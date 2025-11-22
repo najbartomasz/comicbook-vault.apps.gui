@@ -28,6 +28,7 @@ jobs:
             - name: Validate
               run: |
                   npm run build
+                  npm run lint
                   npm run test
 
             - name: SonarQube Scan
