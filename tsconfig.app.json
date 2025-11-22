@@ -4,7 +4,25 @@
         "outDir": "./out-tsc/app",
         "types": [
             "node"
-        ]
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "@core/*": [
+                "src/app/core/*/index.ts"
+            ],
+            "@domain/*": [
+                "src/app/domain/*/index.ts"
+            ],
+            "@presentation": [
+                "src/app/infrastructure/presentation/index.ts"
+            ],
+            "@presentation/*": [
+                "src/app/infrastructure/presentation/*/index.ts"
+            ],
+            "@api/*": [
+                "src/app/infrastructure/api/*/index.ts"
+            ]
+        }
     },
     "include": [
         "src/**/*.ts"

@@ -4,6 +4,7 @@ import angularTemplateParser from '@angular-eslint/template-parser';
 import eslint from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import vitest from '@vitest/eslint-plugin';
+import boundariesPlugin from 'eslint-plugin-boundaries';
 import importPlugin from 'eslint-plugin-import';
 import promisePlugin from 'eslint-plugin-promise';
 import securityPlugin from 'eslint-plugin-security';
@@ -27,13 +28,39 @@ export default [
         settings: {
             'import/resolver': {
                 typescript: {
+                    alwaysTryTypes: true,
                     project: './tsconfig.app.json'
                 }
-            }
+            },
+            'import/internal-regex': '^@(core|domain|presentation|api)/',
+            'boundaries/elements': [
+                {
+                    type: 'core',
+                    pattern: 'src/app/core/**',
+                    capture: ['module']
+                },
+                {
+                    type: 'domain',
+                    pattern: 'src/app/domain/**',
+                    capture: ['module']
+                },
+                {
+                    type: 'api',
+                    pattern: 'src/app/infrastructure/api/**',
+                    capture: ['module']
+                },
+                {
+                    type: 'presentation',
+                    pattern: 'src/app/infrastructure/presentation/**',
+                    capture: ['module']
+                }
+            ],
+            'boundaries/include': ['src/app/**']
         },
         plugins: {
             '@angular-eslint': angularEslint,
             '@typescript-eslint': tseslint.plugin,
+            boundaries: boundariesPlugin,
             import: importPlugin,
             promise: promisePlugin,
             sonarjs: sonarjsPlugin,
@@ -229,7 +256,17 @@ export default [
             '@typescript-eslint/no-redeclare': 'error',
             '@typescript-eslint/no-redundant-type-constituents': 'error',
             '@typescript-eslint/no-require-imports': 'error',
-            '@typescript-eslint/no-restricted-imports': 'error',
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['../*'],
+                            message: 'Parent directory imports are not allowed. Use path aliases instead (e.g., @core/*, @domain/*, etc.)'
+                        }
+                    ]
+                }
+            ],
             '@typescript-eslint/no-restricted-types': 'error',
             '@typescript-eslint/no-shadow': 'error',
             '@typescript-eslint/no-this-alias': 'error',
@@ -347,7 +384,7 @@ export default [
             'import/no-namespace': 'error',
             'import/no-nodejs-modules': 'off',
             'import/no-relative-packages': 'error',
-            'import/no-relative-parent-imports': 'error',
+            'import/no-relative-parent-imports': 'off',
             'import/no-restricted-paths': 'error',
             'import/no-self-import': 'error',
             'import/no-unassigned-import': 'error',
@@ -664,7 +701,50 @@ export default [
             'security/detect-object-injection': 'error',
             'security/detect-possible-timing-attacks': 'error',
             'security/detect-pseudoRandomBytes': 'error',
-            'security/detect-unsafe-regex': 'error'
+            'security/detect-unsafe-regex': 'error',
+            // Boundaries Rules
+            'boundaries/element-types': [
+                'error',
+                {
+                    default: 'disallow',
+                    rules: [
+                        {
+                            from: 'core',
+                            allow: ['core']
+                        },
+                        {
+                            from: 'domain',
+                            allow: ['core', 'domain']
+                        },
+                        {
+                            from: 'api',
+                            allow: ['core', 'domain', 'api']
+                        },
+                        {
+                            from: 'presentation',
+                            allow: ['core', 'domain', 'api', 'presentation']
+                        }
+                    ]
+                }
+            ],
+            'boundaries/entry-point': [
+                'error',
+                {
+                    default: 'allow',
+                    rules: [
+                        {
+                            target: ['core', 'domain', 'api', 'presentation'],
+                            allow: '**/index.ts'
+                        }
+                    ]
+                }
+            ],
+            'boundaries/external': [
+                'error',
+                {
+                    default: 'allow'
+                }
+            ]
         }
     },
     {
