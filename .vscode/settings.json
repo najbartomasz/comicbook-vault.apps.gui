@@ -45,7 +45,7 @@
     },
     "sonarlint.connectedMode.project": {
         "connectionId": "najbartomasz-github",
-        "projectKey": "najbartomasz_comicbook-store"
+        "projectKey": "najbartomasz_comicbook-vault.apps.gui"
     },
     "[github-actions-workflow]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
