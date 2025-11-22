@@ -37,9 +37,6 @@
     "[ignore]": {
         "editor.defaultFormatter": "foxundermoon.shell-format"
     },
-    "[html]": {
-        "editor.defaultFormatter": "vscode.html-language-features"
-    },
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
