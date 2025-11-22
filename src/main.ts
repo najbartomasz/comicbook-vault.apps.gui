@@ -1,6 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { App } from './app/app';
+// eslint-disable-next-line import/no-internal-modules
+import { AppComponent } from './app/app.component';
+// eslint-disable-next-line import/no-internal-modules
 import { appConfig } from './app/app.config';
 
-bootstrapApplication(App, appConfig)
-    .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig)
+    // eslint-disable-next-line promise/prefer-await-to-callbacks
+    .catch((err: unknown) => { console.error(err); });

@@ -1,9 +1,4 @@
-import {
-    AngularNodeAppEngine,
-    createNodeRequestHandler,
-    isMainModule,
-    writeResponseToNodeResponse,
-} from '@angular/ssr/node';
+import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
 
@@ -31,8 +26,8 @@ app.use(
     express.static(browserDistFolder, {
         maxAge: '1y',
         index: false,
-        redirect: false,
-    }),
+        redirect: false
+    })
 );
 
 /**
@@ -41,9 +36,12 @@ app.use(
 app.use((req, res, next) => {
     angularApp
         .handle(req)
-        .then((response) =>
-            response ? writeResponseToNodeResponse(response, res) : next(),
+        // eslint-disable-next-line promise/prefer-await-to-then
+        .then(async (response) =>
+            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, promise/no-callback-in-promise
+            response ? writeResponseToNodeResponse(response, res) : next()
         )
+        // eslint-disable-next-line promise/prefer-await-to-then, promise/no-callback-in-promise
         .catch(next);
 });
 
@@ -51,13 +49,14 @@ app.use((req, res, next) => {
  * Start the server if this module is the main entry point, or it is ran via PM2.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
+const defaultPort = 4000;
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-    const port = process.env['PORT'] || 4000;
+    const port = process.env['PORT'] ?? defaultPort;
+    // eslint-disable-next-line promise/prefer-await-to-callbacks
     app.listen(port, (error) => {
         if (error) {
             throw error;
         }
-
         console.log(`Node Express server listening on http://localhost:${port}`);
     });
 }
