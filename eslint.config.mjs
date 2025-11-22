@@ -18,7 +18,10 @@ export default [
         languageOptions: {
             parser: tsParser,
             parserOptions: {
-                project: './tsconfig.app.json'
+                project: './tsconfig.app.json',
+                tsconfigRootDir: import.meta.dirname,
+                ecmaVersion: 2024,
+                sourceType: 'module'
             },
             globals: {
                 console: 'readonly',
@@ -73,6 +76,7 @@ export default [
             ...angularEslint.configs.recommended.rules,
             // Core Rules
             'constructor-super': 'error',
+            'curly': ['error', 'all'],
             'for-direction': 'error',
             'getter-return': 'error',
             'no-async-promise-executor': 'error',
@@ -80,8 +84,9 @@ export default [
             'no-class-assign': 'error',
             'no-compare-neg-zero': 'error',
             'no-cond-assign': 'error',
+            'no-console': 'error',
             'no-const-assign': 'error',
-            'no-constant-condition': 'error',
+            'no-constant-condition': ['error', { checkLoops: 'allExceptWhileTrue' }],
             'no-control-regex': 'error',
             'no-debugger': 'error',
             'no-delete-var': 'error',
@@ -98,6 +103,7 @@ export default [
             'no-extra-semi': 'error',
             'no-fallthrough': 'error',
             'no-func-assign': 'error',
+            'eqeqeq': ['error', 'always'],
             'no-global-assign': 'error',
             'no-import-assign': 'error',
             'no-inner-declarations': 'error',
@@ -129,13 +135,28 @@ export default [
             'no-useless-backreference': 'error',
             'no-useless-catch': 'error',
             'no-useless-escape': 'error',
+            'no-var': 'error',
             'no-with': 'error',
+            'no-await-in-loop': 'error',
+            'no-constructor-return': 'error',
+            'no-promise-executor-return': 'error',
+            'no-template-curly-in-string': 'error',
+            'no-useless-assignment': 'error',
+            'prefer-const': 'error',
+            'prefer-object-spread': 'error',
             'require-yield': 'error',
             'use-isnan': 'error',
             'valid-typeof': 'error',
             // Angular Rules
             '@angular-eslint/component-class-suffix': 'error',
-            '@angular-eslint/component-max-inline-declarations': 'error',
+            '@angular-eslint/component-max-inline-declarations': [
+                'error',
+                {
+                    template: 10,
+                    styles: 5,
+                    animations: 5
+                }
+            ],
             '@angular-eslint/consistent-component-styles': 'error',
             '@angular-eslint/contextual-decorator': 'error',
             '@angular-eslint/contextual-lifecycle': 'error',
@@ -200,6 +221,7 @@ export default [
             '@typescript-eslint/await-thenable': 'error',
             '@typescript-eslint/ban-ts-comment': 'error',
             '@typescript-eslint/ban-tslint-comment': 'error',
+            '@typescript-eslint/prefer-ts-expect-error': 'error',
             '@typescript-eslint/class-literal-property-style': 'error',
             '@typescript-eslint/class-methods-use-this': 'error',
             '@typescript-eslint/consistent-generic-constructors': 'error',
@@ -215,10 +237,41 @@ export default [
             '@typescript-eslint/explicit-member-accessibility': 'error',
             '@typescript-eslint/explicit-module-boundary-types': 'error',
             '@typescript-eslint/init-declarations': 'error',
-            '@typescript-eslint/max-params': 'error',
+            '@typescript-eslint/max-params': [
+                'error',
+                {
+                    max: 4
+                }
+            ],
             '@typescript-eslint/member-ordering': 'error',
             '@typescript-eslint/method-signature-style': 'error',
-            '@typescript-eslint/naming-convention': 'error',
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: 'default',
+                    format: ['camelCase'],
+                    leadingUnderscore: 'forbid',
+                    trailingUnderscore: 'forbid'
+                },
+                {
+                    selector: 'variable',
+                    format: ['camelCase', 'UPPER_CASE'],
+                    leadingUnderscore: 'forbid',
+                    trailingUnderscore: 'forbid'
+                },
+                {
+                    selector: 'typeLike',
+                    format: ['PascalCase']
+                },
+                {
+                    selector: 'enumMember',
+                    format: ['PascalCase']
+                },
+                {
+                    selector: 'property',
+                    format: null
+                }
+            ],
             '@typescript-eslint/no-array-constructor': 'error',
             '@typescript-eslint/no-array-delete': 'error',
             '@typescript-eslint/no-base-to-string': 'error',
@@ -234,7 +287,13 @@ export default [
             '@typescript-eslint/no-explicit-any': 'error',
             '@typescript-eslint/no-extra-non-null-assertion': 'error',
             '@typescript-eslint/no-extraneous-class': 'error',
-            '@typescript-eslint/no-floating-promises': 'error',
+            '@typescript-eslint/no-floating-promises': [
+                'error',
+                {
+                    ignoreVoid: true,
+                    ignoreIIFE: false
+                }
+            ],
             '@typescript-eslint/no-for-in-array': 'error',
             '@typescript-eslint/no-implied-eval': 'error',
             '@typescript-eslint/no-import-type-side-effects': 'error',
@@ -243,7 +302,19 @@ export default [
             '@typescript-eslint/no-invalid-void-type': 'error',
             '@typescript-eslint/no-loop-func': 'error',
             '@typescript-eslint/no-loss-of-precision': 'error',
-            '@typescript-eslint/no-magic-numbers': 'error',
+            '@typescript-eslint/no-magic-numbers': [
+                'error',
+                {
+                    ignore: [0, 1, -1],
+                    ignoreArrayIndexes: true,
+                    ignoreDefaultValues: true,
+                    ignoreEnums: true,
+                    ignoreNumericLiteralTypes: true,
+                    ignoreReadonlyClassProperties: true,
+                    ignoreTypeIndexes: true,
+                    ignoreClassFieldInitialValues: true
+                }
+            ],
             '@typescript-eslint/no-meaningless-void-operator': 'error',
             '@typescript-eslint/no-misused-new': 'error',
             '@typescript-eslint/no-misused-promises': 'error',
@@ -271,7 +342,12 @@ export default [
             '@typescript-eslint/no-shadow': 'error',
             '@typescript-eslint/no-this-alias': 'error',
             '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
-            '@typescript-eslint/no-unnecessary-condition': 'error',
+            '@typescript-eslint/no-unnecessary-condition': [
+                'error',
+                {
+                    allowConstantLoopConditions: true
+                }
+            ],
             '@typescript-eslint/no-unnecessary-parameter-property-assignment': 'error',
             '@typescript-eslint/no-unnecessary-qualifier': 'error',
             '@typescript-eslint/no-unnecessary-template-expression': 'error',
@@ -301,7 +377,19 @@ export default [
             '@typescript-eslint/only-throw-error': 'error',
             '@typescript-eslint/parameter-properties': 'error',
             '@typescript-eslint/prefer-as-const': 'error',
-            '@typescript-eslint/prefer-destructuring': 'error',
+            '@typescript-eslint/prefer-destructuring': [
+                'error',
+                {
+                    VariableDeclarator: {
+                        array: false,
+                        object: true
+                    },
+                    AssignmentExpression: {
+                        array: false,
+                        object: false
+                    }
+                }
+            ],
             '@typescript-eslint/prefer-enum-initializers': 'error',
             '@typescript-eslint/prefer-find': 'error',
             '@typescript-eslint/prefer-for-of': 'error',
@@ -340,19 +428,22 @@ export default [
             'import/exports-last': 'error',
             'import/extensions': [
                 'error',
+                'ignorePackages',
                 {
-                    component: 'always',
-                    service: 'always',
-                    model: 'always',
-                    config: 'always',
-                    routes: 'always',
-                    server: 'always'
+                    ts: 'never',
+                    js: 'never'
                 }
             ],
             'import/first': 'error',
             'import/group-exports': 'error',
             'import/imports-first': 'error',
-            'import/max-dependencies': 'error',
+            'import/max-dependencies': [
+                'error',
+                {
+                    max: 15,
+                    ignoreTypeImports: true
+                }
+            ],
             'import/named': 'error',
             'import/namespace': 'error',
             'import/newline-after-import': 'error',
@@ -392,7 +483,24 @@ export default [
             'import/no-unused-modules': 'error',
             'import/no-useless-path-segments': 'error',
             'import/no-webpack-loader-syntax': 'error',
-            'import/order': 'off',
+            'import/order': [
+                'error',
+                {
+                    groups: [
+                        'builtin',
+                        'external',
+                        'internal',
+                        'parent',
+                        'sibling',
+                        'index'
+                    ],
+                    'newlines-between': 'always',
+                    alphabetize: {
+                        order: 'asc',
+                        caseInsensitive: true
+                    }
+                }
+            ],
             'import/prefer-default-export': 'off',
             'import/unambiguous': 'error',
             // Promise Rules
@@ -455,7 +563,10 @@ export default [
             'sonarjs/class-name': 'error',
             'sonarjs/class-prototype': 'error',
             'sonarjs/code-eval': 'error',
-            'sonarjs/cognitive-complexity': 'error',
+            'sonarjs/cognitive-complexity': [
+                'error',
+                15
+            ],
             'sonarjs/comma-or-logical-or-case': 'error',
             'sonarjs/comment-regex': 'error',
             'sonarjs/concise-regex': 'error',
@@ -468,7 +579,12 @@ export default [
             'sonarjs/cookies': 'error',
             'sonarjs/cors': 'error',
             'sonarjs/csrf': 'error',
-            'sonarjs/cyclomatic-complexity': 'error',
+            'sonarjs/cyclomatic-complexity': [
+                'error',
+                {
+                    threshold: 10
+                }
+            ],
             'sonarjs/declarations-in-global-scope': 'error',
             'sonarjs/deprecation': 'error',
             'sonarjs/destructuring-assignment-syntax': 'error',
@@ -512,10 +628,25 @@ export default [
             'sonarjs/jsx-no-leaked-render': 'error',
             'sonarjs/label-position': 'error',
             'sonarjs/link-with-target-blank': 'error',
-            'sonarjs/max-lines': 'error',
-            'sonarjs/max-lines-per-function': 'error',
+            'sonarjs/max-lines': [
+                'error',
+                {
+                    maximum: 300
+                }
+            ],
+            'sonarjs/max-lines-per-function': [
+                'error',
+                {
+                    maximum: 50
+                }
+            ],
             'sonarjs/max-switch-cases': 'error',
-            'sonarjs/max-union-size': 'error',
+            'sonarjs/max-union-size': [
+                'error',
+                {
+                    threshold: 5
+                }
+            ],
             'sonarjs/misplaced-loop-counter': 'error',
             'sonarjs/nested-control-flow': 'error',
             'sonarjs/new-operator-misuse': 'error',
@@ -536,7 +667,13 @@ export default [
             'sonarjs/no-dead-store': 'error',
             'sonarjs/no-delete-var': 'error',
             'sonarjs/no-duplicate-in-composite': 'error',
-            'sonarjs/no-duplicate-string': 'error',
+            'sonarjs/no-duplicate-string': [
+                'error',
+                {
+                    threshold: 3,
+                    ignoreStrings: 'application/json, utf-8'
+                }
+            ],
             'sonarjs/no-duplicated-branches': 'error',
             'sonarjs/no-element-overwrite': 'error',
             'sonarjs/no-empty-after-reluctant': 'error',
@@ -560,7 +697,10 @@ export default [
             'sonarjs/no-hook-setter-in-body': 'error',
             'sonarjs/no-identical-conditions': 'error',
             'sonarjs/no-identical-expressions': 'error',
-            'sonarjs/no-identical-functions': 'error',
+            'sonarjs/no-identical-functions': [
+                'error',
+                3
+            ],
             'sonarjs/no-ignored-exceptions': 'error',
             'sonarjs/no-ignored-return': 'error',
             'sonarjs/no-implicit-dependencies': 'error',
@@ -888,8 +1028,18 @@ export default [
             '@angular-eslint/template/banana-in-box': 'error',
             '@angular-eslint/template/button-has-type': 'error',
             '@angular-eslint/template/click-events-have-key-events': 'error',
-            '@angular-eslint/template/conditional-complexity': 'error',
-            '@angular-eslint/template/cyclomatic-complexity': 'error',
+            '@angular-eslint/template/conditional-complexity': [
+                'error',
+                {
+                    maxComplexity: 5
+                }
+            ],
+            '@angular-eslint/template/cyclomatic-complexity': [
+                'error',
+                {
+                    maxComplexity: 10
+                }
+            ],
             '@angular-eslint/template/elements-content': 'error',
             '@angular-eslint/template/eqeqeq': 'error',
             '@angular-eslint/template/i18n': 'off',
