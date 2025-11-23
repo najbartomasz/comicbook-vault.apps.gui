@@ -46,5 +46,8 @@
     },
     "[github-actions-workflow]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
     }
 }

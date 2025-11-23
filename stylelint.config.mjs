@@ -3,7 +3,7 @@ export default {
     rules: {
         // Possible errors
         'annotation-no-unknown': true,
-        'at-rule-no-unknown': true,
+        'at-rule-no-unknown': null,
         'block-no-empty': true,
         'color-no-invalid-hex': true,
         'comment-no-empty': true,
@@ -77,7 +77,7 @@ export default {
         'media-feature-name-unit-allowed-list': null,
         'media-feature-name-value-allowed-list': null,
         'no-unknown-animations': true,
-        'no-unknown-custom-properties': true,
+        'no-unknown-custom-properties': null,
         'number-max-precision': 4,
         'property-allowed-list': null,
         'property-disallowed-list': null,

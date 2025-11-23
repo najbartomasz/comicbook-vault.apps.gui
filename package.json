@@ -1,74 +1,76 @@
 {
-    "name": "comicbook-vault.apps.gui",
-    "version": "0.0.0",
-    "scripts": {
-        "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build",
-        "watch": "ng build --watch --configuration development",
-        "test": "ng test",
-        "serve:ssr:comicbook-vault.apps.gui": "node dist/comicbook-vault.apps.gui/server/server.mjs",
-        "lint": "ng lint && stylelint \"**/*.scss\"",
-        "lint:fix": "ng lint --fix && stylelint \"**/*.scss\" --fix",
-        "lint:styles": "stylelint \"**/*.scss\"",
-        "lint:styles:fix": "stylelint \"**/*.scss\" --fix"
-    },
-    "prettier": {
-        "printWidth": 100,
-        "singleQuote": true,
-        "overrides": [
-            {
-                "files": "*.html",
-                "options": {
-                    "parser": "angular"
-                }
-            }
-        ]
-    },
-    "private": true,
-    "packageManager": "npm@10.9.2",
-    "dependencies": {
-        "@angular/common": "^21.0.0",
-        "@angular/compiler": "^21.0.0",
-        "@angular/core": "^21.0.0",
-        "@angular/forms": "^21.0.0",
-        "@angular/platform-browser": "^21.0.0",
-        "@angular/platform-server": "^21.0.0",
-        "@angular/router": "^21.0.0",
-        "@angular/ssr": "^21.0.0",
-        "express": "^5.1.0",
-        "rxjs": "~7.8.0",
-        "tslib": "^2.3.0"
-    },
-    "devDependencies": {
-        "@angular-eslint/builder": "^20.6.0",
-        "@angular-eslint/eslint-plugin": "^20.6.0",
-        "@angular-eslint/eslint-plugin-template": "^20.6.0",
-        "@angular-eslint/schematics": "^20.6.0",
-        "@angular-eslint/template-parser": "^20.6.0",
-        "@angular/build": "^21.0.0",
-        "@angular/cli": "^21.0.0",
-        "@angular/compiler-cli": "^21.0.0",
-        "@eslint/js": "^9.39.1",
-        "@types/express": "^5.0.1",
-        "@types/node": "^20.17.19",
-        "@typescript-eslint/eslint-plugin": "^8.47.0",
-        "@typescript-eslint/parser": "^8.47.0",
-        "@vitest/coverage-v8": "^4.0.13",
-        "@vitest/eslint-plugin": "^1.4.3",
-        "eslint": "^9.39.1",
-        "eslint-import-resolver-typescript": "^4.4.4",
-        "eslint-plugin-boundaries": "^5.2.0",
-        "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-promise": "^7.2.1",
-        "eslint-plugin-security": "^3.0.1",
-        "eslint-plugin-sonarjs": "^3.0.5",
-        "jsdom": "^27.1.0",
-        "postcss-scss": "^4.0.9",
-        "stylelint": "^16.26.0",
-        "stylelint-config-standard-scss": "^16.0.0",
-        "typescript": "~5.9.2",
-        "typescript-eslint": "^8.47.0",
-        "vitest": "^4.0.8"
-    }
+  "name": "comicbook-vault.apps.gui",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:comicbook-vault.apps.gui": "node dist/comicbook-vault.apps.gui/server/server.mjs",
+    "lint": "ng lint && stylelint \"**/*.scss\"",
+    "lint:fix": "ng lint --fix && stylelint \"**/*.scss\" --fix",
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "lint:styles:fix": "stylelint \"**/*.scss\" --fix"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "dependencies": {
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/platform-server": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "@angular/ssr": "^21.0.0",
+    "express": "^5.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular-eslint/builder": "^20.6.0",
+    "@angular-eslint/eslint-plugin": "^20.6.0",
+    "@angular-eslint/eslint-plugin-template": "^20.6.0",
+    "@angular-eslint/schematics": "^20.6.0",
+    "@angular-eslint/template-parser": "^20.6.0",
+    "@angular/build": "^21.0.0",
+    "@angular/cli": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@eslint/js": "^9.39.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "@vitest/coverage-v8": "^4.0.13",
+    "@vitest/eslint-plugin": "^1.4.3",
+    "eslint": "^9.39.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-boundaries": "^5.2.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-sonarjs": "^3.0.5",
+    "jsdom": "^27.1.0",
+    "postcss-scss": "^4.0.9",
+    "stylelint": "^16.26.0",
+    "stylelint-config-standard-scss": "^16.0.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.47.0",
+    "vitest": "^4.0.8"
+  }
 }
