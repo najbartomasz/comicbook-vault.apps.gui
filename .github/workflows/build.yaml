@@ -24,6 +24,7 @@ jobs:
             - name: Install Dependencies
               run: |
                   npm ci
+                  npx playwright install --with-deps
 
             - name: Validate
               run: |

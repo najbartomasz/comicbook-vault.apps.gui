@@ -1,17 +1,15 @@
-import { TestBed } from '@angular/core/testing';
+import { setupComponent } from '@testing/unit';
 
 import { AppComponent } from './app.component';
 
 describe(AppComponent, () => {
-    const setup = async () => TestBed.configureTestingModule({
-        imports: [AppComponent]
-    }).compileComponents();
+    const setup = async () => setupComponent(AppComponent);
 
     test('should create the app', async () => {
         // Given
-        await setup();
+        const { fixture } = await setup();
 
         // When, Then
-        expect(TestBed.createComponent(AppComponent).componentInstance).toBeDefined();
+        expect(fixture.componentInstance).toBeDefined();
     });
 });

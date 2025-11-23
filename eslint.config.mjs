@@ -888,7 +888,7 @@ export default [
         }
     },
     {
-        files: ['**/*.spec.ts'],
+        files: ['**/*.spec.ts', "**/testing/**/*.ts"],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -904,6 +904,12 @@ export default [
             vitest
         },
         settings: {
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true,
+                    project: './tsconfig.spec.json'
+                }
+            },
             vitest: {
                 typecheck: true
             }
@@ -911,6 +917,7 @@ export default [
         rules: {
             // TypeScript ESLint Rules
             '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/explicit-module-boundary-types': 'off',
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-type-assertion': 'off',
             // Import Rules
@@ -918,7 +925,8 @@ export default [
                 'error',
                 {
                     allow: [
-                        '@angular/core/testing'
+                        '@angular/core/testing',
+                        'vitest/browser'
                     ]
                 }
             ],
@@ -1008,6 +1016,33 @@ export default [
             'vitest/valid-expect-in-promise': 'error',
             'vitest/valid-title': 'error',
             'vitest/warn-todo': 'error'
+        }
+    },
+    {
+        files: ['vitest*.config.ts'],
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                project: './tsconfig.spec.json'
+            }
+        },
+        settings: {
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true,
+                    project: './tsconfig.spec.json'
+                }
+            }
+        },
+        plugins: {
+            '@typescript-eslint': tseslint.plugin,
+            import: importPlugin
+        },
+        rules: {
+            'import/no-default-export': 'off',
+            'import/no-extraneous-dependencies': 'off',
+            'import/no-internal-modules': 'off',
+            '@typescript-eslint/no-magic-numbers': 'off'
         }
     },
     {
