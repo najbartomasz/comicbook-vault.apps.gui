@@ -1,8 +1,10 @@
 // Learn more about Vitest configuration options at https://vitest.dev/config/
 import { playwright } from '@vitest/browser-playwright';
+import viteTsConfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+    plugins: [viteTsConfigPaths()],
     test: {
         coverage: {
             reporter: [
