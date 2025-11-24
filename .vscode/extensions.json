@@ -9,8 +9,6 @@
         "eamodio.gitlens",
         "ms-playwright.playwright",
         "sonarsource.sonarlint-vscode",
-        "vitest.explorer",
-        "kingwl.vscode-vitest-runner",
         "foxundermoon.shell-formatter",
         "redhat.vscode-yaml"
     ]
