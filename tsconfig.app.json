@@ -7,20 +7,17 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "@core/*": [
-                "src/app/core/*/index.ts"
+            "@shell": [
+                "src/app/shell/index.ts"
             ],
-            "@domain/*": [
-                "src/app/domain/*/index.ts"
+            "@shell/*": [
+                "src/app/shell/*"
             ],
-            "@presentation": [
-                "src/app/infrastructure/presentation/index.ts"
+            "@lib/*": [
+                "src/app/lib/*/index.ts"
             ],
-            "@presentation/*": [
-                "src/app/infrastructure/presentation/*/index.ts"
-            ],
-            "@api/*": [
-                "src/app/infrastructure/api/*/index.ts"
+            "@features/*": [
+                "src/app/features/*/index.ts"
             ]
         }
     },

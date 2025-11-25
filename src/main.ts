@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 
-import { AppComponent, appConfig } from '@presentation';
+import { AppComponent, appConfig } from '@shell';
 
 try {
     await bootstrapApplication(AppComponent, appConfig);

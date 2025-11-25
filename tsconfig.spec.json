@@ -7,23 +7,26 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "@core/*": [
-                "src/app/core/*/index.ts"
+            "@shell": [
+                "src/app/shell/index.ts"
             ],
-            "@domain/*": [
-                "src/app/domain/*/index.ts"
+            "@shell/*": [
+                "src/app/shell/*"
             ],
-            "@presentation": [
-                "src/app/infrastructure/presentation/index.ts"
+            "@lib/*": [
+                "src/app/lib/*/index.ts"
             ],
-            "@presentation/*": [
-                "src/app/infrastructure/presentation/*/index.ts"
-            ],
-            "@api/*": [
-                "src/app/infrastructure/api/*/index.ts"
+            "@features/*": [
+                "src/app/features/*/index.ts"
             ],
             "@testing/*": [
                 "src/testing/*/index.ts"
+            ],
+            "@testing/unit": [
+                "src/testing/unit/index.ts"
+            ],
+            "@testing/e2e/page-objects": [
+                "src/testing/e2e/page-objects/index.ts"
             ]
         }
     },
@@ -31,6 +34,6 @@
         "src/**/*.d.ts",
         "src/**/*.spec.ts",
         "vitest*.config.ts",
-        "testing/**/*.ts"
+        "src/testing/**/*.ts"
     ]
 }

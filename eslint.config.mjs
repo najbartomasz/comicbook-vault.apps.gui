@@ -35,27 +35,51 @@ export default [
                     project: './tsconfig.app.json'
                 }
             },
-            'import/internal-regex': '^@(core|domain|presentation|api)/',
+            'import/internal-regex': '^@(lib|features|shell)/',
             'boundaries/elements': [
                 {
-                    type: 'core',
-                    pattern: 'src/app/core/**',
-                    capture: ['module']
+                    type: 'shell',
+                    pattern: 'src/app/shell/**',
+                    mode: 'folder'
                 },
                 {
-                    type: 'domain',
-                    pattern: 'src/app/domain/**',
-                    capture: ['module']
+                    type: 'lib-domain',
+                    pattern: 'src/app/lib/domain/**',
+                    mode: 'folder'
                 },
                 {
-                    type: 'api',
-                    pattern: 'src/app/infrastructure/api/**',
-                    capture: ['module']
+                    type: 'lib-infrastructure',
+                    pattern: 'src/app/lib/infrastructure/**',
+                    mode: 'folder'
                 },
                 {
-                    type: 'presentation',
-                    pattern: 'src/app/infrastructure/presentation/**',
-                    capture: ['module']
+                    type: 'lib-presentation',
+                    pattern: 'src/app/lib/presentation/**',
+                    mode: 'folder'
+                },
+                {
+                    type: 'feature',
+                    pattern: 'src/app/features/*',
+                    mode: 'folder',
+                    capture: ['featureName']
+                },
+                {
+                    type: 'feature-domain',
+                    pattern: 'src/app/features/*/domain/**',
+                    mode: 'folder',
+                    capture: ['featureName']
+                },
+                {
+                    type: 'feature-infrastructure',
+                    pattern: 'src/app/features/*/infrastructure/**',
+                    mode: 'folder',
+                    capture: ['featureName']
+                },
+                {
+                    type: 'feature-presentation',
+                    pattern: 'src/app/features/*/presentation/**',
+                    mode: 'folder',
+                    capture: ['featureName']
                 }
             ],
             'boundaries/include': ['src/app/**']
@@ -848,21 +872,55 @@ export default [
                 {
                     default: 'disallow',
                     rules: [
+                        // Shell can import from lib and features (orchestration layer)
                         {
-                            from: 'core',
-                            allow: ['core']
+                            from: 'shell',
+                            allow: ['shell', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'feature']
                         },
+                        // Lib domain is framework-agnostic (pure TypeScript only)
                         {
-                            from: 'domain',
-                            allow: ['core', 'domain']
+                            from: 'lib-domain',
+                            allow: ['lib-domain']
                         },
+                        // Lib infrastructure is framework-agnostic (can use lib-domain)
                         {
-                            from: 'api',
-                            allow: ['core', 'domain', 'api']
+                            from: 'lib-infrastructure',
+                            allow: ['lib-domain', 'lib-infrastructure']
                         },
+                        // Lib presentation can use Angular and lower layers
                         {
-                            from: 'presentation',
-                            allow: ['core', 'domain', 'api', 'presentation']
+                            from: 'lib-presentation',
+                            allow: ['lib-domain', 'lib-infrastructure', 'lib-presentation']
+                        },
+                        // Feature domain is framework-agnostic (pure TypeScript)
+                        {
+                            from: 'feature-domain',
+                            allow: [
+                                'lib-domain',
+                                ['feature-domain', { featureName: '${from.featureName}' }]
+                            ]
+                        },
+                        // Feature infrastructure is framework-agnostic (can use domain)
+                        {
+                            from: 'feature-infrastructure',
+                            allow: [
+                                'lib-domain',
+                                'lib-infrastructure',
+                                ['feature-domain', { featureName: '${from.featureName}' }],
+                                ['feature-infrastructure', { featureName: '${from.featureName}' }]
+                            ]
+                        },
+                        // Feature presentation is Angular-specific (can use all layers)
+                        {
+                            from: 'feature-presentation',
+                            allow: [
+                                'lib-domain',
+                                'lib-infrastructure',
+                                'lib-presentation',
+                                ['feature-domain', { featureName: '${from.featureName}' }],
+                                ['feature-infrastructure', { featureName: '${from.featureName}' }],
+                                ['feature-presentation', { featureName: '${from.featureName}' }]
+                            ]
                         }
                     ]
                 }
@@ -870,11 +928,22 @@ export default [
             'boundaries/entry-point': [
                 'error',
                 {
-                    default: 'allow',
+                    default: 'disallow',
                     rules: [
+                        // Features must export through index.ts
                         {
-                            target: ['core', 'domain', 'api', 'presentation'],
-                            allow: '**/index.ts'
+                            target: 'feature',
+                            allow: 'index.ts'
+                        },
+                        // Internal feature files allowed
+                        {
+                            target: ['feature-domain', 'feature-infrastructure', 'feature-presentation'],
+                            allow: '**'
+                        },
+                        // Lib sublayers and shell allow all imports
+                        {
+                            target: ['lib-domain', 'lib-infrastructure', 'lib-presentation', 'shell'],
+                            allow: '**'
                         }
                     ]
                 }
@@ -888,7 +957,7 @@ export default [
         }
     },
     {
-        files: ['**/*.spec.ts', "**/testing/**/*.ts"],
+        files: ['**/*.spec.ts'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -918,6 +987,7 @@ export default [
             // TypeScript ESLint Rules
             '@typescript-eslint/explicit-function-return-type': 'off',
             '@typescript-eslint/explicit-module-boundary-types': 'off',
+            '@typescript-eslint/init-declarations': 'off',
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-type-assertion': 'off',
             // Import Rules
@@ -926,7 +996,40 @@ export default [
                 {
                     allow: [
                         '@angular/core/testing',
-                        'vitest/browser'
+                        'vitest/browser',
+                        '@testing/unit',
+                        '@testing/unit/*',
+                        '@testing/e2e/page-objects',
+                        '@testing/e2e/page-objects/*'
+                    ]
+                }
+            ],
+            'import/no-restricted-paths': [
+                'error',
+                {
+                    zones: [
+                        {
+                            target: './src/**/*.spec.ts',
+                            from: './src/testing/e2e/**',
+                            message: 'Unit tests (*.spec.ts) cannot import from testing/e2e. Use *.e2e.spec.ts for E2E tests.'
+                        },
+                        {
+                            target: './src/**/*.e2e.spec.ts',
+                            from: './src/testing/unit/**',
+                            message: 'E2E tests (*.e2e.spec.ts) cannot import from testing/unit. Use *.spec.ts for unit tests.'
+                        }
+                    ]
+                }
+            ],
+            'no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['vitest'],
+                            importNamePattern: '^(describe|test|it|expect|vi|beforeEach|beforeAll|afterEach|afterAll)$',
+                            message: 'Import test functions from @testing/unit instead of directly from vitest to maintain library independence.'
+                        }
                     ]
                 }
             ],
@@ -1006,7 +1109,7 @@ export default [
             'vitest/prefer-todo': 'error',
             'vitest/prefer-vi-mocked': 'error',
             'vitest/require-awaited-expect-poll': 'error',
-            'vitest/require-hook': 'error',
+            'vitest/require-hook': 'off',
             'vitest/require-local-test-context-for-concurrent-snapshots': 'error',
             'vitest/require-mock-type-parameters': 'error',
             'vitest/require-to-throw-message': 'error',
@@ -1016,6 +1119,43 @@ export default [
             'vitest/valid-expect-in-promise': 'error',
             'vitest/valid-title': 'error',
             'vitest/warn-todo': 'error'
+        }
+    },
+    {
+        files: ['**/testing/**/*.ts'],
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                project: './tsconfig.spec.json'
+            }
+        },
+        plugins: {
+            '@typescript-eslint': tseslint.plugin,
+            import: importPlugin
+        },
+        settings: {
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true,
+                    project: './tsconfig.spec.json'
+                }
+            }
+        },
+        rules: {
+            // Allow direct vitest imports in testing utilities (adapter layer)
+            'no-restricted-imports': 'off',
+            '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/explicit-module-boundary-types': 'off',
+            '@typescript-eslint/no-unsafe-type-assertion': 'off',
+            'import/no-internal-modules': [
+                'error',
+                {
+                    allow: [
+                        '@angular/core/testing',
+                        'vitest/browser'
+                    ]
+                }
+            ]
         }
     },
     {
