@@ -37,4 +37,4 @@ describe(AppComponent, () => {
         // Then
         await expect(page.getByRole('document')).toMatchScreenshot();
     });
-})
+});

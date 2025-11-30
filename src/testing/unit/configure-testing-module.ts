@@ -1,5 +1,5 @@
-import type { Provider } from '@angular/core';
-import type { TestBed, TestModuleMetadata } from '@angular/core/testing';
+import { type Provider } from '@angular/core';
+import { type TestBed, type TestModuleMetadata } from '@angular/core/testing';
 
 export const configureTestingModule = (testBed: TestBed, moduleDef?: TestModuleMetadata): void => {
     const { providers, ...moduleMetadata } = moduleDef ?? { providers: [] };
