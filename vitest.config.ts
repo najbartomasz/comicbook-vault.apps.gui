@@ -8,6 +8,7 @@ export default defineConfig({
     test: {
         globals: false,
         coverage: {
+            cleanOnRerun: true,
             reporter: [
                 "lcov",
                 "text",
@@ -46,7 +47,10 @@ export default defineConfig({
             provider: playwright(),
             enabled: true,
             screenshotFailures: true,
-            instances: [{ browser: 'chromium' }]
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+            testerHtmlPath: './src/index.html',
+            viewport: { width: 1920, height: 1080 }
         }
     }
 });

@@ -447,7 +447,7 @@ export default [
             // Import rules
             'import/consistent-type-specifier-style': 'error',
             'import/default': 'error',
-            'import/dynamic-import-chunkname': 'error',
+            'import/dynamic-import-chunkname': 'off',
             'import/export': 'error',
             'import/exports-last': 'error',
             'import/extensions': [
@@ -483,14 +483,7 @@ export default [
             'import/no-empty-named-blocks': 'error',
             'import/no-extraneous-dependencies': 'error',
             'import/no-import-module-exports': 'error',
-            'import/no-internal-modules': [
-                'error',
-                {
-                    allow: [
-                        '@angular/ssr/node'
-                    ]
-                }
-            ],
+            'import/no-internal-modules': 'off',
             'import/no-mutable-exports': 'error',
             'import/no-named-as-default': 'error',
             'import/no-named-as-default-member': 'error',
@@ -930,6 +923,11 @@ export default [
                 {
                     default: 'disallow',
                     rules: [
+                        // Shell can access internal pages
+                        {
+                            target: 'shell',
+                            allow: '**'
+                        },
                         // Features must export through index.ts
                         {
                             target: 'feature',
@@ -940,7 +938,7 @@ export default [
                             target: ['feature-domain', 'feature-infrastructure', 'feature-presentation'],
                             allow: '**'
                         },
-                        // Lib sublayers and shell allow all imports
+                        // Lib sublayers allow all imports
                         {
                             target: ['lib-domain', 'lib-infrastructure', 'lib-presentation', 'shell'],
                             allow: '**'
@@ -991,19 +989,7 @@ export default [
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-type-assertion': 'off',
             // Import Rules
-            'import/no-internal-modules': [
-                'error',
-                {
-                    allow: [
-                        '@angular/core/testing',
-                        'vitest/browser',
-                        '@testing/unit',
-                        '@testing/unit/*',
-                        '@testing/e2e/page-objects',
-                        '@testing/e2e/page-objects/*'
-                    ]
-                }
-            ],
+            'import/no-internal-modules': 'off',
             'import/no-restricted-paths': [
                 'error',
                 {
