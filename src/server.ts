@@ -38,10 +38,10 @@ app.use((req, res, next) => {
     angularApp
         .handle(req)
         // eslint-disable-next-line promise/prefer-await-to-then
-        .then(async (response) =>
+        .then(async (response) => (
             // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression, promise/no-callback-in-promise
             response ? writeResponseToNodeResponse(response, res) : next()
-        )
+        ))
         // eslint-disable-next-line promise/prefer-await-to-then, promise/no-callback-in-promise
         .catch(next);
 });

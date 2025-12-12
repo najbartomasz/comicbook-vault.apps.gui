@@ -5,8 +5,6 @@ export const configureTestingModule = (testBed: TestBed, moduleDef?: TestModuleM
     const { providers, ...moduleMetadata } = moduleDef ?? { providers: [] };
     testBed.configureTestingModule({
         ...moduleMetadata,
-        providers: [
-            ...(providers ?? []) as Provider[]
-        ]
+        providers: [...(providers ?? []) as Provider[]]
     });
 };
