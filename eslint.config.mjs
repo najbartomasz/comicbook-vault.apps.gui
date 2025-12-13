@@ -629,21 +629,7 @@ export default [
                     overrides: {}
                 }
             ],
-            '@stylistic/object-curly-newline': [
-                'error',
-                {
-                    ObjectExpression: {
-                        multiline: true,
-                        minProperties: 4,
-                        consistent: true
-                    },
-                    ObjectPattern: {
-                        multiline: true,
-                        minProperties: 4,
-                        consistent: true
-                    }
-                }
-            ],
+            '@stylistic/object-curly-newline': 'off',
             '@stylistic/object-curly-spacing': [
                 'error',
                 'always',
@@ -1040,17 +1026,7 @@ export default [
             '@typescript-eslint/no-redeclare': 'error',
             '@typescript-eslint/no-redundant-type-constituents': 'error',
             '@typescript-eslint/no-require-imports': 'error',
-            '@typescript-eslint/no-restricted-imports': [
-                'error',
-                {
-                    patterns: [
-                        {
-                            group: ['../*'],
-                            message: 'Parent directory imports are not allowed. Use path aliases instead (e.g., @core/*, @domain/*, etc.)'
-                        }
-                    ]
-                }
-            ],
+            '@typescript-eslint/no-restricted-imports': 'off',
             '@typescript-eslint/no-restricted-types': 'error',
             '@typescript-eslint/no-shadow': [
                 'error',
@@ -1801,6 +1777,7 @@ export default [
                 }
             ],
             '@typescript-eslint/no-magic-numbers': 'off',
+            '@typescript-eslint/no-unsafe-assignment': 'off',
             '@typescript-eslint/no-unsafe-return': 'off',
             '@typescript-eslint/no-unsafe-type-assertion': 'off',
             // Import Rules

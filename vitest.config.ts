@@ -10,9 +10,9 @@ export default defineConfig({
         coverage: {
             cleanOnRerun: true,
             reporter: [
-                "lcov",
-                "text",
-                "html"
+                'lcov',
+                'text',
+                'html'
             ],
             thresholds: {
                 branches: 100,
@@ -39,9 +39,7 @@ export default defineConfig({
                     100
                 ]
             },
-            exclude: [
-                "**/testing/**"
-            ]
+            exclude: ['**/testing/**']
         },
         browser: {
             provider: playwright(),
@@ -51,6 +49,7 @@ export default defineConfig({
             instances: [{ browser: 'chromium' }],
             testerHtmlPath: './src/index.html',
             viewport: { width: 1920, height: 1080 }
-        }
+        },
+        reporters: ['tree']
     }
 });
