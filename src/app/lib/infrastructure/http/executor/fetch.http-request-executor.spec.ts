@@ -3,10 +3,10 @@ import { describe, expect, spyOn, test, when } from '@testing/unit';
 import { HttpAbortError } from '../error/http-abort-error';
 import { HttpNetworkError } from '../error/http-network-error';
 import { HttpPayloadError } from '../error/http-payload-error';
+import { type HttpRequest } from '../http-request.interface';
 import { HttpMethod } from '../method/http-method';
 
 import { FetchHttpRequestExecutor } from './fetch.http-request-executor';
-import { type HttpRequest } from './http-request.interface';
 import { JsonResponseBodyParser, ResponseBodyParserResolver, TextResponseBodyParser } from './parser';
 
 describe(FetchHttpRequestExecutor, () => {
@@ -41,7 +41,7 @@ describe(FetchHttpRequestExecutor, () => {
         const result = await executor.execute(request);
 
         // Then
-        expect(result).toEqual({
+        expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
             url: 'http://example.com/resource',
@@ -74,7 +74,7 @@ describe(FetchHttpRequestExecutor, () => {
         const result = await executor.execute(request);
 
         // Then
-        expect(result).toEqual({
+        expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
             url: 'http://example.com/resource',
@@ -108,7 +108,7 @@ describe(FetchHttpRequestExecutor, () => {
         const result = await executor.execute(request);
 
         // Then
-        expect(result).toEqual({
+        expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
             url: 'http://example.com/resource',
@@ -141,7 +141,7 @@ describe(FetchHttpRequestExecutor, () => {
         const result = await executor.execute(request);
 
         // Then
-        expect(result).toEqual({
+        expect(result).toStrictEqual({
             status: 404,
             statusText: 'Not Found',
             url: 'http://example.com/resource',
@@ -157,14 +157,20 @@ describe(FetchHttpRequestExecutor, () => {
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
+        const abortError = new DOMException('The operation was aborted.', 'AbortError');
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
-            .thenReject(new DOMException('The operation was aborted.', 'AbortError'));
+            .thenReject(abortError);
         const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
 
         // When, Then
-        await expect(executor.execute(request))
-            .rejects.toThrowError(new HttpAbortError({ url: 'http://example.com/resource' }));
+        const error: HttpAbortError = await executor.execute(request).catch((err: unknown) => err as HttpAbortError) as HttpAbortError;
+
+        expect(error).toBeInstanceOf(HttpAbortError);
+        expect(error.name).toBe('HttpAbortError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.message).toBe('HTTP Request Aborted (URL: http://example.com/resource)');
+        expect(error.cause).toBe(abortError);
     });
 
     test('should throw network error when fetch fails with an exception', async () => {
@@ -175,17 +181,21 @@ describe(FetchHttpRequestExecutor, () => {
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
+        const networkError = new Error('Network failure');
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
-            .thenReject(new Error('Network failure'));
+            .thenReject(networkError);
         const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
 
         // When, Then
-        await expect(executor.execute(request))
-            .rejects.toThrowError(new HttpNetworkError({
-                url: 'http://example.com/resource',
-                description: 'Network failure'
-            }));
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
+
+        expect(error).toBeInstanceOf(HttpNetworkError);
+        expect(error.name).toBe('HttpNetworkError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.description).toBe('Network failure');
+        expect(error.message).toBe('HTTP Network Error (URL: http://example.com/resource): Network failure');
+        expect(error.cause).toBe(networkError);
     });
 
     test('should throw network error when fetch fails with a primitive value', async () => {
@@ -196,17 +206,21 @@ describe(FetchHttpRequestExecutor, () => {
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
+        const primitiveError = 'Network unreachable';
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
-            .thenReject('Network unreachable');
+            .thenReject(primitiveError);
         const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
 
         // When, Then
-        await expect(executor.execute(request))
-            .rejects.toThrowError(new HttpNetworkError({
-                url: 'http://example.com/resource',
-                description: 'Network unreachable'
-            }));
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
+
+        expect(error).toBeInstanceOf(HttpNetworkError);
+        expect(error.name).toBe('HttpNetworkError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.description).toBe('Network unreachable');
+        expect(error.message).toBe('HTTP Network Error (URL: http://example.com/resource): Network unreachable');
+        expect(error.cause).toBe(primitiveError);
     });
 
     test('should throw payload error when JSON parsing fails', async () => {
@@ -231,8 +245,14 @@ describe(FetchHttpRequestExecutor, () => {
         const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([new JsonResponseBodyParser()]));
 
         // When, Then
-        await expect(executor.execute(request))
-            .rejects.toThrowError(new HttpPayloadError({ url: 'http://example.com/resource' }));
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
+
+        expect(error).toBeInstanceOf(HttpPayloadError);
+        expect(error.name).toBe('HttpPayloadError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/resource)');
+        expect(error.cause).toBeInstanceOf(SyntaxError);
     });
 
     test('should throw payload error when text parsing fails', async () => {
@@ -252,14 +272,21 @@ describe(FetchHttpRequestExecutor, () => {
                 statusText: 'OK'
             }
         );
-        spyOn(responseStub, 'text').mockRejectedValue(new TypeError('Failed to read body'));
+        const textError = new TypeError('Failed to read body');
+        spyOn(responseStub, 'text').mockRejectedValue(textError);
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
             .thenResolve(responseStub);
         const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([new TextResponseBodyParser()]));
 
         // When, Then
-        await expect(executor.execute(request))
-            .rejects.toThrowError(new HttpPayloadError({ url: 'http://example.com/resource' }));
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
+
+        expect(error).toBeInstanceOf(HttpPayloadError);
+        expect(error.name).toBe('HttpPayloadError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/resource)');
+        expect(error.cause).toBe(textError);
     });
 });

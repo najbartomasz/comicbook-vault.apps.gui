@@ -1,10 +1,10 @@
 import { HttpAbortError } from '../error/http-abort-error';
 import { HttpNetworkError } from '../error/http-network-error';
 import { HttpPayloadError } from '../error/http-payload-error';
+import { type HttpRequest } from '../http-request.interface';
+import { type HttpResponse } from '../http-response.interface';
 
 import { type HttpRequestExecutor } from './http-request-executor.interface';
-import { type HttpRequest } from './http-request.interface';
-import { type HttpResponse } from './http-response.interface';
 import { type ResponseBodyParserResolver } from './parser';
 
 export class FetchHttpRequestExecutor implements HttpRequestExecutor {
@@ -24,18 +24,21 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
                 signal: request.signal
             });
         } catch (error) {
+            const { url } = request;
             if (error instanceof DOMException && error.name === 'AbortError') {
-                throw new HttpAbortError({ url: request.url });
+                const e = new HttpAbortError({ url }, { cause: error });
+                e.stack = error.stack;
+                throw e;
             }
-            throw new HttpNetworkError({ url: request.url, description: (error instanceof Error) ? error.message : String(error) });
+            throw new HttpNetworkError({ url, description: (error instanceof Error) ? error.message : String(error) }, { cause: error });
         }
         let responseBody: unknown;
         const contentType = response.headers.get('Content-Type') ?? '';
         try {
             const parser = this.#parserResolver.resolve(contentType);
             responseBody = await parser.parse(response);
-        } catch {
-            throw new HttpPayloadError({ url: response.url });
+        } catch (error) {
+            throw new HttpPayloadError({ url: response.url }, { cause: error });
         }
         return {
             status: response.status,

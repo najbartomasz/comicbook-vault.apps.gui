@@ -1,11 +1,10 @@
 import { describe, expect, fn, test, when } from '@testing/unit';
 
 import { HttpNetworkError } from './error/http-network-error';
-import { HttpStatusError } from './error/http-status-error';
 import { HttpClient } from './http-client';
 
 describe(HttpClient, () => {
-    test('should return parsed body when GET request succeeds with 2xx status', async () => {
+    test('should return HTTP response when GET request succeeds', async () => {
         // Given
         const executeMock = fn();
         when(executeMock)
@@ -22,10 +21,15 @@ describe(HttpClient, () => {
         const result = await httpClient.get('/resource');
 
         // Then
-        expect(result).toEqual({ data: 'test' });
+        expect(result).toStrictEqual({
+            status: 200,
+            statusText: 'OK',
+            url: 'http://example.com/resource',
+            body: { data: 'test' }
+        });
     });
 
-    test('should throw error when executor rejects with network failure', async () => {
+    test('should re-throw error when executor rejects', async () => {
         // Given
         const executeMock = fn();
         when(executeMock)
@@ -38,29 +42,6 @@ describe(HttpClient, () => {
             .rejects.toThrowError(new HttpNetworkError({
                 url: 'http://example.com/resource',
                 description: 'Network failure'
-            }));
-    });
-
-    test('should throw status error when response status indicates failure', async () => {
-        // Given
-        const executeMock = fn();
-        when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: 'GET' })
-            .thenResolve({
-                status: 404,
-                statusText: 'Not Found',
-                url: 'http://example.com/resource',
-                body: { message: 'not found' }
-            });
-        const httpClient = new HttpClient('http://example.com', { execute: executeMock });
-
-        // When, Then
-        await expect(httpClient.get('/resource'))
-            .rejects.toThrowError(new HttpStatusError({
-                status: 404,
-                statusText: 'Not Found',
-                url: 'http://example.com/resource',
-                body: { message: 'not found' }
             }));
     });
 
@@ -79,10 +60,9 @@ describe(HttpClient, () => {
         const httpClient = new HttpClient('http://example.com', { execute: executeMock });
 
         // When
-        const result = await httpClient.get('/resource', { abortSignal: abortController.signal });
+        await httpClient.get('/resource', { abortSignal: abortController.signal });
 
         // Then
-        expect(result).toEqual({ data: 'test' });
         expect(executeMock).toHaveBeenCalledWith({
             url: 'http://example.com/resource',
             method: 'GET',
@@ -104,10 +84,9 @@ describe(HttpClient, () => {
         const httpClient = new HttpClient('http://example.com', { execute: executeMock });
 
         // When
-        const result = await httpClient.get('/resource');
+        await httpClient.get('/resource');
 
         // Then
-        expect(result).toEqual({ data: 'test' });
         expect(executeMock).toHaveBeenCalledWith({
             url: 'http://example.com/resource',
             method: 'GET'

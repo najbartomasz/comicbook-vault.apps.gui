@@ -3,8 +3,8 @@ export class HttpPayloadError extends Error {
     public readonly url: string;
     public readonly description: string;
 
-    public constructor(response: { url: string }) {
-        super(`HTTP Payload Error (URL: ${response.url})`);
+    public constructor(response: { url: string }, options?: ErrorOptions) {
+        super(`HTTP Payload Error (URL: ${response.url})`, options);
         this.url = response.url;
         this.description = 'Failed to parse response as JSON';
         Object.setPrototypeOf(this, HttpPayloadError.prototype);

@@ -8,8 +8,9 @@ export class HttpStatusError extends Error {
     }
 
     readonly #body?: unknown;
-    public constructor(response: { url: string; status: number; statusText: string; body?: unknown }) {
-        super(`HTTP Status Error ${response.status}: ${response.statusText} (URL: ${response.url})`);
+
+    public constructor(response: { url: string; status: number; statusText: string; body?: unknown }, options?: ErrorOptions) {
+        super(`HTTP Status Error ${response.status}: ${response.statusText} (URL: ${response.url})`, options);
         this.url = response.url;
         this.status = response.status;
         this.statusText = response.statusText;

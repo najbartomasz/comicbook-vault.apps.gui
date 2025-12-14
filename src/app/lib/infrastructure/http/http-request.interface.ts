@@ -1,4 +1,4 @@
-import { type HttpMethod } from '../method/http-method';
+import { type HttpMethod } from './method/http-method';
 
 export interface HttpRequest {
     readonly url: string;

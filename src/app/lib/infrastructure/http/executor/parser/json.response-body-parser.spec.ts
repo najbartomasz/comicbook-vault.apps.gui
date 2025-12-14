@@ -55,7 +55,7 @@ describe(JsonResponseBodyParser, () => {
         const result = await parser.parse(new Response(JSON.stringify({ key: 'value' })));
 
         // Then
-        expect(result).toEqual({ key: 'value' });
+        expect(result).toStrictEqual({ key: 'value' });
     });
 
     test('should parse JSON array response body', async () => {
@@ -66,7 +66,7 @@ describe(JsonResponseBodyParser, () => {
         const result = await parser.parse(new Response(JSON.stringify([1, 2, 3])));
 
         // Then
-        expect(result).toEqual([1, 2, 3]);
+        expect(result).toStrictEqual([1, 2, 3]);
     });
 
     test('should parse nested JSON response body', async () => {
@@ -77,6 +77,6 @@ describe(JsonResponseBodyParser, () => {
         const result = await parser.parse(new Response(JSON.stringify({ nested: { data: { value: 123 } } })));
 
         // Then
-        expect(result).toEqual({ nested: { data: { value: 123 } } });
+        expect(result).toStrictEqual({ nested: { data: { value: 123 } } });
     });
 });

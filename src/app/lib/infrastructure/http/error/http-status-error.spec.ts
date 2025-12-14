@@ -41,4 +41,28 @@ describe(HttpStatusError, () => {
         expect(error.body).toBeUndefined();
         expect(error.message).toBe('HTTP Status Error 500: Internal Server Error (URL: http://example.com/resource)');
     });
+
+    test('should create an instance with cause option', () => {
+        // Given
+        const cause = new Error('Original error');
+
+        // When
+        const error = new HttpStatusError(
+            {
+                status: 404,
+                statusText: 'Not Found',
+                url: 'http://example.com/resource'
+            },
+            { cause }
+        );
+
+        // Then
+        expect(error).toBeInstanceOf(HttpStatusError);
+        expect(error.name).toBe('HttpStatusError');
+        expect(error.url).toBe('http://example.com/resource');
+        expect(error.status).toBe(404);
+        expect(error.statusText).toBe('Not Found');
+        expect(error.message).toBe('HTTP Status Error 404: Not Found (URL: http://example.com/resource)');
+        expect(error.cause).toBe(cause);
+    });
 });

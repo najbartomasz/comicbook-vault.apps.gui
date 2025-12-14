@@ -1,3 +1,5 @@
+import { type HttpResponse } from './http-response.interface';
+
 export interface HttpClient {
-    get<T>(url: string, options?: { abortSignal?: AbortSignal }): Promise<T>;
+    get(url: string, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse>;
 }
