@@ -1,5 +1,4 @@
-import { describe, expect, test } from '@testing/unit';
-
+/* eslint-disable vitest/max-expects */
 import { HttpNetworkError } from './http-network-error';
 
 describe(HttpNetworkError, () => {

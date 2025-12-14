@@ -1,14 +1,16 @@
-import { describe, expect, fn, test, when } from '@testing/unit';
+import { when } from 'vitest-when';
 
 import { HttpNetworkError } from './error/http-network-error';
+import { type HttpRequestExecutor } from './executor';
 import { HttpClient } from './http-client';
+import { HttpMethod } from './method';
 
 describe(HttpClient, () => {
     test('should return HTTP response when GET request succeeds', async () => {
         // Given
-        const executeMock = fn();
+        const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: 'GET' })
+            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
@@ -31,15 +33,15 @@ describe(HttpClient, () => {
 
     test('should re-throw error when executor rejects', async () => {
         // Given
-        const executeMock = fn();
+        const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: 'GET' })
+            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
             .thenReject(new HttpNetworkError({ url: 'http://example.com/resource', description: 'Network failure' }));
         const httpClient = new HttpClient('http://example.com', { execute: executeMock });
 
         // When, Then
         await expect(httpClient.get('/resource'))
-            .rejects.toThrowError(new HttpNetworkError({
+            .rejects.toThrow(new HttpNetworkError({
                 url: 'http://example.com/resource',
                 description: 'Network failure'
             }));
@@ -48,9 +50,9 @@ describe(HttpClient, () => {
     test('should pass abort signal to executor when provided', async () => {
         // Given
         const abortController = new AbortController();
-        const executeMock = fn();
+        const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: 'GET', signal: abortController.signal })
+            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get, signal: abortController.signal })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
@@ -72,9 +74,9 @@ describe(HttpClient, () => {
 
     test('should not pass signal to executor when abort signal not provided', async () => {
         // Given
-        const executeMock = fn();
+        const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: 'GET' })
+            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',

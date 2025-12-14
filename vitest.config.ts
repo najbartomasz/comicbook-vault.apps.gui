@@ -6,7 +6,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
     plugins: [viteTsConfigPaths()],
     test: {
-        globals: false,
+        globals: true,
         coverage: {
             cleanOnRerun: true,
             reporter: [

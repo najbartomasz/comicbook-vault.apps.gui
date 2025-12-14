@@ -1,5 +1,4 @@
-import { describe, expect, test } from '@testing/unit';
-
+/* eslint-disable vitest/max-expects */
 import { HttpPayloadError } from './http-payload-error';
 
 describe(HttpPayloadError, () => {

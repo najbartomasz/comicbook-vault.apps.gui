@@ -1,5 +1,3 @@
-import { describe, expect, test } from '@testing/unit';
-
 import { ResponseBodyParserResolver } from './response-body-parser-resolver';
 import { type ResponseBodyParser } from './response-body-parser.interface';
 
@@ -50,7 +48,7 @@ describe(ResponseBodyParserResolver, () => {
         const result = resolver.resolve('application/xml');
 
         // Then
-        expect(await result.parse(new Response('plain text'))).toBe('plain text');
+        await expect(result.parse(new Response('plain text'))).resolves.toBe('plain text');
     });
 
     test('should resolve default text parser when content-type is empty', async () => {
@@ -65,7 +63,7 @@ describe(ResponseBodyParserResolver, () => {
         const result = resolver.resolve('');
 
         // Then
-        expect(await result.parse(new Response('fallback text'))).toBe('fallback text');
+        await expect(result.parse(new Response('fallback text'))).resolves.toBe('fallback text');
     });
 
     test('should resolve default text parser when no parsers are provided', async () => {
@@ -76,6 +74,6 @@ describe(ResponseBodyParserResolver, () => {
         const result = resolver.resolve('application/json');
 
         // Then
-        expect(await result.parse(new Response('text content'))).toBe('text content');
+        await expect(result.parse(new Response('text content'))).resolves.toBe('text content');
     });
 });

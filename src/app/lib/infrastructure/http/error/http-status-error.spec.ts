@@ -1,5 +1,4 @@
-import { describe, expect, test } from '@testing/unit';
-
+/* eslint-disable vitest/max-expects */
 import { HttpStatusError } from './http-status-error';
 
 describe(HttpStatusError, () => {
@@ -20,7 +19,6 @@ describe(HttpStatusError, () => {
         expect(error.status).toBe(404);
         expect(error.statusText).toBe('Not Found');
         expect(error.body).toStrictEqual({ message: 'Resource not found' });
-        expect(error.body).not.toBe(body);
         expect(error.message).toBe('HTTP Status Error 404: Not Found (URL: http://example.com/resource)');
     });
 

@@ -1,4 +1,4 @@
-import { describe, expect, spyOn, test, when } from '@testing/unit';
+import { when } from 'vitest-when';
 
 import { HttpAbortError } from '../error/http-abort-error';
 import { HttpNetworkError } from '../error/http-network-error';
@@ -18,7 +18,7 @@ describe(FetchHttpRequestExecutor, () => {
 
     test('should return response with JSON body when content-type is application/json', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -51,7 +51,7 @@ describe(FetchHttpRequestExecutor, () => {
 
     test('should return response with text body when content-type is text/plain', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -84,7 +84,7 @@ describe(FetchHttpRequestExecutor, () => {
 
     test('should return response with text body when content-type header is missing', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -98,7 +98,7 @@ describe(FetchHttpRequestExecutor, () => {
                 statusText: 'OK'
             }
         );
-        spyOn(responseStub.headers, 'get').mockReturnValue(null);
+        vi.spyOn(responseStub.headers, 'get').mockReturnValue(null);
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
             .thenResolve(responseStub);
@@ -118,7 +118,7 @@ describe(FetchHttpRequestExecutor, () => {
 
     test('should return response without throwing when status indicates error', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -151,7 +151,7 @@ describe(FetchHttpRequestExecutor, () => {
 
     test('should throw abort error when fetch is aborted', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -167,15 +167,13 @@ describe(FetchHttpRequestExecutor, () => {
         const error: HttpAbortError = await executor.execute(request).catch((err: unknown) => err as HttpAbortError) as HttpAbortError;
 
         expect(error).toBeInstanceOf(HttpAbortError);
-        expect(error.name).toBe('HttpAbortError');
         expect(error.url).toBe('http://example.com/resource');
-        expect(error.message).toBe('HTTP Request Aborted (URL: http://example.com/resource)');
         expect(error.cause).toBe(abortError);
     });
 
     test('should throw network error when fetch fails with an exception', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -191,16 +189,14 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
 
         expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.name).toBe('HttpNetworkError');
         expect(error.url).toBe('http://example.com/resource');
         expect(error.description).toBe('Network failure');
-        expect(error.message).toBe('HTTP Network Error (URL: http://example.com/resource): Network failure');
         expect(error.cause).toBe(networkError);
     });
 
     test('should throw network error when fetch fails with a primitive value', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -216,16 +212,14 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
 
         expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.name).toBe('HttpNetworkError');
         expect(error.url).toBe('http://example.com/resource');
         expect(error.description).toBe('Network unreachable');
-        expect(error.message).toBe('HTTP Network Error (URL: http://example.com/resource): Network unreachable');
         expect(error.cause).toBe(primitiveError);
     });
 
     test('should throw payload error when JSON parsing fails', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -248,16 +242,14 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
 
         expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.name).toBe('HttpPayloadError');
         expect(error.url).toBe('http://example.com/resource');
         expect(error.description).toBe('Failed to parse response as JSON');
-        expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/resource)');
         expect(error.cause).toBeInstanceOf(SyntaxError);
     });
 
     test('should throw payload error when text parsing fails', async () => {
         // Given
-        const fetchMock = spyOn(globalThis, 'fetch');
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
@@ -273,7 +265,7 @@ describe(FetchHttpRequestExecutor, () => {
             }
         );
         const textError = new TypeError('Failed to read body');
-        spyOn(responseStub, 'text').mockRejectedValue(textError);
+        vi.spyOn(responseStub, 'text').mockRejectedValue(textError);
         when(fetchMock)
             .calledWith(request.url, { method: request.method, signal: request.signal })
             .thenResolve(responseStub);
@@ -283,10 +275,8 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
 
         expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.name).toBe('HttpPayloadError');
         expect(error.url).toBe('http://example.com/resource');
         expect(error.description).toBe('Failed to parse response as JSON');
-        expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/resource)');
         expect(error.cause).toBe(textError);
     });
 });

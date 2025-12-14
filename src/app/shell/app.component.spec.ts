@@ -1,4 +1,6 @@
-import { describe, expect, page, setupComponent, test } from '@testing/unit';
+import { page } from 'vitest/browser';
+
+import { setupComponent } from '@testing/unit';
 
 import { AppComponent } from './app.component';
 

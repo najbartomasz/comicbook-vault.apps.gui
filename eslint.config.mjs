@@ -1799,18 +1799,6 @@ export default [
                     ]
                 }
             ],
-            'no-restricted-imports': [
-                'error',
-                {
-                    patterns: [
-                        {
-                            group: ['vitest'],
-                            importNamePattern: '^(describe|test|it|expect|vi|beforeEach|beforeAll|afterEach|afterAll)$',
-                            message: 'Import test functions from @testing/unit instead of directly from vitest to maintain library independence.'
-                        }
-                    ]
-                }
-            ],
             // Promise Rules
             'promise/avoid-new': 'off',
             // SonarJS Rules
@@ -1885,9 +1873,9 @@ export default [
             'vitest/prefer-strict-boolean-matchers': 'error',
             'vitest/prefer-strict-equal': 'error',
             'vitest/prefer-to-be': 'error',
-            'vitest/prefer-to-be-falsy': 'error',
+            'vitest/prefer-to-be-falsy': 'off',
             'vitest/prefer-to-be-object': 'error',
-            'vitest/prefer-to-be-truthy': 'error',
+            'vitest/prefer-to-be-truthy': 'off',
             'vitest/prefer-to-contain': 'error',
             'vitest/prefer-to-have-length': 'error',
             'vitest/prefer-todo': 'error',
