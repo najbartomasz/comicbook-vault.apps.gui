@@ -1,59 +1,84 @@
-# ComicbookVaultAppsGui
+# ComicBook Vault
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=coverage)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=bugs)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=najbartomasz_comicbook-vault.apps.gui&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=najbartomasz_comicbook-vault.apps.gui)
 
-## Development server
+## 📐 Architecture
 
-To start a local development server, run:
+This project follows a **layered architecture** with strict separation between framework-agnostic business logic and framework-specific presentation code.
 
-```bash
-ng serve
-```
+📖 **[Read the full architecture documentation →](ARCHITECTURE.md)**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🚀 Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Development Server
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Navigate to `http://localhost:4200/`. The application automatically reloads when you modify source files.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Build
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+Build artifacts are stored in the `dist/` directory.
 
-For end-to-end (e2e) testing, run:
+---
+
+## 🧪 Testing
+
+### Unit Tests
 
 ```bash
-ng e2e
+npm test                   # Run all tests
+npm run test:unit          # Run unit tests only
+npm run test:unit:visual   # Run visual regression tests
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Linting
 
-## Additional Resources
+```bash
+npm run lint           # Check code quality
+npm run lint:fix       # Auto-fix issues
+npm run lint:styles    # Check styles only
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## 📊 Code Analysis
+
+### Coverage Reports
+
+Test coverage reports are generated in the `coverage/` directory.
+
+**Dependency Analysis**: See [ARCHITECTURE.md](ARCHITECTURE.md#dependency-analysis) for detailed dependency graphs and analysis commands.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: Angular 21 (Zoneless)
+- **Testing**: Vitest + Angular Testing Library
+- **Code Quality**: ESLint, Stylelint, SonarCloud
+- **Architecture**: Layered architecture with framework-agnostic core
+
+---
+
+##  Documentation
+
+- [Architecture Guide](ARCHITECTURE.md) - Detailed architecture principles and patterns
+- [Architecture Draft](ARCHITECTURE-DRAFT.md) - Future architecture considerations

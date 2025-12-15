@@ -1,0 +1,41 @@
+#!/bin/sh
+
+echo "🔍 Analyzing dependencies..."
+
+# Check for circular dependencies
+echo "Checking for circular dependencies..."
+if ! npm run analyze:deps --silent; then
+  echo "❌ Circular dependencies detected! Push aborted."
+  exit 1
+fi
+
+# Check for orphaned files
+echo "Checking for orphaned files..."
+ORPHANS=$(npm run analyze:orphans --silent)
+if echo "$ORPHANS" | grep -q "Orphan modules:"; then
+  echo "❌ Orphaned files detected! Push aborted."
+  echo "$ORPHANS"
+  exit 1
+fi
+
+# Check if there are structural changes (files added, deleted, or renamed)
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+REMOTE_BRANCH="origin/$CURRENT_BRANCH"
+
+if git rev-parse --verify "$REMOTE_BRANCH" >/dev/null 2>&1; then
+  STRUCTURAL_CHANGES=$(git diff --name-status "$REMOTE_BRANCH"...HEAD | grep -E '^(A|D|R)' || true)
+
+  if [ -n "$STRUCTURAL_CHANGES" ]; then
+    echo "📊 Structural changes detected, updating dependency graphs..."
+    echo "  → Module dependencies overview..."
+    npm run visualize:modules --silent
+    echo "  → Architectural layers visualization..."
+    npm run visualize:layers --silent
+
+    if ! git diff --quiet deps-graph.svg deps-report.svg 2>/dev/null; then
+      echo "⚠️  Dependency graphs have changed. Please review and commit them."
+    fi
+  fi
+fi
+
+echo "✅ All dependency checks passed!"
