@@ -15,7 +15,7 @@
 
 This project follows a **layered architecture** with strict separation between framework-agnostic business logic and framework-specific presentation code.
 
-📖 **[Read the full architecture documentation →](ARCHITECTURE.md)**
+📖 **[Read the Architecture Guide →](doc/ARCHITECTURE.md)**
 
 ---
 
@@ -65,7 +65,7 @@ npm run lint:styles    # Check styles only
 
 Test coverage reports are generated in the `coverage/` directory.
 
-**Dependency Analysis**: See [ARCHITECTURE.md](ARCHITECTURE.md#dependency-analysis) for detailed dependency graphs and analysis commands.
+**Dependency Analysis**: See [Architecture Guide](doc/ARCHITECTURE.md#dependency-analysis) for detailed dependency graphs and analysis commands.
 
 ---
 
@@ -80,5 +80,5 @@ Test coverage reports are generated in the `coverage/` directory.
 
 ##  Documentation
 
-- [Architecture Guide](ARCHITECTURE.md) - Detailed architecture principles and patterns
-- [Architecture Draft](ARCHITECTURE-DRAFT.md) - Future architecture considerations
+- [Architecture Guide](doc/ARCHITECTURE.md) - Detailed architecture principles and patterns
+- [Architecture Draft](doc/ARCHITECTURE-DRAFT.md) - Future architecture considerations

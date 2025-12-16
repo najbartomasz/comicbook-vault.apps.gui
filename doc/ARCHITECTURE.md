@@ -128,8 +128,8 @@ See the [High-Level Architecture](#high-level-architecture) diagram above for th
 <details>
 <summary>🔄 Module Dependencies Overview (click to expand)</summary>
 
-<a href="deps-graph.svg" target="_blank">
-  <img src="deps-graph.svg" alt="Module Dependencies Overview" width="800">
+<a href="module-dependencies.svg" target="_blank">
+  <img src="module-dependencies.svg" alt="Module Dependencies Overview" width="800">
 </a>
 
 *Click image to open full size*
@@ -139,8 +139,8 @@ See the [High-Level Architecture](#high-level-architecture) diagram above for th
 <details>
 <summary>📐 Architectural Layers Visualization (click to expand)</summary>
 
-<a href="deps-report.svg" target="_blank">
-  <img src="deps-report.svg" alt="Architectural Layers Visualization" width="800">
+<a href="architecture-layers.svg" target="_blank">
+  <img src="architecture-layers.svg" alt="Architectural Layers Visualization" width="800">
 </a>
 
 *Click image to open full size*

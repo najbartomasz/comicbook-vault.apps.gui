@@ -14,10 +14,10 @@
         "lint:fix": "ng lint --fix && stylelint \"**/*.scss\" --fix",
         "lint:styles": "stylelint \"**/*.scss\"",
         "lint:styles:fix": "stylelint \"**/*.scss\" --fix",
-        "analyze:deps": "madge --circular --extensions ts src/app",
-        "analyze:orphans": "madge --orphans --extensions ts src/app",
-        "visualize:modules": "madge --image deps-graph.svg --extensions ts src/app",
-        "visualize:layers": "depcruise src/app --include-only '^src/app' --exclude '\\.spec\\.ts$' --output-type dot | node scripts/dependency-cruiser/colorize-deps.js | dot -T svg -Gbgcolor='#ffffff' -Nshape=box -Nstyle='rounded,filled' -Nfontname=Arial -Nfontsize=10 -Ecolor='#00000055' -Epenwidth=1.5 -Earrowsize=0.8 > deps-report.svg && echo '✔ Architectural layers visualization: deps-report.svg'",
+        "analyze:deps": "madge --circular --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
+        "analyze:orphans": "madge --orphans --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
+        "visualize:modules": "madge --image doc/module-dependencies.svg --extensions ts --exclude '\\.spec\\.ts$|testing/' --ts-config tsconfig.app.json --warning src",
+        "visualize:layers": "depcruise --output-type dot src/ | node doc/dependency-cruiser/colorize-deps.js | doc/dependency-cruiser/render-dot.sh",
         "prepare": "husky"
     },
     "prettier": {
