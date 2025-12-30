@@ -2,12 +2,12 @@ import { when } from 'vitest-when';
 
 import { HttpNetworkError } from './error/http-network-error';
 import { type HttpRequestExecutor } from './executor';
-import { HttpClient } from './http-client';
+import { FetchHttpClient } from './fetch-http-client';
 import { type HttpRequestInterceptor } from './interceptor/http-request-interceptor.interface';
 import { type HttpResponseInterceptor } from './interceptor/http-response-interceptor.interface';
 import { HttpMethod } from './method';
 
-describe(HttpClient, () => {
+describe(FetchHttpClient, () => {
     test('should return HTTP response when GET request succeeds', async () => {
         // Given
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
@@ -19,7 +19,7 @@ describe(HttpClient, () => {
                 url: 'http://example.com/resource',
                 body: { data: 'test' }
             });
-        const httpClient = new HttpClient('http://example.com', { execute: executeMock });
+        const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
         const result = await httpClient.get('/resource');
@@ -39,7 +39,7 @@ describe(HttpClient, () => {
         when(executeMock)
             .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
             .thenReject(new HttpNetworkError({ url: 'http://example.com/resource', description: 'Network failure' }));
-        const httpClient = new HttpClient('http://example.com', { execute: executeMock });
+        const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When, Then
         await expect(httpClient.get('/resource'))
@@ -61,7 +61,7 @@ describe(HttpClient, () => {
                 url: 'http://example.com/resource',
                 body: { data: 'test' }
             });
-        const httpClient = new HttpClient('http://example.com', { execute: executeMock });
+        const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
         await httpClient.get('/resource', { abortSignal: abortController.signal });
@@ -85,7 +85,7 @@ describe(HttpClient, () => {
                 url: 'http://example.com/resource',
                 body: { data: 'test' }
             });
-        const httpClient = new HttpClient('http://example.com', { execute: executeMock });
+        const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
         await httpClient.get('/resource');
@@ -116,7 +116,7 @@ describe(HttpClient, () => {
             ...request,
             url: `${request.url}&param2=value2`
         }));
-        const httpClient = new HttpClient(
+        const httpClient = new FetchHttpClient(
             'http://example.com',
             { execute: executeMock },
             [{ interceptRequest: interceptRequest1Mock }, { interceptRequest: interceptRequest2Mock }]
@@ -153,7 +153,7 @@ describe(HttpClient, () => {
             ...response,
             body: { ...response.body as object, interceptor2: 'applied' }
         }));
-        const httpClient = new HttpClient(
+        const httpClient = new FetchHttpClient(
             'http://example.com',
             { execute: executeMock },
             [{ interceptResponse: interceptResponse1Mock }, { interceptResponse: interceptResponse2Mock }]

@@ -1,5 +1,5 @@
 import { type HttpRequestExecutor } from './executor';
-import { type HttpClient as HttpClientInterface } from './http-client.interface';
+import { type HttpClient } from './http-client.interface';
 import { type HttpInterceptor } from './http-interceptor.interface';
 import { type HttpRequest } from './http-request.interface';
 import { type HttpResponse } from './http-response.interface';
@@ -8,7 +8,7 @@ import { type HttpRequestInterceptor } from './interceptor/http-request-intercep
 import { type HttpResponseInterceptor } from './interceptor/http-response-interceptor.interface';
 import { HttpMethod } from './method';
 
-export class HttpClient implements HttpClientInterface {
+export class FetchHttpClient implements HttpClient {
     readonly #url: HttpUrl;
     readonly #requestExecutor: HttpRequestExecutor;
     readonly #requestInterceptors: readonly HttpRequestInterceptor[];
