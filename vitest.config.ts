@@ -7,6 +7,8 @@ export default defineConfig({
     plugins: [viteTsConfigPaths()],
     test: {
         globals: true,
+        restoreMocks: true,
+        mockReset: true,
         coverage: {
             cleanOnRerun: true,
             reporter: [

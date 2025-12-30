@@ -283,7 +283,6 @@ export default [
                 {
                     code: 140,
                     ignoreUrls: true,
-                    ignoreStrings: true,
                     ignoreTemplateLiterals: true,
                     ignoreRegExpLiterals: true
                 }
@@ -653,7 +652,8 @@ export default [
                 'before',
                 {
                     overrides: {
-                        '=': 'none'
+                        '=': 'after',
+                        '|': 'before'
                     }
                 }
             ],
