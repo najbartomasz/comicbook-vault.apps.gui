@@ -6,13 +6,28 @@ import { type HttpResponseInterceptor } from '../http-response-interceptor.inter
 export class LoggerHttpInterceptor implements HttpRequestInterceptor, HttpResponseInterceptor {
     public interceptRequest(request: HttpRequest): HttpRequest {
         // eslint-disable-next-line no-console
-        console.info('[HTTP Request]', { method: request.method, url: request.url });
+        console.info(
+            '[HTTP Request]',
+            {
+                method: request.method,
+                url: request.url,
+                ...request.metadata?.sequenceNumber && { sequenceNumber: request.metadata.sequenceNumber }
+            }
+        );
         return request;
     }
 
-    public interceptResponse(response: HttpResponse): HttpResponse {
+    public interceptResponse(response: HttpResponse, request: HttpRequest): HttpResponse {
         // eslint-disable-next-line no-console
-        console.info('[HTTP Response]', { url: response.url, status: response.status, statusText: response.statusText });
+        console.info(
+            '[HTTP Response]',
+            {
+                url: response.url,
+                status: response.status,
+                statusText: response.statusText,
+                ...request.metadata?.sequenceNumber && { sequenceNumber: request.metadata.sequenceNumber }
+            }
+        );
         return response;
     }
 }
