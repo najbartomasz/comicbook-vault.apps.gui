@@ -1,3 +1,5 @@
+import { type CurrentDateTimeProvider } from '@lib/core/date-time';
+
 import { type HttpRequest } from '../../http-request.interface';
 import { type HttpResponse } from '../../http-response.interface';
 import { HttpMethod } from '../../method';
@@ -7,13 +9,14 @@ import { TimestampHttpInterceptor } from './timestamp.http-interceptor';
 describe(TimestampHttpInterceptor, () => {
     test('should add timestamp to request metadata', () => {
         // Given
-        const interceptor = new TimestampHttpInterceptor();
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
             url: 'http://example.com/resource',
             method: HttpMethod.Get
         };
-        const now = 1234567890;
-        vi.spyOn(Date, 'now').mockReturnValue(now);
 
         // When
         const result = interceptor.interceptRequest(requestStub);
@@ -23,33 +26,37 @@ describe(TimestampHttpInterceptor, () => {
             url: 'http://example.com/resource',
             method: HttpMethod.Get,
             metadata: {
-                timestamp: now
+                timestamp: 1234567890
             }
         });
     });
 
     test('should preserve existing metadata and add timestamp', () => {
         // Given
-        const interceptor = new TimestampHttpInterceptor();
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
             method: HttpMethod.Get
         };
-        const now = 1234567890;
-        vi.spyOn(Date, 'now').mockReturnValue(now);
 
         // When
         const result = interceptor.interceptRequest(requestStub);
 
         // Then
         expect(result.metadata).toStrictEqual({
-            timestamp: now
+            timestamp: 1234567890
         });
     });
 
     test('should override existing timestamp in request metadata', () => {
         // Given
-        const interceptor = new TimestampHttpInterceptor();
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
             method: HttpMethod.Get,
@@ -57,27 +64,26 @@ describe(TimestampHttpInterceptor, () => {
                 timestamp: 999
             }
         };
-        const now = 1234567890;
-        vi.spyOn(Date, 'now').mockReturnValue(now);
 
         // When
         const result = interceptor.interceptRequest(requestStub);
 
         // Then
-        expect(result.metadata?.timestamp).toBe(now);
+        expect(result.metadata?.timestamp).toBe(1234567890);
     });
 
     test('should add timestamp to response metadata', () => {
         // Given
-        const interceptor = new TimestampHttpInterceptor();
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const responseStub: HttpResponse = {
             status: 200,
             statusText: 'OK',
             url: 'http://example.com/resource',
             body: { data: 'test' }
         };
-        const now = 1234567890;
-        vi.spyOn(Date, 'now').mockReturnValue(now);
 
         // When
         const result = interceptor.interceptResponse(responseStub);
@@ -89,14 +95,17 @@ describe(TimestampHttpInterceptor, () => {
             url: 'http://example.com/resource',
             body: { data: 'test' },
             metadata: {
-                timestamp: now
+                timestamp: 1234567890
             }
         });
     });
 
     test('should override existing timestamp in response metadata', () => {
         // Given
-        const interceptor = new TimestampHttpInterceptor();
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const responseStub: HttpResponse = {
             status: 200,
             statusText: 'OK',
@@ -106,13 +115,11 @@ describe(TimestampHttpInterceptor, () => {
                 timestamp: 999
             }
         };
-        const now = 1234567890;
-        vi.spyOn(Date, 'now').mockReturnValue(now);
 
         // When
         const result = interceptor.interceptResponse(responseStub);
 
         // Then
-        expect(result.metadata?.timestamp).toBe(now);
+        expect(result.metadata?.timestamp).toBe(1234567890);
     });
 });

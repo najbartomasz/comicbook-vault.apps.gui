@@ -17,7 +17,7 @@
         "analyze:deps": "madge --circular --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
         "analyze:orphans": "madge --orphans --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
         "visualize:modules": "madge --image doc/module-dependencies.svg --extensions ts --exclude '\\.spec\\.ts$|testing/' --ts-config tsconfig.app.json --warning src",
-        "visualize:layers": "depcruise --output-type dot src/ | node doc/dependency-cruiser/colorize-deps.js | doc/dependency-cruiser/render-dot.sh",
+        "visualize:layers": "depcruise --output-type dot src/ | node doc/dependency-cruiser/colorize-dependencies.js | doc/dependency-cruiser/render-dot.sh",
         "prepare": "husky"
     },
     "prettier": {
