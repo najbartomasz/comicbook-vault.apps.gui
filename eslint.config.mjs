@@ -53,6 +53,11 @@ export default [
                     mode: 'folder'
                 },
                 {
+                    type: 'lib-core',
+                    pattern: 'src/app/lib/core/**',
+                    mode: 'folder'
+                },
+                {
                     type: 'lib-domain',
                     pattern: 'src/app/lib/domain/**',
                     mode: 'folder'
@@ -70,6 +75,12 @@ export default [
                 {
                     type: 'feature',
                     pattern: 'src/app/features/*',
+                    mode: 'folder',
+                    capture: ['featureName']
+                },
+                {
+                    type: 'feature-core',
+                    pattern: 'src/app/features/*/core/**',
                     mode: 'folder',
                     capture: ['featureName']
                 },
@@ -1631,28 +1642,35 @@ export default [
                         // Shell can import from lib and features (orchestration layer)
                         {
                             from: 'shell',
-                            allow: ['shell', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'feature']
+                            allow: ['shell', 'lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'feature']
+                        },
+                        // Lib core is the lowest layer (no imports from app code)
+                        {
+                            from: 'lib-core',
+                            allow: ['lib-core']
                         },
                         // Lib domain is framework-agnostic (pure TypeScript only)
                         {
                             from: 'lib-domain',
-                            allow: ['lib-domain']
+                            allow: ['lib-core', 'lib-domain']
                         },
                         // Lib infrastructure is framework-agnostic (can use lib-domain)
                         {
                             from: 'lib-infrastructure',
-                            allow: ['lib-domain', 'lib-infrastructure']
+                            allow: ['lib-core', 'lib-domain', 'lib-infrastructure']
                         },
                         // Lib presentation can use Angular and lower layers
                         {
                             from: 'lib-presentation',
-                            allow: ['lib-domain', 'lib-infrastructure', 'lib-presentation']
+                            allow: ['lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation']
                         },
                         // Feature domain is framework-agnostic (pure TypeScript)
                         {
                             from: 'feature-domain',
                             allow: [
+                                'lib-core',
                                 'lib-domain',
+                                ['feature-core', { featureName: '${from.featureName}' }],
                                 ['feature-domain', { featureName: '${from.featureName}' }]
                             ]
                         },
@@ -1660,8 +1678,10 @@ export default [
                         {
                             from: 'feature-infrastructure',
                             allow: [
+                                'lib-core',
                                 'lib-domain',
                                 'lib-infrastructure',
+                                ['feature-core', { featureName: '${from.featureName}' }],
                                 ['feature-domain', { featureName: '${from.featureName}' }],
                                 ['feature-infrastructure', { featureName: '${from.featureName}' }]
                             ]
@@ -1670,12 +1690,22 @@ export default [
                         {
                             from: 'feature-presentation',
                             allow: [
+                                'lib-core',
                                 'lib-domain',
                                 'lib-infrastructure',
                                 'lib-presentation',
+                                ['feature-core', { featureName: '${from.featureName}' }],
                                 ['feature-domain', { featureName: '${from.featureName}' }],
                                 ['feature-infrastructure', { featureName: '${from.featureName}' }],
                                 ['feature-presentation', { featureName: '${from.featureName}' }]
+                            ]
+                        },
+                        // Feature core is framework-agnostic (lowest feature layer)
+                        {
+                            from: 'feature-core',
+                            allow: [
+                                'lib-core',
+                                ['feature-core', { featureName: '${from.featureName}' }]
                             ]
                         }
                     ]
@@ -1698,12 +1728,12 @@ export default [
                         },
                         // Internal feature files allowed
                         {
-                            target: ['feature-domain', 'feature-infrastructure', 'feature-presentation'],
+                            target: ['feature-core', 'feature-domain', 'feature-infrastructure', 'feature-presentation'],
                             allow: '**'
                         },
                         // Lib sublayers allow all imports
                         {
-                            target: ['lib-domain', 'lib-infrastructure', 'lib-presentation', 'shell'],
+                            target: ['lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'shell'],
                             allow: '**'
                         }
                     ]
@@ -1712,7 +1742,45 @@ export default [
             'boundaries/external': [
                 'error',
                 {
-                    default: 'allow'
+                    default: 'allow',
+                    rules: [
+                        // Core cannot import Angular
+                        {
+                            from: 'lib-core',
+                            disallow: ['@angular/**'],
+                            message: 'Core layer cannot import Angular. Keep core utilities framework-agnostic.'
+                        },
+                        // Domain cannot import Angular
+                        {
+                            from: 'lib-domain',
+                            disallow: ['@angular/**'],
+                            message: 'Domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // Infrastructure cannot import Angular
+                        {
+                            from: 'lib-infrastructure',
+                            disallow: ['@angular/**'],
+                            message: 'Infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
+                        },
+                        // Feature core cannot import Angular
+                        {
+                            from: 'feature-core',
+                            disallow: ['@angular/**'],
+                            message: 'Feature core layer cannot import Angular. Keep core utilities framework-agnostic.'
+                        },
+                        // Feature domain cannot import Angular
+                        {
+                            from: 'feature-domain',
+                            disallow: ['@angular/**'],
+                            message: 'Feature domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // Feature infrastructure cannot import Angular
+                        {
+                            from: 'feature-infrastructure',
+                            disallow: ['@angular/**'],
+                            message: 'Feature infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
+                        }
+                    ]
                 }
             ]
         }
@@ -1852,7 +1920,7 @@ export default [
             'vitest/padding-around-expect-groups': 'error',
             'vitest/padding-around-test-blocks': 'error',
             'vitest/prefer-called-exactly-once-with': 'error',
-            'vitest/prefer-called-once': 'error',
+            'vitest/prefer-called-once': 'off',
             'vitest/prefer-called-times': 'error',
             'vitest/prefer-called-with': 'error',
             'vitest/prefer-comparison-matcher': 'error',
