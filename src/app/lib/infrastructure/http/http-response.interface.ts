@@ -1,4 +1,6 @@
-import { type HttpResponseMetadata } from './http-response-metadata.interface';
+interface HttpResponseMetadata {
+    readonly timestamp?: number;
+}
 
 export interface HttpResponse {
     readonly status: number;

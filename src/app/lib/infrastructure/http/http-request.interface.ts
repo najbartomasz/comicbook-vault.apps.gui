@@ -1,5 +1,9 @@
-import { type HttpRequestMetadata } from './http-request-metadata.interface';
 import { type HttpMethod } from './method/http-method';
+
+interface HttpRequestMetadata {
+    readonly sequenceNumber?: number;
+    readonly timestamp?: number;
+}
 
 export interface HttpRequest {
     readonly url: string;
