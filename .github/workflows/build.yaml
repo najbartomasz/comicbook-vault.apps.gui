@@ -26,11 +26,32 @@ jobs:
                   npm ci
                   npx playwright install --with-deps
 
+            - name: Install Graphviz
+              run: sudo apt-get update && sudo apt-get install -y graphviz
+
             - name: Validate
               run: |
                   npm run build
                   npm run lint
                   npm run test
+
+            - name: Validate Architecture Documentation
+              run: |
+                  npm run analyze:deps
+                  npm run visualize:modules
+                  npm run visualize:layers
+                  if ! git diff --quiet docs/module-dependencies.svg docs/architecture-layers.svg; then
+                    echo "❌ Dependency graphs are out of date!"
+                    echo "Run 'npm run visualize:modules' and 'npm run visualize:layers' and commit the changes."
+                    exit 1
+                  fi
+
+                  npm run docs:metrics
+                  if ! git diff --quiet docs/ARCHITECTURE.md; then
+                    echo "❌ Architecture metrics are out of date!"
+                    echo "Run 'npm run docs:metrics' and commit the changes."
+                    exit 1
+                  fi
 
             - name: SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@v6

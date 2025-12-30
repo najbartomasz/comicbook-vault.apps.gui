@@ -65,13 +65,18 @@ update_dependency_graphs() {
   echo "  → Architectural layers visualization..."
   npm run visualize:layers --silent
 
-  if ! git diff --quiet doc/module-dependencies.svg doc/architecture-layers.svg 2>/dev/null; then
-    echo "❌ Dependency graphs have changed. Please review and commit them."
+  if ! git diff --quiet docs/module-dependencies.svg docs/architecture-layers.svg 2>/dev/null; then
+    echo "❌ Dependency graphs have changed. Please review and commit them:"
+    echo "   git add docs/module-dependencies.svg docs/architecture-layers.svg"
+    echo "   git commit -m 'docs: update dependency graphs'"
+    echo "   git push"
     return 1
   fi
 
   return 0
 }
+
+
 
 echo "🔍 Analyzing dependencies..."
 

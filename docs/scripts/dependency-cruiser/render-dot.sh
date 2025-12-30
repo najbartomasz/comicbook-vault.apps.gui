@@ -10,6 +10,6 @@ dot -T svg \
   -Ecolor='#00000055' \
   -Epenwidth=1.5 \
   -Earrowsize=0.8 \
-  > doc/architecture-layers.svg
+  > docs/architecture-layers.svg
 
-echo '✔ Architectural layers visualization: doc/architecture-layers.svg'
+echo '✔ Architectural layers visualization: docs/architecture-layers.svg'

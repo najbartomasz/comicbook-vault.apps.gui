@@ -15,7 +15,7 @@
 
 This project follows a **layered architecture** with strict separation between framework-agnostic business logic and framework-specific presentation code.
 
-📖 **[Read the Architecture Guide →](doc/ARCHITECTURE.md)**
+📖 **[Read the Architecture Guide →](docs/ARCHITECTURE.md)**
 
 ---
 
@@ -52,33 +52,73 @@ npm run test:unit:visual   # Run visual regression tests
 ### Linting
 
 ```bash
-npm run lint           # Check code quality
-npm run lint:fix       # Auto-fix issues
-npm run lint:styles    # Check styles only
+npm run lint               # Check code and styles
+npm run lint:fix           # Auto-fix issues
+npm run lint:styles        # Check styles only
+npm run lint:styles:fix    # Auto-fix style issues
 ```
 
 ---
 
 ## 📊 Code Analysis
 
+### Dependency Analysis
+
+```bash
+npm run analyze:deps       # Check for circular dependencies
+npm run analyze:orphans    # Find orphaned modules
+npm run visualize:modules  # Generate module dependency graph
+npm run visualize:layers   # Generate architecture layers visualization
+npm run docs:metrics       # Update architecture metrics
+npm run docs:validate      # Run all analysis and update documentation
+```
+
 ### Coverage Reports
 
 Test coverage reports are generated in the `coverage/` directory.
 
-**Dependency Analysis**: See [Architecture Guide](doc/ARCHITECTURE.md#dependency-analysis) for detailed dependency graphs and analysis commands.
+**Detailed Dependency Analysis**: See [Architecture Guide](docs/ARCHITECTURE.md#dependency-analysis) for detailed graphs and explanations.
+
+---
+
+## 🎣 Git Hooks & Automation
+
+### Pre-Commit Hook
+When committing changes to `src/app/`:
+- Automatically updates architecture metrics in `docs/ARCHITECTURE.md`
+- **Aborts commit if changes detected** - you must review and add them:
+  ```bash
+  git add docs/ARCHITECTURE.md
+  git commit --amend --no-edit
+  ```
+
+### Pre-Push Hook
+When pushing commits with structural changes (add/delete/rename files):
+- Automatically generates dependency graphs (`module-dependencies.svg`, `architecture-layers.svg`)
+- **Aborts push if graphs changed** - you must review and commit them:
+  ```bash
+  git add docs/module-dependencies.svg docs/architecture-layers.svg
+  git commit -m 'docs: update dependency graphs'
+  git push
+  ```
+- Validates architecture constraints (no circular dependencies, no orphaned files)
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Angular 21 (Zoneless)
-- **Testing**: Vitest + Angular Testing Library
-- **Code Quality**: ESLint, Stylelint, SonarCloud
+- **Framework**: Angular 21 (Zoneless) + Angular Material
+- **SSR**: Angular Server-Side Rendering with Express
+- **Language**: TypeScript 5.9
+- **Testing**: Vitest 4 + Angular Testing Library + Playwright
+- **Code Quality**: ESLint 9, Stylelint, SonarCloud
+- **Architecture Analysis**: Dependency Cruiser, Madge
+- **Git Hooks**: Husky
 - **Architecture**: Layered architecture with framework-agnostic core
 
 ---
 
-##  Documentation
+## 📚 Documentation
 
-- [Architecture Guide](doc/ARCHITECTURE.md) - Detailed architecture principles and patterns
-- [Architecture Draft](doc/ARCHITECTURE-DRAFT.md) - Future architecture considerations
+- [Architecture Guide](docs/ARCHITECTURE.md) - Detailed architecture principles and patterns
+- [Architecture Draft](docs/ARCHITECTURE-DRAFT.md) - Future architecture considerations

@@ -6,7 +6,9 @@ const LAYER_COLORS = {
     PRESENTATION: { fillcolor: '#81D4FA', color: '#03A9F4', clusterFillcolor: '#e3f2fd' },
     INFRASTRUCTURE: { fillcolor: '#B39DDB', color: '#673AB7', clusterFillcolor: '#ede7f6' },
     DOMAIN: { fillcolor: '#FFCC80', color: '#FF9800', clusterFillcolor: '#fff3e0' },
-    CORE: { fillcolor: '#FFF59D', color: '#FFEB3B', clusterFillcolor: '#fffde7' }
+    CORE: { fillcolor: '#FFF59D', color: '#FFEB3B', clusterFillcolor: '#fffde7' },
+    LIB: { fillcolor: '#80CBC4', color: '#00897B', clusterFillcolor: '#E0F2F1' },
+    FEATURES: { fillcolor: '#F8BBD0', color: '#C2185B', clusterFillcolor: '#FCE4EC' }
 };
 
 const LAYER_PATHS = [
@@ -23,10 +25,12 @@ const LAYER_PATHS = [
 
 const CLUSTER_PATTERNS = [
     { path: 'cluster_src/app/shell', layer: LAYER_COLORS.PRESENTATION },
+    { path: 'cluster_src/app/lib', layer: LAYER_COLORS.LIB },
     { path: 'cluster_src/app/lib/core', layer: LAYER_COLORS.CORE },
     { path: 'cluster_src/app/lib/infrastructure', layer: LAYER_COLORS.INFRASTRUCTURE },
     { path: 'cluster_src/app/lib/domain', layer: LAYER_COLORS.DOMAIN },
     { path: 'cluster_src/app/lib/presentation', layer: LAYER_COLORS.PRESENTATION },
+    { path: 'cluster_src/app/features', layer: LAYER_COLORS.FEATURES },
     { path: 'cluster_src/app/features/([^/]+)/core', layer: LAYER_COLORS.CORE },
     { path: 'cluster_src/app/features/([^/]+)/infrastructure', layer: LAYER_COLORS.INFRASTRUCTURE },
     { path: 'cluster_src/app/features/([^/]+)/domain', layer: LAYER_COLORS.DOMAIN },
@@ -38,7 +42,7 @@ function createClusterStyle(layer) {
         'style="rounded,filled" ' +
         `fillcolor="${layer.clusterFillcolor}" ` +
         `color="${layer.color}" ` +
-        'penwidth=3 label='
+        'penwidth=2 label='
     );
 }
 
@@ -46,7 +50,7 @@ function createNodeStyle(layer) {
     return (
         `fillcolor="${layer.fillcolor}" ` +
         `color="${layer.color}" ` +
-        'penwidth=2 label='
+        'penwidth=1 label='
     );
 }
 

@@ -381,7 +381,7 @@ module.exports = {
                            splines: "polyline" is a good middle ground
                        */
                         splines: "polyline",
-                        rankdir: "TB"
+                        rankdir: "LR"
                     },
                 }
             },

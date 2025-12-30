@@ -1,5 +1,33 @@
 # Application Architecture
 
+![Architecture Validated](https://img.shields.io/badge/architecture-validated-green)
+![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
+![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
+![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-79%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-21%25-blue)
+![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [High-Level Architecture](#high-level-architecture)
+- [Project Statistics](#project-statistics)
+- [Project Structure](#project-structure)
+- [Architecture Principles](#architecture-principles)
+  - [Layer Separation](#layer-separation)
+- [Testing Strategy](#testing-strategy)
+  - [Unit Tests](#unit-tests)
+  - [E2E Tests](#e2e-tests)
+- [Benefits](#benefits)
+- [Dependency Analysis](#dependency-analysis)
+  - [Dependency Graph](#dependency-graph)
+  - [Analysis Commands](#analysis-commands)
+  - [Automatic Validation](#automatic-validation)
+- [Future Extensions](#future-extensions)
+
+---
+
 ## Overview
 
 This project follows a **layered architecture** with strict separation between framework-agnostic business logic and Angular-specific presentation code. The architecture ensures portability, testability, and maintainability.
@@ -14,27 +42,46 @@ flowchart TB
     end
 
     subgraph Pure["Framework-Agnostic Layer"]
+        LibCore["Lib/Core<br/>(Date-Time Provider, etc.)"]
         LibInfra["Lib/Infrastructure<br/>(HTTP Client)"]
     end
 
     Shell --> Pages
     Pages --> LibInfra
+    Pages --> LibCore
     Shell -.uses.-> LibInfra
+    Shell -.uses.-> LibCore
 
-    style Angular fill:#e3f2fd,stroke:#03A9F4,stroke-width:3px,color:#000000
-    style Pure fill:#ede7f6,stroke:#673AB7,stroke-width:3px,color:#000000
-    style Shell fill:#bbdefb,color:#000000,stroke:#03A9F4,stroke-width:2px
-    style Pages fill:#bbdefb,color:#000000,stroke:#03A9F4,stroke-width:2px
-    style LibInfra fill:#d1c4e9,color:#000000,stroke:#673AB7,stroke-width:2px
+    style Angular fill:#e3f2fd,stroke:#03A9F4,stroke-width:2px,color:#000000
+    style Pure fill:#E0F2F1,stroke:#00897B,stroke-width:2px,color:#000000
+    style Shell fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
+    style Pages fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
+    style LibCore fill:#FFF59D,color:#000000,stroke:#FFEB3B,stroke-width:1px
+    style LibInfra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
 
     linkStyle default stroke:#000000,stroke-width:1px
-    linkStyle 2 stroke:#000000,stroke-width:1px,stroke-dasharray:5
+    linkStyle 3 stroke:#000000,stroke-width:1px,stroke-dasharray:5
+    linkStyle 4 stroke:#000000,stroke-width:1px,stroke-dasharray:5
 ```
 
 **Key Points:**
-- 🔵 Blue = Angular-specific (shell, pages)
-- 🟣 Purple = Framework-agnostic (lib/infrastructure)
+- 🔵 Blue = Angular-specific presentation layer
+- 🟣 Purple = Framework-agnostic layers (core, domain, infrastructure)
 - Arrows show dependency flow
+
+---
+
+## Project Statistics
+
+- **Total TypeScript Files**: 55
+- **Production Files**: 39
+- **Test Files**: 16
+- **Framework-Agnostic Files**: 31 (79%)
+- **Angular-Specific Files**: 8 (21%)
+- **Test Coverage**: 100.0% ✅
+- **Circular Dependencies**: 0 ✅
+
+*Last generated: 2025-12-31*
 
 ---
 
@@ -43,8 +90,14 @@ flowchart TB
 ```
 src/app/
 ├── lib/                         # Shared/reusable code across features
+│   ├── core/                    # 🟣 Pure TypeScript (framework-agnostic)
+│   │   └── date-time/          # Date-time provider abstraction
 │   └── infrastructure/          # 🟣 Pure TypeScript (framework-agnostic)
 │       └── http/                # HTTP client implementation
+│           ├── error/           # HTTP error types
+│           ├── executor/        # Request execution logic
+│           ├── interceptor/     # HTTP interceptors
+│           └── method/          # HTTP method types
 │
 └── shell/                       # 🔵 Application shell (Angular-specific)
     ├── app.component.ts
@@ -64,33 +117,18 @@ src/testing/
 
 ### Layer Separation
 
-🟣 **Framework-Agnostic Layers** (`lib/infrastructure`):
+🟣 **Framework-Agnostic Layers** (`core`, `domain`, `infrastructure`):
 - Pure TypeScript interfaces and classes
 - No `@angular/*` imports
 - No decorators
 - Constructor-based dependency injection
 - Testable without Angular TestBed
 
-🔵 **Angular-Specific Layers** (`shell`, `testing/unit`):
+🔵 **Angular-Specific Layers** (`shell`, `presentation`):
 - Angular components with decorators
 - Router and Material UI components
 - Angular Testing Library
 - `@angular/*` imports allowed
-
-### Dependency Flow
-
-```
-Shell (Angular)
-    ↓
-Lib Infrastructure (Pure TypeScript)
-```
-
-**Rules:**
-- `shell` depends on `lib/infrastructure`
-- `lib/infrastructure` has no Angular dependencies
-- Testing utilities mirror the architecture (`unit` = Angular, `e2e` = Pure TS)
-
----
 
 ## Testing Strategy
 
@@ -110,7 +148,7 @@ Lib Infrastructure (Pure TypeScript)
 2. **Testability**: Test infrastructure code without Angular
 3. **Clear Separation**: Framework-agnostic vs Angular-specific code
 4. **Maintainability**: Focused responsibilities per layer
-5. **Future-Proof**: Framework migration only affects shell layer (~30% of code)
+5. **Future-Proof**: Framework migration only affects presentation layer
 6. **Type Safety**: Full TypeScript strict mode coverage
 
 ---
@@ -146,10 +184,12 @@ See the [High-Level Architecture](#high-level-architecture) diagram above for th
 *Click image to open full size*
 
 **Legend**:
-- 🔵 **Blue** = Presentation Layer (shell)
-- 🟣 **Purple** = Infrastructure Layer (lib/infrastructure)
-- 🟠 **Orange** = Domain Layer (reserved for future use)
-- ⚪ **Grey** = Core Layer (reserved for future use)
+- 🔵 **Blue** = Presentation Layer
+- 🟣 **Purple** = Infrastructure Layer
+- 🟠 **Orange** = Domain Layer
+- 🟡 **Yellow** = Core Layer
+- 🟩 **Teal** = Lib Container (shared foundation)
+- 🟥 **Rose** = Features Container (business modules)
 
 </details>
 
@@ -190,6 +230,20 @@ This prevents architectural issues from being pushed to the repository.
 
 ---
 
+## Architecture Decision Records (ADRs)
+
+Key architectural decisions are documented in a separate file for better organization and readability.
+
+📋 **[View Architecture Decision Records →](ADR.md)**
+
+This includes decisions about:
+- Layered architecture and framework separation
+- Technology choices (Vitest, Playwright, Angular Material)
+- Development practices and automation
+- Future considerations for complex features
+
+---
+
 ## Future Extensions
 
 When adding new features:
@@ -198,11 +252,13 @@ When adding new features:
 src/app/
 ├── features/                    # Business domain features
 │   └── {feature-name}/
+│       ├── core/               # 🟣 Pure TypeScript core utilities
 │       ├── domain/             # 🟣 Pure TypeScript business logic
 │       ├── infrastructure/     # 🟣 Pure TypeScript implementations
 │       └── presentation/       # 🔵 Angular components
 │
 ├── lib/
+│   ├── core/                   # 🟣 Shared core utilities (current)
 │   ├── domain/                 # 🟣 Shared domain models (future)
 │   ├── infrastructure/         # 🟣 Shared implementations (current)
 │   └── presentation/           # 🔵 Shared Angular components (future)
@@ -210,4 +266,4 @@ src/app/
 
 ---
 
-**Last Updated**: December 15, 2025
+**Last Updated**: December 31, 2025
