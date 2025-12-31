@@ -1,24 +1,5 @@
 #!/bin/sh
+set -e
 
-if git diff --cached --name-only | grep -q "package.json"; then
-  VERSION=$(node -p "require('./package.json').version")
-  sed -i "s/^sonar.projectVersion=.*/sonar.projectVersion=$VERSION/" sonar-project.properties
-  if ! git diff --quiet sonar-project.properties; then
-    echo "❌ Sonar project version has changed. Please review and add it:"
-    echo "   git add sonar-project.properties"
-    echo "   git commit --amend --no-edit"
-    exit 1
-  fi
-fi
-
-if git diff --cached --name-only | grep -q "^src/app/"; then
-  echo "📊 Updating architecture metrics..."
-  npm run docs:metrics --silent >/dev/null 2>&1
-
-  if ! git diff --quiet docs/ARCHITECTURE.md; then
-    echo "❌ Architecture metrics have changed. Please review and add them:"
-    echo "   git add docs/ARCHITECTURE.md"
-    echo "   git commit --amend --no-edit"
-    exit 1
-  fi
-fi
+.husky/scripts/sync-sonar-project-version.sh
+.husky/scripts/update-architecture-metrics.sh

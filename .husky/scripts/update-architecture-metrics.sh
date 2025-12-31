@@ -1,0 +1,17 @@
+#!/bin/sh
+# Updates architecture metrics documentation
+
+if git diff --cached --name-only | grep -q "^src/app/"; then
+  echo "📊 Updating architecture metrics..."
+
+  npm run docs:metrics --silent >/dev/null 2>&1
+
+  if ! git diff --quiet docs/ARCHITECTURE.md; then
+    echo "❌ Architecture metrics have changed. Please review and add them:"
+    echo "   git add docs/ARCHITECTURE.md"
+    echo "   git commit --amend --no-edit"
+    exit 1
+  fi
+
+  echo "✅ Architecture metrics are up to date"
+fi
