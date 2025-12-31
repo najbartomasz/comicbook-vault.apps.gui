@@ -1,0 +1,75 @@
+name: Nightly
+on:
+    schedule:
+        - cron: "0 0 * * *" # Daily at midnight UTC
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: nightly-audit
+    cancel-in-progress: false
+
+env:
+    NODE_VERSION: 24
+    AUDIT_LEVEL: moderate
+
+jobs:
+    audit:
+        name: Security Audit
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Run Security Audit
+              id: audit
+              run: npm audit --audit-level=${{ env.AUDIT_LEVEL }}
+              continue-on-error: true
+
+            - name: Send Email Notification
+              if: steps.audit.outcome == 'failure'
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  secure: true
+                  username: ${{ secrets.MAIL_USERNAME }}
+                  password: ${{ secrets.MAIL_PASSWORD }}
+                  subject: 🚨 Security Audit Failed - ${{ github.repository }}
+                  to: najbartomasz@gmail.com
+                  from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
+                  body: |
+                      Security audit detected ${{ env.AUDIT_LEVEL }} or high severity vulnerabilities.
+
+                      Repository: ${{ github.repository }}
+                      Workflow: ${{ github.workflow }}
+                      Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+                      Please review the workflow logs and update dependencies.
+
+            - name: Report Results
+              if: always()
+              run: |
+                  echo "## Security Audit Results" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+
+                  if [[ "${{ steps.audit.outcome }}" == "success" ]]; then
+                    echo "✅ No ${{ env.AUDIT_LEVEL }} or high severity vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+                  else
+                    echo "❌ Vulnerabilities detected! Review the logs above for details." >> $GITHUB_STEP_SUMMARY
+                    echo "" >> $GITHUB_STEP_SUMMARY
+                    echo "Run \`npm audit\` locally to see recommendations." >> $GITHUB_STEP_SUMMARY
+                    exit 1
+                  fi

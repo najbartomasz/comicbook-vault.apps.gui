@@ -1,6 +1,6 @@
 # GitHub Actions CI Workflow Best Practices
 
-This document outlines the conventions and best practices for editing the `ci.yaml` workflow.
+This document outlines the conventions and best practices for editing the `*.ci.yaml` workflows.
 
 ## Action Pinning
 

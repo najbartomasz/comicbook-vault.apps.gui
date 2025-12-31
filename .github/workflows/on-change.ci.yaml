@@ -1,4 +1,4 @@
-name: Build
+name: OnChange
 on:
     push:
         branches:
@@ -6,17 +6,22 @@ on:
     pull_request:
         types: [opened, synchronize, reopened]
 
+permissions:
+    contents: read
+
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
+
+env:
+    NODE_VERSION: 24
+    ARTIFACT_RETENTION_DAYS: 2
 
 jobs:
     setup:
         name: Setup Dependencies
         runs-on: ubuntu-latest
         timeout-minutes: 10
-        outputs:
-            cache-key: ${{ steps.cache-keys.outputs.npm }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -27,13 +32,8 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
-                  cache: "npm"
-
-            - name: Generate Cache Keys
-              id: cache-keys
-              run: |
-                  echo "npm=${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
 
             - name: Cache Node Modules
               id: node-modules-cache
@@ -49,7 +49,7 @@ jobs:
               run: npm ci
 
     build:
-        name: Build Application
+        name: Build
         runs-on: ubuntu-latest
         timeout-minutes: 10
         needs: setup
@@ -60,7 +60,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
+                  node-version: ${{ env.NODE_VERSION }}
 
             - name: Restore Node Modules Cache
               uses: actions/cache/restore@v4
@@ -78,11 +78,11 @@ jobs:
               with:
                   name: build-output
                   path: dist/
-                  retention-days: 2
+                  retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
                   if-no-files-found: error
 
     lint:
-        name: Lint Code
+        name: Lint
         runs-on: ubuntu-latest
         timeout-minutes: 10
         needs: setup
@@ -93,7 +93,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
+                  node-version: ${{ env.NODE_VERSION }}
 
             - name: Restore Node Modules Cache
               uses: actions/cache/restore@v4
@@ -107,7 +107,7 @@ jobs:
               run: npm run lint
 
     test:
-        name: Run Tests
+        name: Test
         runs-on: ubuntu-latest
         timeout-minutes: 15
         needs: setup
@@ -118,7 +118,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
+                  node-version: ${{ env.NODE_VERSION }}
 
             - name: Restore Node Modules Cache
               uses: actions/cache/restore@v4
@@ -154,7 +154,7 @@ jobs:
               with:
                   name: coverage-reports
                   path: coverage/
-                  retention-days: 2
+                  retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
             - name: Upload Visual Test Screenshots
               uses: actions/upload-artifact@v4
@@ -162,10 +162,10 @@ jobs:
               with:
                   name: visual-test-failures
                   path: src/**/__screenshots__/
-                  retention-days: 2
+                  retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
     architecture:
-        name: Validate Architecture
+        name: Architecture
         runs-on: ubuntu-latest
         timeout-minutes: 10
         needs: [setup, test]
@@ -179,7 +179,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
+                  node-version: ${{ env.NODE_VERSION }}
 
             - name: Restore Node Modules Cache
               uses: actions/cache/restore@v4
@@ -224,7 +224,7 @@ jobs:
                     exit 1
                   fi
 
-            - name: Create Job Summary
+            - name: Report Results
               if: always()
               run: |
                   echo "## Architecture Validation" >> $GITHUB_STEP_SUMMARY
@@ -234,11 +234,11 @@ jobs:
                   echo "✅ Architecture documentation is current" >> $GITHUB_STEP_SUMMARY
 
     sonarqube:
-        name: SonarQube Analysis
+        name: SonarQube
         runs-on: ubuntu-latest
         timeout-minutes: 10
         needs: [build, lint, test]
-        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository # Skip for external forks
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -248,7 +248,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 24
+                  node-version: ${{ env.NODE_VERSION }}
 
             - name: Restore Node Modules Cache
               uses: actions/cache/restore@v4
@@ -264,19 +264,19 @@ jobs:
                   name: coverage-reports
                   path: coverage/
 
-            - name: SonarQube Scan
+            - name: Run SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@v4
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     status:
-        name: Build Status
+        name: Status
         runs-on: ubuntu-latest
         timeout-minutes: 5
         needs: [build, lint, test, architecture, sonarqube]
         if: always()
         steps:
-            - name: Check Job Status
+            - name: Report Build Status
               run: |
                   echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
                   echo "" >> $GITHUB_STEP_SUMMARY
