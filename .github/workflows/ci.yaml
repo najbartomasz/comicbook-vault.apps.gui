@@ -1,0 +1,300 @@
+name: Build
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    setup:
+        name: Setup Dependencies
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        outputs:
+            cache-key: ${{ steps.cache-keys.outputs.npm }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  lfs: true
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+                  cache: "npm"
+
+            - name: Generate Cache Keys
+              id: cache-keys
+              run: |
+                  echo "npm=${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
+
+            - name: Cache Node Modules
+              id: node-modules-cache
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install Dependencies
+              if: steps.node-modules-cache.outputs.cache-hit != 'true'
+              run: npm ci
+
+    build:
+        name: Build Application
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        needs: setup
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Restore Node Modules Cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Build
+              run: npm run build
+
+            - name: Upload Build Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-output
+                  path: dist/
+                  retention-days: 2
+                  if-no-files-found: error
+
+    lint:
+        name: Lint Code
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        needs: setup
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Restore Node Modules Cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Lint
+              run: npm run lint
+
+    test:
+        name: Run Tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        needs: setup
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Restore Node Modules Cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Cache Playwright Browsers
+              id: playwright-cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-playwright-
+
+            - name: Install Playwright Browsers
+              if: steps.playwright-cache.outputs.cache-hit != 'true'
+              run: npx playwright install --with-deps
+
+            - name: Install Playwright System Dependencies
+              if: steps.playwright-cache.outputs.cache-hit == 'true'
+              run: npx playwright install-deps
+
+            - name: Run Tests
+              run: npm run test
+
+            - name: Upload Coverage Reports
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: coverage-reports
+                  path: coverage/
+                  retention-days: 2
+
+            - name: Upload Visual Test Screenshots
+              uses: actions/upload-artifact@v4
+              if: failure()
+              with:
+                  name: visual-test-failures
+                  path: src/**/__screenshots__/
+                  retention-days: 2
+
+    architecture:
+        name: Validate Architecture
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        needs: [setup, test]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  lfs: true
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Restore Node Modules Cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Install Graphviz
+              run: sudo apt-get update && sudo apt-get install -y graphviz
+
+            - name: Download Coverage Reports
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-reports
+                  path: coverage/
+
+            - name: Analyze Dependencies
+              run: npm run analyze:deps
+
+            - name: Generate Module Dependencies Graph
+              run: npm run visualize:modules
+
+            - name: Generate Architecture Layers Graph
+              run: npm run visualize:layers
+
+            - name: Check Dependency Graphs Are Up-to-Date
+              run: |
+                  if ! git diff --exit-code docs/module-dependencies.svg docs/architecture-layers.svg; then
+                    echo "::error title=Outdated Dependency Graphs::Dependency graphs are out of date! Run 'npm run visualize:modules' and 'npm run visualize:layers' and commit the changes."
+                    exit 1
+                  fi
+
+            - name: Generate Architecture Metrics
+              run: npm run docs:metrics
+
+            - name: Check Architecture Documentation Is Up-to-Date
+              run: |
+                  if ! git diff --exit-code docs/ARCHITECTURE.md; then
+                    echo "::error title=Outdated Architecture Docs::Architecture metrics are out of date! Run 'npm run docs:metrics' and commit the changes."
+                    exit 1
+                  fi
+
+            - name: Create Job Summary
+              if: always()
+              run: |
+                  echo "## Architecture Validation" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ No circular dependencies detected" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Dependency graphs are up-to-date" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ Architecture documentation is current" >> $GITHUB_STEP_SUMMARY
+
+    sonarqube:
+        name: SonarQube Analysis
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        needs: [build, lint, test]
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Restore Node Modules Cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-modules-
+
+            - name: Download Coverage Reports
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-reports
+                  path: coverage/
+
+            - name: SonarQube Scan
+              uses: SonarSource/sonarqube-scan-action@v4
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    status:
+        name: Build Status
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        needs: [build, lint, test, architecture, sonarqube]
+        if: always()
+        steps:
+            - name: Check Job Status
+              run: |
+                  echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "- Build: ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- Lint: ${{ needs.lint.result }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- Test: ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- Architecture: ${{ needs.architecture.result }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- SonarQube: ${{ needs.sonarqube.result }}" >> $GITHUB_STEP_SUMMARY
+
+                  if [[ "${{ needs.build.result }}" != "success" ]] || \
+                     [[ "${{ needs.lint.result }}" != "success" ]] || \
+                     [[ "${{ needs.test.result }}" != "success" ]] || \
+                     [[ "${{ needs.architecture.result }}" != "success" ]] || \
+                     [[ "${{ needs.sonarqube.result }}" != "success" && "${{ needs.sonarqube.result }}" != "skipped" ]]; then
+                    echo "" >> $GITHUB_STEP_SUMMARY
+                    echo "❌ Build failed!" >> $GITHUB_STEP_SUMMARY
+                    exit 1
+                  fi
+
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "✅ All checks passed!" >> $GITHUB_STEP_SUMMARY
