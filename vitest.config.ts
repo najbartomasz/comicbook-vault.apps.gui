@@ -45,9 +45,12 @@ export default defineConfig({
             exclude: ['**/testing/**']
         },
         browser: {
-            provider: playwright(),
+            provider: playwright({
+                contextOptions: {
+                    viewport: { width: 1920, height: 1080 }
+                }
+            }),
             enabled: true,
-            screenshotFailures: true,
             headless: true,
             instances: [{ browser: 'chromium' }],
             testerHtmlPath: './src/index.html',

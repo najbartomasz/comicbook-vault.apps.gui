@@ -43,7 +43,7 @@ describe(FetchHttpClient, () => {
 
         // When, Then
         await expect(httpClient.get('/resource'))
-            .rejects.toThrow(new HttpNetworkError({
+            .rejects.toThrowError(new HttpNetworkError({
                 url: 'http://example.com/resource',
                 description: 'Network failure'
             }));
