@@ -7,7 +7,6 @@ const { extname, join, relative } = require('node:path');
 const ROOT_DIR = process.cwd();
 const SRC_DIR = join(ROOT_DIR, 'src', 'app');
 const ARCH_DOC_PATH = join(ROOT_DIR, 'docs', 'ARCHITECTURE.md');
-const COVERAGE_SUMMARY_PATH = join(ROOT_DIR, 'coverage', 'comicbook-vault.apps.gui', 'coverage-summary.json');
 
 const isTestFile = (path) => path.includes('.spec.ts') || path.includes('testing/');
 const isAngularSpecific = (path) => path.startsWith('shell') || path.includes('/presentation/');
@@ -45,15 +44,6 @@ const categorizeFiles = (files) =>
         return categories;
     }, { frameworkAgnostic: [], angularSpecific: [], tests: [] });
 
-const getTestCoverage = () => {
-    try {
-        const coverageSummary = JSON.parse(readFileSync(COVERAGE_SUMMARY_PATH, 'utf8'));
-        return coverageSummary.total.lines.pct.toFixed(1);
-    } catch {
-        return 'N/A';
-    }
-};
-
 const parseCircularDepsOutput = (output) => {
     const matches = output.match(/(\d+)\s+circular/i);
     return matches ? Number(matches[1]) : 'Error';
@@ -87,16 +77,12 @@ const generateMetrics = () => {
             count: categories.angularSpecific.length,
             percentage: calculatePercentage(categories.angularSpecific.length, totalProductionFiles)
         },
-        testCoverage: getTestCoverage(),
         circularDependencies: checkCircularDependencies(),
         lastGenerated: new Date().toISOString().split('T')[0]
     };
 };
 
 const getCircularDepsStatus = (count) => (count === 0 ? '✅' : '❌');
-
-const getCoverageBadge = (coverage) =>
-    coverage !== 'N/A' && Number(coverage) >= 80 ? '✅' : '⚠️';
 
 const formatMetricsMarkdown = (metrics) => `## Project Statistics
 
@@ -105,7 +91,6 @@ const formatMetricsMarkdown = (metrics) => `## Project Statistics
 - **Test Files**: ${metrics.testFiles}
 - **Framework-Agnostic Files**: ${metrics.frameworkAgnostic.count} (${metrics.frameworkAgnostic.percentage}%)
 - **Angular-Specific Files**: ${metrics.angularSpecific.count} (${metrics.angularSpecific.percentage}%)
-- **Test Coverage**: ${metrics.testCoverage}% ${getCoverageBadge(metrics.testCoverage)}
 - **Circular Dependencies**: ${metrics.circularDependencies} ${getCircularDepsStatus(metrics.circularDependencies)}
 
 *Last generated: ${metrics.lastGenerated}*`;

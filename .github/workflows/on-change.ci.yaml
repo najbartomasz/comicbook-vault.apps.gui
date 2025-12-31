@@ -107,10 +107,21 @@ jobs:
               run: npm run lint
 
     test:
-        name: Test
+        name: Test - ${{ matrix.type }}
         runs-on: ubuntu-latest
         timeout-minutes: 15
         needs: setup
+        strategy:
+            matrix:
+                include:
+                    - type: unit
+                      script: test:unit
+                      coverage-path: coverage/unit
+                      artifact-name: coverage-unit
+                    - type: unit-visual
+                      script: test:unit:visual
+                      coverage-path: coverage/unit-visual
+                      artifact-name: coverage-unit-visual
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -146,19 +157,19 @@ jobs:
               run: npx playwright install-deps
 
             - name: Run Tests
-              run: npm run test
+              run: npm run ${{ matrix.script }}
 
-            - name: Upload Coverage Reports
+            - name: Upload Coverage
               uses: actions/upload-artifact@v4
               if: always()
               with:
-                  name: coverage-reports
-                  path: coverage/
+                  name: ${{ matrix.artifact-name }}
+                  path: ${{ matrix.coverage-path }}/
                   retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
             - name: Upload Visual Test Screenshots
               uses: actions/upload-artifact@v4
-              if: failure()
+              if: failure() && matrix.type == 'unit-visual'
               with:
                   name: visual-test-failures
                   path: src/**/__screenshots__/
@@ -192,11 +203,17 @@ jobs:
             - name: Install Graphviz
               run: sudo apt-get update && sudo apt-get install -y graphviz
 
-            - name: Download Coverage Reports
+            - name: Download Unit Coverage
               uses: actions/download-artifact@v4
               with:
-                  name: coverage-reports
-                  path: coverage/
+                  name: coverage-unit
+                  path: coverage/unit/
+
+            - name: Download Visual Coverage
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-unit-visual
+                  path: coverage/unit-visual/
 
             - name: Analyze Dependencies
               run: npm run analyze:deps
@@ -258,11 +275,17 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-node-modules-
 
-            - name: Download Coverage Reports
+            - name: Download Unit Coverage
               uses: actions/download-artifact@v4
               with:
-                  name: coverage-reports
-                  path: coverage/
+                  name: coverage-unit
+                  path: coverage/unit/
+
+            - name: Download Visual Coverage
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-unit-visual
+                  path: coverage/unit-visual/
 
             - name: Run SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@v4

@@ -23,7 +23,7 @@ You are an expert documenter. You know markdown language very well. You know how
 - Run `npm run visualize:modules` or `npm run visualize:layers` for dependency graphs
 
 ### Content Guidelines
-- Ensure all badges reflect current metrics (Framework Agnostic %, Angular Specific %, Test Coverage, Circular Dependencies)
+- Ensure all badges reflect current metrics (Framework Agnostic %, Angular Specific %, Circular Dependencies)
 - Keep Project Statistics section synchronized with actual codebase
 - Maintain Mermaid diagram syntax and styling (use proper subgraphs)
 - Keep collapsible sections for large diagrams using `<details>` tags

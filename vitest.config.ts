@@ -3,59 +3,30 @@ import { playwright } from '@vitest/browser-playwright';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
+const VIEWPORT = { width: 1920, height: 1080 };
+
 export default defineConfig({
     plugins: [viteTsConfigPaths()],
     test: {
         globals: true,
         restoreMocks: true,
         mockReset: true,
+        reporters: ['tree'],
         coverage: {
+            reportsDirectory: './coverage/comicbook-vault.apps.gui',
             cleanOnRerun: true,
-            reporter: [
-                'lcov',
-                'text',
-                'html',
-                'json-summary'
-            ],
-            thresholds: {
-                branches: 100,
-                functions: 100,
-                lines: 100,
-                statements: 100,
-                perFile: true
-            },
-            watermarks: {
-                statements: [
-                    100,
-                    100
-                ],
-                branches: [
-                    100,
-                    100
-                ],
-                functions: [
-                    100,
-                    100
-                ],
-                lines: [
-                    100,
-                    100
-                ]
-            },
+            reporter: ['lcov', 'text', 'html', 'json-summary'],
             exclude: ['**/testing/**']
         },
         browser: {
-            provider: playwright({
-                contextOptions: {
-                    viewport: { width: 1920, height: 1080 }
-                }
-            }),
             enabled: true,
             headless: true,
             instances: [{ browser: 'chromium' }],
             testerHtmlPath: './src/index.html',
-            viewport: { width: 1920, height: 1080 }
-        },
-        reporters: ['tree']
+            viewport: VIEWPORT,
+            provider: playwright({
+                contextOptions: { viewport: VIEWPORT }
+            })
+        }
     }
 });

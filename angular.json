@@ -80,6 +80,14 @@
                     "options": {
                         "coverage": true,
                         "runnerConfig": "vitest.config.ts"
+                    },
+                    "configurations": {
+                        "unit": {
+                            "runnerConfig": "vitest.spec.config.ts"
+                        },
+                        "visual": {
+                            "runnerConfig": "vitest.visual.spec.config.ts"
+                        }
                     }
                 },
                 "lint": {

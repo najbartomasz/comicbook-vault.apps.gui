@@ -2086,5 +2086,11 @@ export default [
             '@angular-eslint/template/use-track-by-function': 'error',
             '@angular-eslint/template/valid-aria': 'error'
         }
+    },
+    {
+        files: ['vitest*.config.ts'],
+        rules: {
+            'sonarjs/no-empty-test-file': 'off'
+        }
     }
 ];

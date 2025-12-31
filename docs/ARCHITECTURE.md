@@ -78,7 +78,6 @@ flowchart TB
 - **Test Files**: 16
 - **Framework-Agnostic Files**: 31 (79%)
 - **Angular-Specific Files**: 8 (21%)
-- **Test Coverage**: 100.0% ✅
 - **Circular Dependencies**: 0 ✅
 
 *Last generated: 2025-12-31*
