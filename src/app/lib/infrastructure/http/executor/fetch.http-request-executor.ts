@@ -1,6 +1,4 @@
-import { HttpAbortError } from '../error/http-abort-error';
-import { HttpNetworkError } from '../error/http-network-error';
-import { HttpPayloadError } from '../error/http-payload-error';
+import { HttpAbortError, HttpNetworkError, HttpPayloadError } from '../error';
 import { type HttpRequest } from '../http-request.interface';
 import { type HttpResponse } from '../http-response.interface';
 

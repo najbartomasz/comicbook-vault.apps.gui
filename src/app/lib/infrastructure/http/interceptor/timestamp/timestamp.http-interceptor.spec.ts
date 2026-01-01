@@ -14,30 +14,6 @@ describe(TimestampHttpInterceptor, () => {
         };
         const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
-            url: 'http://example.com/resource',
-            method: HttpMethod.Get
-        };
-
-        // When
-        const result = interceptor.interceptRequest(requestStub);
-
-        // Then
-        expect(result).toStrictEqual({
-            url: 'http://example.com/resource',
-            method: HttpMethod.Get,
-            metadata: {
-                timestamp: 1234567890
-            }
-        });
-    });
-
-    test('should preserve existing metadata and add timestamp', () => {
-        // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
-        const requestStub: HttpRequest = {
             url: 'http://example.com/api',
             method: HttpMethod.Get
         };
@@ -46,8 +22,12 @@ describe(TimestampHttpInterceptor, () => {
         const result = interceptor.interceptRequest(requestStub);
 
         // Then
-        expect(result.metadata).toStrictEqual({
-            timestamp: 1234567890
+        expect(result).toStrictEqual({
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            metadata: {
+                timestamp: 1234567890
+            }
         });
     });
 
@@ -72,6 +52,30 @@ describe(TimestampHttpInterceptor, () => {
         expect(result.metadata?.timestamp).toBe(1234567890);
     });
 
+    test('should preserve existing metadata while adding timestamp to request', () => {
+        // Given
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: () => 1234567890
+        };
+        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
+        const requestStub: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            metadata: {
+                sequenceNumber: 42
+            }
+        };
+
+        // When
+        const result = interceptor.interceptRequest(requestStub);
+
+        // Then
+        expect(result.metadata).toStrictEqual({
+            sequenceNumber: 42,
+            timestamp: 1234567890
+        });
+    });
+
     test('should add timestamp to response metadata', () => {
         // Given
         const dateTimeProviderStub: CurrentDateTimeProvider = {
@@ -81,7 +85,7 @@ describe(TimestampHttpInterceptor, () => {
         const responseStub: HttpResponse = {
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test' }
         };
 
@@ -92,7 +96,7 @@ describe(TimestampHttpInterceptor, () => {
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test' },
             metadata: {
                 timestamp: 1234567890

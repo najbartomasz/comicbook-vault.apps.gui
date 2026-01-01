@@ -73,14 +73,14 @@ flowchart TB
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 55
-- **Production Files**: 39
-- **Test Files**: 16
-- **Framework-Agnostic Files**: 31 (79%)
-- **Angular-Specific Files**: 8 (21%)
+- **Total TypeScript Files**: 56
+- **Production Files**: 41
+- **Test Files**: 15
+- **Framework-Agnostic Files**: 33 (80%)
+- **Angular-Specific Files**: 8 (20%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2025-12-31*
+*Last generated: 2026-01-01*
 
 ---
 

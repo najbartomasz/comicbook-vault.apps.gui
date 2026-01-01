@@ -12,23 +12,23 @@ describe(FetchHttpClient, () => {
         // Given
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
+            .calledWith({ url: 'http://example.com/api', method: HttpMethod.Get })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test' }
             });
         const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
-        const result = await httpClient.get('/resource');
+        const result = await httpClient.get('/api');
 
         // Then
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test' }
         });
     });
@@ -37,14 +37,14 @@ describe(FetchHttpClient, () => {
         // Given
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
-            .thenReject(new HttpNetworkError({ url: 'http://example.com/resource', description: 'Network failure' }));
+            .calledWith({ url: 'http://example.com/api', method: HttpMethod.Get })
+            .thenReject(new HttpNetworkError({ url: 'http://example.com/api', description: 'Network failure' }));
         const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When, Then
-        await expect(httpClient.get('/resource'))
+        await expect(httpClient.get('/api'))
             .rejects.toThrowError(new HttpNetworkError({
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 description: 'Network failure'
             }));
     });
@@ -54,21 +54,21 @@ describe(FetchHttpClient, () => {
         const abortController = new AbortController();
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get, signal: abortController.signal })
+            .calledWith({ url: 'http://example.com/api', method: HttpMethod.Get, signal: abortController.signal })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test' }
             });
         const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
-        await httpClient.get('/resource', { abortSignal: abortController.signal });
+        await httpClient.get('/api', { abortSignal: abortController.signal });
 
         // Then
         expect(executeMock).toHaveBeenCalledExactlyOnceWith({
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: 'GET',
             signal: abortController.signal
         });
@@ -78,21 +78,21 @@ describe(FetchHttpClient, () => {
         // Given
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource', method: HttpMethod.Get })
+            .calledWith({ url: 'http://example.com/api', method: HttpMethod.Get })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test' }
             });
         const httpClient = new FetchHttpClient('http://example.com', { execute: executeMock });
 
         // When
-        await httpClient.get('/resource');
+        await httpClient.get('/api');
 
         // Then
         expect(executeMock).toHaveBeenCalledExactlyOnceWith({
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: 'GET'
         });
     });
@@ -101,11 +101,11 @@ describe(FetchHttpClient, () => {
         // Given
         const executeMock = vi.fn<HttpRequestExecutor['execute']>();
         when(executeMock)
-            .calledWith({ url: 'http://example.com/resource?param1=value1&param2=value2', method: HttpMethod.Get })
+            .calledWith({ url: 'http://example.com/api?param1=value1&param2=value2', method: HttpMethod.Get })
             .thenResolve({
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test' }
             });
         const interceptRequest1Mock = vi.fn<HttpRequestInterceptor['interceptRequest']>((request) => ({
@@ -123,18 +123,18 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        await httpClient.get('/resource');
+        await httpClient.get('/api');
 
         // Then
         expect(interceptRequest1Mock).toHaveBeenCalledExactlyOnceWith({
-            url: 'http://example.com/resource', method: HttpMethod.Get
+            url: 'http://example.com/api', method: HttpMethod.Get
         });
         expect(interceptRequest2Mock).toHaveBeenCalledExactlyOnceWith({
-            url: 'http://example.com/resource?param1=value1', method: HttpMethod.Get
+            url: 'http://example.com/api?param1=value1', method: HttpMethod.Get
         });
         expect(interceptRequest1Mock).toHaveBeenCalledBefore(interceptRequest2Mock);
         expect(executeMock).toHaveBeenCalledExactlyOnceWith({
-            url: 'http://example.com/resource?param1=value1&param2=value2', method: HttpMethod.Get
+            url: 'http://example.com/api?param1=value1&param2=value2', method: HttpMethod.Get
         });
     });
 
@@ -142,7 +142,7 @@ describe(FetchHttpClient, () => {
         const executeMock = vi.fn<HttpRequestExecutor['execute']>().mockResolvedValueOnce({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test' }
         });
         const interceptResponse1Mock = vi.fn<HttpResponseInterceptor['interceptResponse']>((response) => ({
@@ -160,18 +160,18 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        const result = await httpClient.get('/resource');
+        const result = await httpClient.get('/api');
 
         // Then
         expect(interceptResponse1Mock).toHaveBeenCalledExactlyOnceWith(
             {
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test' }
             },
             {
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 method: HttpMethod.Get
             }
         );
@@ -179,11 +179,11 @@ describe(FetchHttpClient, () => {
             {
                 status: 200,
                 statusText: 'OK',
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 body: { data: 'test', interceptor1: 'applied' }
             },
             {
-                url: 'http://example.com/resource',
+                url: 'http://example.com/api',
                 method: HttpMethod.Get
             }
         );
@@ -191,7 +191,7 @@ describe(FetchHttpClient, () => {
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test', interceptor1: 'applied', interceptor2: 'applied' }
         });
     });

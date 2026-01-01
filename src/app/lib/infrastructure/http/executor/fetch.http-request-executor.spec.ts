@@ -20,7 +20,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -44,7 +44,7 @@ describe(FetchHttpRequestExecutor, () => {
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { data: 'test' }
         });
     });
@@ -53,7 +53,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -77,7 +77,7 @@ describe(FetchHttpRequestExecutor, () => {
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: 'plain text response'
         });
     });
@@ -86,7 +86,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -111,7 +111,7 @@ describe(FetchHttpRequestExecutor, () => {
         expect(result).toStrictEqual({
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: 'response without content-type'
         });
     });
@@ -120,7 +120,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -144,7 +144,7 @@ describe(FetchHttpRequestExecutor, () => {
         expect(result).toStrictEqual({
             status: 404,
             statusText: 'Not Found',
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             body: { error: 'not found' }
         });
     });
@@ -153,7 +153,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -167,7 +167,7 @@ describe(FetchHttpRequestExecutor, () => {
         const error: HttpAbortError = await executor.execute(request).catch((err: unknown) => err as HttpAbortError) as HttpAbortError;
 
         expect(error).toBeInstanceOf(HttpAbortError);
-        expect(error.url).toBe('http://example.com/resource');
+        expect(error.url).toBe('http://example.com/api');
         expect(error.cause).toBe(abortError);
     });
 
@@ -175,7 +175,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -189,7 +189,7 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
 
         expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('http://example.com/resource');
+        expect(error.url).toBe('http://example.com/api');
         expect(error.description).toBe('Network failure');
         expect(error.cause).toBe(networkError);
     });
@@ -198,7 +198,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -212,7 +212,7 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
 
         expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('http://example.com/resource');
+        expect(error.url).toBe('http://example.com/api');
         expect(error.description).toBe('Network unreachable');
         expect(error.cause).toBe(primitiveError);
     });
@@ -221,7 +221,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -242,7 +242,7 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
 
         expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.url).toBe('http://example.com/resource');
+        expect(error.url).toBe('http://example.com/api');
         expect(error.description).toBe('Failed to parse response as JSON');
         expect(error.cause).toBeInstanceOf(SyntaxError);
     });
@@ -251,7 +251,7 @@ describe(FetchHttpRequestExecutor, () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
         const request: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
@@ -275,7 +275,7 @@ describe(FetchHttpRequestExecutor, () => {
         const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
 
         expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.url).toBe('http://example.com/resource');
+        expect(error.url).toBe('http://example.com/api');
         expect(error.description).toBe('Failed to parse response as JSON');
         expect(error.cause).toBe(textError);
     });

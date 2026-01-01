@@ -8,7 +8,7 @@ describe(SequenceNumberHttpInterceptor, () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const requestStub: HttpRequest = {
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get
         };
 
@@ -17,7 +17,7 @@ describe(SequenceNumberHttpInterceptor, () => {
 
         // Then
         expect(result).toStrictEqual({
-            url: 'http://example.com/resource',
+            url: 'http://example.com/api',
             method: HttpMethod.Get,
             metadata: {
                 sequenceNumber: 1
@@ -29,15 +29,15 @@ describe(SequenceNumberHttpInterceptor, () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const request1Stub: HttpRequest = {
-            url: 'http://example.com/resource/1',
+            url: 'http://example.com/api/1',
             method: HttpMethod.Get
         };
         const request2Stub: HttpRequest = {
-            url: 'http://example.com/resource/2',
+            url: 'http://example.com/api/2',
             method: HttpMethod.Get
         };
         const request3Stub: HttpRequest = {
-            url: 'http://example.com/resource/3',
+            url: 'http://example.com/api/3',
             method: HttpMethod.Get
         };
 
@@ -68,6 +68,27 @@ describe(SequenceNumberHttpInterceptor, () => {
 
         // Then
         expect(result.metadata).toStrictEqual({
+            sequenceNumber: 1
+        });
+    });
+
+    test('should preserve existing metadata while adding sequence number', () => {
+        // Given
+        const interceptor = new SequenceNumberHttpInterceptor();
+        const requestStub: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            metadata: {
+                timestamp: 1234567890
+            }
+        };
+
+        // When
+        const result = interceptor.interceptRequest(requestStub);
+
+        // Then
+        expect(result.metadata).toStrictEqual({
+            timestamp: 1234567890,
             sequenceNumber: 1
         });
     });

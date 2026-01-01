@@ -31,8 +31,7 @@ describe(LoggerHttpInterceptor, () => {
         const interceptor = new LoggerHttpInterceptor();
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
-            method: HttpMethod.Get,
-            metadata: { sequenceNumber: 42 }
+            method: HttpMethod.Get
         };
 
         // When
@@ -41,10 +40,33 @@ describe(LoggerHttpInterceptor, () => {
         // Then
         expect(consoleLogSpy).toHaveBeenCalledExactlyOnceWith('[HTTP Request]', {
             method: HttpMethod.Get,
-            url: 'http://example.com/api',
-            sequenceNumber: 42
+            url: 'http://example.com/api'
         });
         expect(result).toBe(requestStub);
+    });
+
+    test('should preserve existing request metadata', () => {
+        // Given
+        vi.spyOn(console, 'info').mockImplementationOnce(vi.fn());
+        const interceptor = new LoggerHttpInterceptor();
+        const requestStub: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            metadata: {
+                sequenceNumber: 42,
+                timestamp: 1234567890
+            }
+        };
+
+        // When
+        const result = interceptor.interceptRequest(requestStub);
+
+        // Then
+        expect(result).toBe(requestStub);
+        expect(result.metadata).toStrictEqual({
+            sequenceNumber: 42,
+            timestamp: 1234567890
+        });
     });
 
     test('should log response without sequence number when metadata is not present', () => {
@@ -81,7 +103,9 @@ describe(LoggerHttpInterceptor, () => {
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
             method: HttpMethod.Get,
-            metadata: { sequenceNumber: 42 }
+            metadata: {
+                sequenceNumber: 42
+            }
         };
         const responseStub: HttpResponse = {
             status: 200,
@@ -101,5 +125,33 @@ describe(LoggerHttpInterceptor, () => {
             sequenceNumber: 42
         });
         expect(result).toBe(responseStub);
+    });
+
+    test('should preserve existing response metadata', () => {
+        // Given
+        vi.spyOn(console, 'info').mockImplementationOnce(vi.fn());
+        const interceptor = new LoggerHttpInterceptor();
+        const requestStub: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get
+        };
+        const responseStub: HttpResponse = {
+            status: 200,
+            statusText: 'OK',
+            url: 'http://example.com/api',
+            body: { data: 'test' },
+            metadata: {
+                timestamp: 1234567890
+            }
+        };
+
+        // When
+        const result = interceptor.interceptResponse(responseStub, requestStub);
+
+        // Then
+        expect(result).toBe(responseStub);
+        expect(result.metadata).toStrictEqual({
+            timestamp: 1234567890
+        });
     });
 });

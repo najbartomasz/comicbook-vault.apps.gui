@@ -9,6 +9,7 @@ export class SequenceNumberHttpInterceptor implements HttpRequestInterceptor {
         return {
             ...request,
             metadata: {
+                ...request.metadata,
                 sequenceNumber: this.#sequenceNumber
             }
         };
