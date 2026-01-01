@@ -83,7 +83,10 @@
                     },
                     "configurations": {
                         "unit": {
-                            "runnerConfig": "vitest.spec.config.ts"
+                            "runnerConfig": "vitest.unit.spec.config.ts"
+                        },
+                        "integration": {
+                            "runnerConfig": "vitest.integration.spec.config.ts"
                         },
                         "visual": {
                             "runnerConfig": "vitest.visual.spec.config.ts"

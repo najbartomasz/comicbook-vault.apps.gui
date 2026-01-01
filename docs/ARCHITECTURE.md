@@ -42,20 +42,28 @@ flowchart TB
     end
 
     subgraph Pure["Framework-Agnostic Layer"]
-        LibCore["Lib/Core<br/>(Date-Time Provider, etc.)"]
+        LibCore["Lib/Core<br/>(Date-Time, Performance)"]
         LibInfra["Lib/Infrastructure<br/>(HTTP Client)"]
     end
 
+    subgraph Angular2["Angular-Specific Layer (Shared)"]
+        LibPres["Lib/Presentation<br/>(HTTP Client Components)"]
+    end
+
     Shell --> Pages
+    Pages --> LibPres
     Pages --> LibInfra
     Pages --> LibCore
+    LibPres --> LibInfra
     Shell -.uses.-> LibInfra
     Shell -.uses.-> LibCore
 
     style Angular fill:#e3f2fd,stroke:#03A9F4,stroke-width:2px,color:#000000
+    style Angular2 fill:#e3f2fd,stroke:#03A9F4,stroke-width:2px,color:#000000
     style Pure fill:#E0F2F1,stroke:#00897B,stroke-width:2px,color:#000000
     style Shell fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
     style Pages fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
+    style LibPres fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
     style LibCore fill:#FFF59D,color:#000000,stroke:#FFEB3B,stroke-width:1px
     style LibInfra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
 
@@ -73,11 +81,11 @@ flowchart TB
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 64
-- **Production Files**: 47
-- **Test Files**: 17
-- **Framework-Agnostic Files**: 39 (83%)
-- **Angular-Specific Files**: 8 (17%)
+- **Total TypeScript Files**: 68
+- **Production Files**: 50
+- **Test Files**: 18
+- **Framework-Agnostic Files**: 39 (78%)
+- **Angular-Specific Files**: 11 (22%)
 - **Circular Dependencies**: 0 ✅
 
 *Last generated: 2026-01-01*
@@ -90,24 +98,30 @@ flowchart TB
 src/app/
 ├── lib/                         # Shared/reusable code across features
 │   ├── core/                    # 🟣 Pure TypeScript (framework-agnostic)
-│   │   └── date-time/          # Date-time provider abstraction
-│   └── infrastructure/          # 🟣 Pure TypeScript (framework-agnostic)
-│       └── http/                # HTTP client implementation
-│           ├── error/           # HTTP error types
-│           ├── executor/        # Request execution logic
-│           ├── interceptor/     # HTTP interceptors
-│           └── method/          # HTTP method types
+│   │   ├── date-time/          # Date-time provider abstraction
+│   │   └── performance/        # Performance monitoring utilities
+│   ├── infrastructure/          # 🟣 Pure TypeScript (framework-agnostic)
+│   │   └── http/                # HTTP client implementation
+│   │       ├── error/           # HTTP error types
+│   │       ├── executor/        # Request execution logic
+│   │       ├── interceptor/     # HTTP interceptors
+│   │       └── method/          # HTTP method types
+│   └── presentation/            # 🔵 Angular-specific shared components
+│       └── http-client/         # HTTP client UI components
 │
 └── shell/                       # 🔵 Application shell (Angular-specific)
     ├── app.component.ts
+    ├── app.component.html
+    ├── app.component.scss
     ├── app.config.ts
+    ├── app.config.server.ts
     ├── app.routes.ts
+    ├── app.routes.server.ts
     └── pages/
         └── dashboard-page/      # Route components
 
 src/testing/
-├── unit/                        # 🔵 Angular-specific test utilities
-└── e2e/                         # 🟣 Framework-agnostic E2E utilities
+└── unit/                        # 🔵 Angular-specific test utilities
 ```
 
 ---
@@ -265,4 +279,4 @@ src/app/
 
 ---
 
-**Last Updated**: December 31, 2025
+**Last Updated**: January 1, 2026

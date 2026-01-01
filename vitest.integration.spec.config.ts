@@ -5,7 +5,7 @@ import vitestConfig from './vitest.config';
 export default mergeConfig(vitestConfig, defineConfig({
     test: {
         coverage: {
-            reportsDirectory: './coverage/visual',
+            reportsDirectory: './coverage/integration',
             watermarks: {
                 statements: [0, 0],
                 branches: [0, 0],
@@ -14,7 +14,7 @@ export default mergeConfig(vitestConfig, defineConfig({
             }
         },
         browser: {
-            screenshotFailures: true
+            headless: process.env['CI'] === 'true'
         }
     }
 }));

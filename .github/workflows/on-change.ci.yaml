@@ -118,10 +118,14 @@ jobs:
                       script: test:unit
                       coverage-path: coverage/unit
                       artifact-name: coverage-unit
-                    - type: unit-visual
-                      script: test:unit:visual
-                      coverage-path: coverage/unit-visual
-                      artifact-name: coverage-unit-visual
+                    - type: integration
+                      script: test:integration
+                      coverage-path: coverage/integration
+                      artifact-name: coverage-integration
+                    - type: visual
+                      script: test:visual
+                      coverage-path: coverage/visual
+                      artifact-name: coverage-visual
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -169,7 +173,7 @@ jobs:
 
             - name: Upload Visual Test Screenshots
               uses: actions/upload-artifact@v4
-              if: failure() && matrix.type == 'unit-visual'
+              if: failure() && matrix.type == 'visual'
               with:
                   name: visual-test-failures
                   path: src/**/__screenshots__/
@@ -209,11 +213,17 @@ jobs:
                   name: coverage-unit
                   path: coverage/unit/
 
+            - name: Download Integration Coverage
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-integration
+                  path: coverage/integration/
+
             - name: Download Visual Coverage
               uses: actions/download-artifact@v4
               with:
-                  name: coverage-unit-visual
-                  path: coverage/unit-visual/
+                  name: coverage-visual
+                  path: coverage/visual/
 
             - name: Analyze Dependencies
               run: npm run analyze:deps
@@ -281,11 +291,17 @@ jobs:
                   name: coverage-unit
                   path: coverage/unit/
 
+            - name: Download Integration Coverage
+              uses: actions/download-artifact@v4
+              with:
+                  name: coverage-integration
+                  path: coverage/integration/
+
             - name: Download Visual Coverage
               uses: actions/download-artifact@v4
               with:
-                  name: coverage-unit-visual
-                  path: coverage/unit-visual/
+                  name: coverage-visual
+                  path: coverage/visual/
 
             - name: Run SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@v4
