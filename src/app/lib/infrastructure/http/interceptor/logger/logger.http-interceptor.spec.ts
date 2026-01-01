@@ -25,13 +25,18 @@ describe(LoggerHttpInterceptor, () => {
         expect(result).toBe(requestStub);
     });
 
-    test('should log request with sequence number when metadata is present', () => {
+    test('should log request with all metadata when present', () => {
         // Given
         const consoleLogSpy = vi.spyOn(console, 'info').mockImplementationOnce(vi.fn());
         const interceptor = new LoggerHttpInterceptor();
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
-            method: HttpMethod.Get
+            method: HttpMethod.Get,
+            metadata: {
+                sequenceNumber: 42,
+                timestamp: 1234567890,
+                highResolutionTimestamp: 78343.570643
+            }
         };
 
         // When
@@ -40,7 +45,10 @@ describe(LoggerHttpInterceptor, () => {
         // Then
         expect(consoleLogSpy).toHaveBeenCalledExactlyOnceWith('[HTTP Request]', {
             method: HttpMethod.Get,
-            url: 'http://example.com/api'
+            url: 'http://example.com/api',
+            sequenceNumber: 42,
+            timestamp: 1234567890,
+            highResolutionTimestamp: 78343.570643
         });
         expect(result).toBe(requestStub);
     });
@@ -98,7 +106,7 @@ describe(LoggerHttpInterceptor, () => {
         expect(result).toBe(responseStub);
     });
 
-    test('should log response with sequence number when metadata is present', () => {
+    test('should log response with all metadata when present', () => {
         // Given
         const consoleLogSpy = vi.spyOn(console, 'info').mockImplementationOnce(vi.fn());
         const interceptor = new LoggerHttpInterceptor();
@@ -113,7 +121,11 @@ describe(LoggerHttpInterceptor, () => {
             url: 'http://example.com/api',
             status: 200,
             statusText: 'OK',
-            body: { data: 'test' }
+            body: { data: 'test' },
+            metadata: {
+                timestamp: 1234567890,
+                responseTimeMs: 123.45
+            }
         };
 
         // When
@@ -124,7 +136,9 @@ describe(LoggerHttpInterceptor, () => {
             url: 'http://example.com/api',
             status: 200,
             statusText: 'OK',
-            sequenceNumber: 42
+            sequenceNumber: 42,
+            timestamp: 1234567890,
+            responseTimeMs: 123.45
         });
         expect(result).toBe(responseStub);
     });
@@ -143,7 +157,8 @@ describe(LoggerHttpInterceptor, () => {
             statusText: 'OK',
             body: { data: 'test' },
             metadata: {
-                timestamp: 1234567890
+                timestamp: 1234567890,
+                responseTimeMs: 123.45
             }
         };
 
@@ -153,7 +168,8 @@ describe(LoggerHttpInterceptor, () => {
         // Then
         expect(result).toBe(responseStub);
         expect(result.metadata).toStrictEqual({
-            timestamp: 1234567890
+            timestamp: 1234567890,
+            responseTimeMs: 123.45
         });
     });
 });

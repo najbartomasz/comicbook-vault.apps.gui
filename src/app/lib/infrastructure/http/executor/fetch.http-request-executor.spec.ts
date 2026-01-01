@@ -11,9 +11,9 @@ import { JsonResponseBodyParser, ResponseBodyParserResolver, TextResponseBodyPar
 
 describe(FetchHttpRequestExecutor, () => {
     const createResponseStub = (url: string, body: BodyInit, init: ResponseInit): Response => {
-        const response = new Response(body, init);
-        Object.defineProperty(response, 'url', { value: url });
-        return response;
+        const responseStub = new Response(body, init);
+        Object.defineProperty(responseStub, 'url', { value: url });
+        return responseStub;
     };
 
     test('should return response with JSON body when content-type is application/json', async () => {
