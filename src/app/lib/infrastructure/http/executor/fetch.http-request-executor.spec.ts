@@ -217,6 +217,74 @@ describe(FetchHttpRequestExecutor, () => {
         expect(error.cause).toBe(primitiveError);
     });
 
+    test('should throw network error with object message when fetch fails with object containing message property', async () => {
+        // Given
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
+        const request: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        const objectError = { message: 'Connection timeout', code: 'ETIMEDOUT' };
+        when(fetchMock)
+            .calledWith(request.url, { method: request.method, signal: request.signal })
+            .thenReject(objectError);
+        const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
+
+        // When, Then
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
+
+        expect(error).toBeInstanceOf(HttpNetworkError);
+        expect(error.url).toBe('http://example.com/api');
+        expect(error.description).toBe('Connection timeout');
+        expect(error.cause).toBe(objectError);
+    });
+
+    test('should throw network error with "Unknown error" when fetch fails with non-standard value', async () => {
+        // Given
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
+        const request: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        const unknownError = 42;
+        when(fetchMock)
+            .calledWith(request.url, { method: request.method, signal: request.signal })
+            .thenReject(unknownError);
+        const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
+
+        // When, Then
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
+
+        expect(error).toBeInstanceOf(HttpNetworkError);
+        expect(error.url).toBe('http://example.com/api');
+        expect(error.description).toBe('Unknown error');
+        expect(error.cause).toBe(unknownError);
+    });
+
+    test('should throw network error with "Unknown error" when fetch fails with null', async () => {
+        // Given
+        const fetchMock = vi.spyOn(globalThis, 'fetch');
+        const request: HttpRequest = {
+            url: 'http://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        when(fetchMock)
+            .calledWith(request.url, { method: request.method, signal: request.signal })
+            .thenReject(null);
+        const executor = new FetchHttpRequestExecutor(new ResponseBodyParserResolver([]));
+
+        // When, Then
+        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
+
+        expect(error).toBeInstanceOf(HttpNetworkError);
+        expect(error.url).toBe('http://example.com/api');
+        expect(error.description).toBe('Unknown error');
+        expect(error.cause).toBeNull();
+    });
+
     test('should throw payload error when JSON parsing fails', async () => {
         // Given
         const fetchMock = vi.spyOn(globalThis, 'fetch');
@@ -243,7 +311,7 @@ describe(FetchHttpRequestExecutor, () => {
 
         expect(error).toBeInstanceOf(HttpPayloadError);
         expect(error.url).toBe('http://example.com/api');
-        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.description).toBe('Failed to parse response');
         expect(error.cause).toBeInstanceOf(SyntaxError);
     });
 
@@ -276,7 +344,7 @@ describe(FetchHttpRequestExecutor, () => {
 
         expect(error).toBeInstanceOf(HttpPayloadError);
         expect(error.url).toBe('http://example.com/api');
-        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.description).toBe('Failed to parse response');
         expect(error.cause).toBe(textError);
     });
 });

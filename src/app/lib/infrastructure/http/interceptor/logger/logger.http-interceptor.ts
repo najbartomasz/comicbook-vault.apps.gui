@@ -9,9 +9,9 @@ export class LoggerHttpInterceptor implements HttpRequestInterceptor, HttpRespon
         console.info(
             '[HTTP Request]',
             {
-                method: request.method,
                 url: request.url,
-                ...request.metadata?.sequenceNumber && { sequenceNumber: request.metadata.sequenceNumber }
+                method: request.method,
+                ...request.metadata?.sequenceNumber !== undefined && { sequenceNumber: request.metadata.sequenceNumber }
             }
         );
         return request;
@@ -25,7 +25,7 @@ export class LoggerHttpInterceptor implements HttpRequestInterceptor, HttpRespon
                 url: response.url,
                 status: response.status,
                 statusText: response.statusText,
-                ...request.metadata?.sequenceNumber && { sequenceNumber: request.metadata.sequenceNumber }
+                ...request.metadata?.sequenceNumber !== undefined && { sequenceNumber: request.metadata.sequenceNumber }
             }
         );
         return response;

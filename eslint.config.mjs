@@ -35,7 +35,8 @@ export default [
                 setTimeout: 'readonly',
                 clearTimeout: 'readonly',
                 setInterval: 'readonly',
-                clearInterval: 'readonly'
+                clearInterval: 'readonly',
+                performance: 'readonly'
             }
         },
         settings: {

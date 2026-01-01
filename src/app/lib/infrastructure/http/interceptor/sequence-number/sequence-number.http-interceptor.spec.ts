@@ -72,14 +72,15 @@ describe(SequenceNumberHttpInterceptor, () => {
         });
     });
 
-    test('should preserve existing metadata while adding sequence number', () => {
+    test('should preserve existing metadata while adding sequence number to request', () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const requestStub: HttpRequest = {
             url: 'http://example.com/api',
             method: HttpMethod.Get,
             metadata: {
-                timestamp: 1234567890
+                timestamp: 1234567890,
+                highResolutionTimestamp: 78343.570643
             }
         };
 
@@ -88,8 +89,9 @@ describe(SequenceNumberHttpInterceptor, () => {
 
         // Then
         expect(result.metadata).toStrictEqual({
+            sequenceNumber: 1,
             timestamp: 1234567890,
-            sequenceNumber: 1
+            highResolutionTimestamp: 78343.570643
         });
     });
 });

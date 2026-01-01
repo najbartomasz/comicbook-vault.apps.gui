@@ -62,7 +62,8 @@ describe(TimestampHttpInterceptor, () => {
             url: 'http://example.com/api',
             method: HttpMethod.Get,
             metadata: {
-                sequenceNumber: 42
+                sequenceNumber: 42,
+                highResolutionTimestamp: 78343.570643
             }
         };
 
@@ -72,7 +73,8 @@ describe(TimestampHttpInterceptor, () => {
         // Then
         expect(result.metadata).toStrictEqual({
             sequenceNumber: 42,
-            timestamp: 1234567890
+            timestamp: 1234567890,
+            highResolutionTimestamp: 78343.570643
         });
     });
 
@@ -83,9 +85,9 @@ describe(TimestampHttpInterceptor, () => {
         };
         const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const responseStub: HttpResponse = {
+            url: 'http://example.com/api',
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/api',
             body: { data: 'test' }
         };
 
@@ -94,9 +96,9 @@ describe(TimestampHttpInterceptor, () => {
 
         // Then
         expect(result).toStrictEqual({
+            url: 'http://example.com/api',
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/api',
             body: { data: 'test' },
             metadata: {
                 timestamp: 1234567890
@@ -111,9 +113,9 @@ describe(TimestampHttpInterceptor, () => {
         };
         const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const responseStub: HttpResponse = {
+            url: 'http://example.com/api',
             status: 200,
             statusText: 'OK',
-            url: 'http://example.com/api',
             body: {},
             metadata: {
                 timestamp: 999

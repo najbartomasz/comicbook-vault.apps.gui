@@ -1,0 +1,1 @@
+export const RESPONSE_TIME_PRECISION_MS = 2;

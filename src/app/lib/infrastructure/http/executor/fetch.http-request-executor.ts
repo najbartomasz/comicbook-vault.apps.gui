@@ -21,14 +21,14 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
                 method: request.method,
                 signal: request.signal
             });
-        } catch (error) {
+        } catch (error: unknown) {
             const { url } = request;
             if (error instanceof DOMException && error.name === 'AbortError') {
                 const e = new HttpAbortError({ url }, { cause: error });
                 e.stack = error.stack;
                 throw e;
             }
-            throw new HttpNetworkError({ url, description: (error instanceof Error) ? error.message : String(error) }, { cause: error });
+            throw new HttpNetworkError({ url, description: this.#getErrorMessage(error) }, { cause: error });
         }
         let responseBody: unknown;
         const contentType = response.headers.get('Content-Type') ?? '';
@@ -39,10 +39,23 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
             throw new HttpPayloadError({ url: response.url }, { cause: error });
         }
         return {
+            url: response.url,
             status: response.status,
             statusText: response.statusText,
-            url: response.url,
             body: responseBody
         };
+    }
+
+    #getErrorMessage(error: unknown): string {
+        if (error instanceof Error) {
+            return error.message;
+        }
+        if (typeof error === 'string') {
+            return error;
+        }
+        if (error && typeof error === 'object' && 'message' in error) {
+            return String(error.message);
+        }
+        return 'Unknown error';
     }
 }

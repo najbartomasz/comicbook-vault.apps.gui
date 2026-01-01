@@ -12,7 +12,7 @@ describe(HttpPayloadError, () => {
         expect(error).toBeInstanceOf(HttpPayloadError);
         expect(error.name).toBe('HttpPayloadError');
         expect(error.url).toBe('http://example.com/api');
-        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.description).toBe('Failed to parse response');
         expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/api)');
     });
 
@@ -30,7 +30,7 @@ describe(HttpPayloadError, () => {
         expect(error).toBeInstanceOf(HttpPayloadError);
         expect(error.name).toBe('HttpPayloadError');
         expect(error.url).toBe('http://example.com/api');
-        expect(error.description).toBe('Failed to parse response as JSON');
+        expect(error.description).toBe('Failed to parse response');
         expect(error.message).toBe('HTTP Payload Error (URL: http://example.com/api)');
         expect(error.cause).toBe(cause);
     });
