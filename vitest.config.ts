@@ -26,7 +26,8 @@ export default defineConfig({
             viewport: VIEWPORT,
             provider: playwright({
                 contextOptions: { viewport: VIEWPORT }
-            })
+            }),
+            screenshotFailures: false
         }
     }
 });
