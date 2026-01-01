@@ -1,6 +1,8 @@
 #!/bin/sh
 # Updates dependency graphs if structural changes are detected
 
+. "$(dirname "$0")/helpers/has-uncommitted-changes.sh"
+
 remote_branch="origin/$(git rev-parse --abbrev-ref HEAD)"
 
 # Skip if remote branch doesn't exist or no structural changes
@@ -20,11 +22,11 @@ npm run visualize:modules --silent
 echo "  → Architectural layers visualization..."
 npm run visualize:layers --silent
 
-if ! git diff --quiet docs/module-dependencies.svg docs/architecture-layers.svg 2>/dev/null; then
-  echo "❌ Dependency graphs have changed. Please review and commit them:"
+if has_uncommitted_changes "docs/module-dependencies.svg" "docs/architecture-layers.svg"; then
+  echo "❌ Dependency graphs have changed!"
+  echo "   Please review and commit them:"
   echo "   git add docs/module-dependencies.svg docs/architecture-layers.svg"
-  echo "   git commit -m 'docs: update dependency graphs'"
-  echo "   git push"
+  echo "   git commit --amend --no-edit"
   exit 1
 fi
 

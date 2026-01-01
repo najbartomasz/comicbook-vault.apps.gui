@@ -83,28 +83,43 @@ Test coverage reports are generated in the `coverage/` directory.
 
 ## 🎣 Git Hooks & Automation
 
-### Pre-Commit Hook
-When committing changes to `src/app/`:
-- Automatically updates architecture metrics in `docs/ARCHITECTURE.md`
-- **Aborts commit if changes detected** - you must review and add them:
+### Pre-Push Hook
+Before pushing commits to remote, the following validations run automatically:
+
+**Architecture Metrics Validation**
+When pushing commits that modify `src/app/`:
+- Validates architecture metrics are up to date in `docs/ARCHITECTURE.md`
+- **Aborts push if metrics are outdated**:
   ```bash
   git add docs/ARCHITECTURE.md
   git commit --amend --no-edit
-  ```
-
-### Pre-Push Hook
-When pushing commits with structural changes (add/delete/rename files):
-- Automatically generates dependency graphs (`module-dependencies.svg`, `architecture-layers.svg`)
-- **Aborts push if graphs changed** - you must review and commit them:
-  ```bash
-  git add docs/module-dependencies.svg docs/architecture-layers.svg
-  git commit -m 'docs: update dependency graphs'
   git push
   ```
-- Validates architecture constraints (no circular dependencies, no orphaned files)
 
----
+**Dependency Graph Generation**
+When pushing commits with structural changes (add/delete/rename files):
+- Automatically generates dependency graphs (`module-dependencies.svg`, `architecture-layers.svg`)
+- **Aborts push if graphs changed**:
+  ```bash
+  git add docs/module-dependencies.svg docs/architecture-layers.svg
+  git commit --amend --no-edit
+  git push
+  ```
 
+**SonarQube Version Sync**
+When pushing commits that modify `package.json`:
+- Syncs version to `sonar-project.properties`
+- **Aborts push if version changed**:
+  ```bash
+  git add sonar-project.properties
+  git commit --amend --no-edit
+  git push
+  ```
+
+**Architecture Validation**
+Always runs on push:
+- Checks for circular dependencies (fails if found)
+- Checks for orphaned files (fails if found)
 ## 🛠️ Tech Stack
 
 - **Framework**: Angular 21 (Zoneless) + Angular Material
