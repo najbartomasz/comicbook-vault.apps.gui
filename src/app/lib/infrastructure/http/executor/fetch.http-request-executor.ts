@@ -7,11 +7,11 @@ import { type ResponseBodyParserResolver } from './parser';
 
 export class FetchHttpRequestExecutor implements HttpRequestExecutor {
     readonly #fetcher: typeof fetch;
-    readonly #parserResolver: ResponseBodyParserResolver;
+    readonly #bodyParserResolver: ResponseBodyParserResolver;
 
-    public constructor(parserResolver: ResponseBodyParserResolver, fetcher: typeof fetch = fetch) {
+    public constructor(bodyParserResolver: ResponseBodyParserResolver, fetcher: typeof fetch = fetch) {
         this.#fetcher = fetcher;
-        this.#parserResolver = parserResolver;
+        this.#bodyParserResolver = bodyParserResolver;
     }
 
     public async execute(request: HttpRequest): Promise<HttpResponse> {
@@ -33,7 +33,7 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
         let responseBody: unknown;
         const contentType = response.headers.get('Content-Type') ?? '';
         try {
-            const parser = this.#parserResolver.resolve(contentType);
+            const parser = this.#bodyParserResolver.resolve(contentType);
             responseBody = await parser.parse(response);
         } catch (error) {
             throw new HttpPayloadError({ url: response.url }, { cause: error });

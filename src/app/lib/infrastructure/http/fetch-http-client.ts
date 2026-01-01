@@ -1,6 +1,6 @@
 import { type HttpRequestExecutor } from './executor';
 import { type HttpClient } from './http-client.interface';
-import { type HttpInterceptor } from './http-interceptor.interface';
+import { type HttpInterceptor } from './http-interceptor.type';
 import { type HttpRequest } from './http-request.interface';
 import { type HttpResponse } from './http-response.interface';
 import { type HttpUrl } from './http-url.type';
