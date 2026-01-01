@@ -1,5 +1,0 @@
-#!/bin/sh
-set -e
-
-.husky/scripts/sync-sonar-project-version.sh
-.husky/scripts/update-architecture-metrics.sh

@@ -1,6 +1,19 @@
 #!/bin/sh
 set -e
 
-.husky/scripts/check-circular-dependencies.sh
-.husky/scripts/check-orphaned-files.sh
-.husky/scripts/update-dependency-graphs.sh
+HUSKY_DIR="$(dirname "$0")"
+
+echo "🚀 Running pre-push checks..."
+
+# Sync and update
+"$HUSKY_DIR/scripts/sync-sonar-project-version.sh"
+"$HUSKY_DIR/scripts/update-architecture-metrics.sh"
+
+# Validation checks
+"$HUSKY_DIR/scripts/check-circular-dependencies.sh"
+"$HUSKY_DIR/scripts/check-orphaned-files.sh"
+
+# Generate artifacts
+"$HUSKY_DIR/scripts/update-dependency-graphs.sh"
+
+echo "✅ All pre-push checks passed!"
