@@ -1,18 +1,24 @@
 import { type CurrentDateTimeProvider } from '@lib/core/date-time';
 
+import { type HttpInterceptorNext } from '../../http-interceptor-next.type';
 import { type HttpRequest } from '../../http-request.interface';
 import { type HttpResponse } from '../../http-response.interface';
-import { type HttpRequestInterceptor } from '../http-request-interceptor.interface';
-import { type HttpResponseInterceptor } from '../http-response-interceptor.interface';
+import { type HttpInterceptor } from '../http-interceptor.interface';
 
-export class TimestampHttpInterceptor implements HttpRequestInterceptor, HttpResponseInterceptor {
+export class TimestampHttpInterceptor implements HttpInterceptor {
     readonly #dateTimeProvider: CurrentDateTimeProvider;
 
     public constructor(dateTimeProvider: CurrentDateTimeProvider) {
         this.#dateTimeProvider = dateTimeProvider;
     }
 
-    public interceptRequest(request: HttpRequest): HttpRequest {
+    public async intercept(request: HttpRequest, next: HttpInterceptorNext): Promise<HttpResponse> {
+        const requestWithTimestamp = this.#interceptRequest(request);
+        const response = await next(requestWithTimestamp);
+        return this.#interceptResponse(response);
+    }
+
+    #interceptRequest(request: HttpRequest): HttpRequest {
         return {
             ...request,
             metadata: {
@@ -22,7 +28,7 @@ export class TimestampHttpInterceptor implements HttpRequestInterceptor, HttpRes
         };
     }
 
-    public interceptResponse(response: HttpResponse): HttpResponse {
+    #interceptResponse(response: HttpResponse): HttpResponse {
         return {
             ...response,
             metadata: {
@@ -32,4 +38,3 @@ export class TimestampHttpInterceptor implements HttpRequestInterceptor, HttpRes
         };
     }
 }
-

@@ -1,97 +1,117 @@
+import { type HttpInterceptorNext } from '../../http-interceptor-next.type';
 import { type HttpRequest } from '../../http-request.interface';
-import { HttpMethod } from '../../method';
+import { type HttpResponse } from '../../http-response.interface';
+import { HttpMethod } from '../../method/http-method';
 
 import { SequenceNumberHttpInterceptor } from './sequence-number.http-interceptor';
 
 describe(SequenceNumberHttpInterceptor, () => {
-    test('should add sequence number to request metadata', () => {
+    test('should add sequence number to request and response metadata', async () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
+            url: 'https://example.com/api',
             method: HttpMethod.Get
         };
+        const responseStub: HttpResponse = {
+            url: 'https://example.com/api',
+            status: 200,
+            statusText: 'OK',
+            body: { data: 'test' }
+        };
+        const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
 
         // When
-        const result = interceptor.interceptRequest(requestStub);
+        const result = await interceptor.intercept(requestStub, nextMock);
 
         // Then
+        expect(nextMock).toHaveBeenCalledExactlyOnceWith({
+            ...requestStub,
+            metadata: {
+                sequenceNumber: 1
+            }
+        });
         expect(result).toStrictEqual({
-            url: 'http://example.com/api',
-            method: HttpMethod.Get,
+            url: 'https://example.com/api',
+            status: 200,
+            statusText: 'OK',
+            body: { data: 'test' },
             metadata: {
                 sequenceNumber: 1
             }
         });
     });
 
-    test('should increment sequence number on each request', () => {
+    test('should increment sequence number on each request', async () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const request1Stub: HttpRequest = {
-            url: 'http://example.com/api/1',
+            url: 'https://example.com/api/1',
             method: HttpMethod.Get
         };
         const request2Stub: HttpRequest = {
-            url: 'http://example.com/api/2',
+            url: 'https://example.com/api/2',
             method: HttpMethod.Get
         };
-        const request3Stub: HttpRequest = {
-            url: 'http://example.com/api/3',
-            method: HttpMethod.Get
-        };
+        const nextMock = vi.fn<HttpInterceptorNext>()
+            .mockResolvedValueOnce({
+                url: 'https://example.com/api/1',
+                status: 200,
+                statusText: 'OK',
+                body: { data: 'test1' }
+            })
+            .mockResolvedValueOnce({
+                url: 'https://example.com/api/2',
+                status: 200,
+                statusText: 'OK',
+                body: { data: 'test2' }
+            });
 
         // When
-        const result1 = interceptor.interceptRequest(request1Stub);
-        const result2 = interceptor.interceptRequest(request2Stub);
-        const result3 = interceptor.interceptRequest(request3Stub);
+        const result1 = await interceptor.intercept(request1Stub, nextMock);
+        const result2 = await interceptor.intercept(request2Stub, nextMock);
 
         // Then
         expect(result1.metadata?.sequenceNumber).toBe(1);
         expect(result2.metadata?.sequenceNumber).toBe(2);
-        expect(result3.metadata?.sequenceNumber).toBe(3);
     });
 
-    test('should override existing sequence number in metadata', () => {
+    test('should preserve existing metadata while adding sequence number', async () => {
         // Given
         const interceptor = new SequenceNumberHttpInterceptor();
         const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
+            url: 'https://example.com/api',
             method: HttpMethod.Get,
             metadata: {
-                sequenceNumber: 999
+                timestamp: 1000
             }
         };
+        const responseStub: HttpResponse = {
+            url: 'https://example.com/api',
+            status: 200,
+            statusText: 'OK',
+            body: { data: 'test' },
+            metadata: {
+                timestamp: 1100
+            }
+        };
+        const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
 
         // When
-        const result = interceptor.interceptRequest(requestStub);
+        const result = await interceptor.intercept(requestStub, nextMock);
 
         // Then
-        expect(result.metadata).toStrictEqual({
-            sequenceNumber: 1
+        expect(nextMock).toHaveBeenCalledExactlyOnceWith({
+            url: 'https://example.com/api',
+            method: HttpMethod.Get,
+            metadata: {
+                sequenceNumber: 1,
+                timestamp: 1000
+            }
         });
-    });
-
-    test('should preserve existing metadata while adding sequence number to request', () => {
-        // Given
-        const interceptor = new SequenceNumberHttpInterceptor();
-        const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
-            method: HttpMethod.Get,
-            metadata: {
-                timestamp: 1234567890,
-                highResolutionTimestamp: 78343.570643
-            }
-        };
-
-        // When
-        const result = interceptor.interceptRequest(requestStub);
-
-        // Then
         expect(result.metadata).toStrictEqual({
             sequenceNumber: 1,
-            timestamp: 1234567890,
-            highResolutionTimestamp: 78343.570643
+            timestamp: 1100
         });
     });
 });

@@ -23,7 +23,7 @@ describe(JsonResponseBodyParser, () => {
         expect(result).toBe(true);
     });
 
-    test('should return false when content-type is text/plain', () => {
+    test('should return false when content-type is not application/json', () => {
         // Given
         const parser = new JsonResponseBodyParser();
 

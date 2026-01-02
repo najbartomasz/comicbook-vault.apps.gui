@@ -1,4 +1,5 @@
 interface HttpResponseMetadata {
+    readonly sequenceNumber?: number;
     readonly timestamp?: number;
     readonly responseTimeMs?: number;
 }

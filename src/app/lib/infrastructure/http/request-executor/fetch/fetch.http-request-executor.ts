@@ -1,17 +1,25 @@
-import { HttpAbortError, HttpNetworkError, HttpPayloadError } from '../error';
-import { type HttpRequest } from '../http-request.interface';
-import { type HttpResponse } from '../http-response.interface';
-
-import { type HttpRequestExecutor } from './http-request-executor.interface';
-import { type ResponseBodyParserResolver } from './parser';
+import { type ResponseBodyParser } from '../../body-parser/response-body-parser.interface';
+import { TextResponseBodyParser } from '../../body-parser/text/text.response-body-parser';
+import { HttpAbortError } from '../../error/abort/http-abort-error';
+import { HttpNetworkError } from '../../error/network/http-network-error';
+import { HttpPayloadError } from '../../error/payload/http-payload-error';
+import { type HttpRequest } from '../../http-request.interface';
+import { type HttpResponse } from '../../http-response.interface';
+import { type HttpRequestExecutor } from '../http-request-executor.interface';
 
 export class FetchHttpRequestExecutor implements HttpRequestExecutor {
     readonly #fetcher: typeof fetch;
-    readonly #bodyParserResolver: ResponseBodyParserResolver;
+    readonly #parsers: readonly ResponseBodyParser[];
+    readonly #defaultParser: ResponseBodyParser;
 
-    public constructor(bodyParserResolver: ResponseBodyParserResolver, fetcher: typeof fetch = fetch) {
+    public constructor(
+        bodyParsers: readonly ResponseBodyParser[],
+        fetcher: typeof fetch = fetch,
+        defaultParser: ResponseBodyParser = new TextResponseBodyParser()
+    ) {
         this.#fetcher = fetcher;
-        this.#bodyParserResolver = bodyParserResolver;
+        this.#parsers = bodyParsers;
+        this.#defaultParser = defaultParser;
     }
 
     public async execute(request: HttpRequest): Promise<HttpResponse> {
@@ -33,8 +41,8 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
         let responseBody: unknown;
         const contentType = response.headers.get('Content-Type') ?? '';
         try {
-            const parser = this.#bodyParserResolver.resolve(contentType);
-            responseBody = await parser.parse(response);
+            const bodyParser = this.#parsers.find((parser) => parser.canParse(contentType)) ?? this.#defaultParser;
+            responseBody = await bodyParser.parse(response);
         } catch (error) {
             throw new HttpPayloadError({ url: response.url }, { cause: error });
         }

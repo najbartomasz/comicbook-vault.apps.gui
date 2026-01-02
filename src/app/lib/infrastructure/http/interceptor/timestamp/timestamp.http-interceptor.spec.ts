@@ -1,131 +1,95 @@
 import { type CurrentDateTimeProvider } from '@lib/core/date-time';
 
+import { type HttpInterceptorNext } from '../../http-interceptor-next.type';
 import { type HttpRequest } from '../../http-request.interface';
 import { type HttpResponse } from '../../http-response.interface';
-import { HttpMethod } from '../../method';
+import { HttpMethod } from '../../method/http-method';
 
 import { TimestampHttpInterceptor } from './timestamp.http-interceptor';
 
 describe(TimestampHttpInterceptor, () => {
-    test('should add timestamp to request metadata', () => {
+    test('should add timestamp to request and response metadata', async () => {
         // Given
         const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
+            now: vi.fn<CurrentDateTimeProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100)
         };
         const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
+            url: 'https://example.com/api',
             method: HttpMethod.Get
         };
+        const responseStub: HttpResponse = {
+            status: 200,
+            statusText: 'OK',
+            url: 'https://example.com/api',
+            body: { data: 'test' }
+        };
+        const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
 
         // When
-        const result = interceptor.interceptRequest(requestStub);
+        const result = await interceptor.intercept(requestStub, nextMock);
 
         // Then
-        expect(result).toStrictEqual({
-            url: 'http://example.com/api',
-            method: HttpMethod.Get,
+        expect(nextMock).toHaveBeenCalledExactlyOnceWith({
+            ...requestStub,
             metadata: {
-                timestamp: 1234567890
+                timestamp: 1000
+            }
+        });
+        expect(result).toStrictEqual({
+            status: 200,
+            statusText: 'OK',
+            url: 'https://example.com/api',
+            body: { data: 'test' },
+            metadata: {
+                timestamp: 1100
             }
         });
     });
 
-    test('should override existing timestamp in request metadata', () => {
+    test('should preserve existing metadata while adding timestamp', async () => {
         // Given
         const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
+            now: vi.fn<CurrentDateTimeProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100)
         };
         const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
+            url: 'https://example.com/api',
             method: HttpMethod.Get,
             metadata: {
-                timestamp: 999
+                sequenceNumber: 42
             }
         };
+        const responseStub: HttpResponse = {
+            status: 200,
+            statusText: 'OK',
+            url: 'https://example.com/api',
+            body: {},
+            metadata: {
+                responseTimeMs: 100.25
+            }
+        };
+        const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
 
         // When
-        const result = interceptor.interceptRequest(requestStub);
+        const result = await interceptor.intercept(requestStub, nextMock);
 
         // Then
-        expect(result.metadata?.timestamp).toBe(1234567890);
-    });
-
-    test('should preserve existing metadata while adding timestamp to request', () => {
-        // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
-        const requestStub: HttpRequest = {
-            url: 'http://example.com/api',
+        expect(nextMock).toHaveBeenCalledExactlyOnceWith({
+            url: 'https://example.com/api',
             method: HttpMethod.Get,
             metadata: {
                 sequenceNumber: 42,
-                highResolutionTimestamp: 78343.570643
+                timestamp: 1000
             }
-        };
-
-        // When
-        const result = interceptor.interceptRequest(requestStub);
-
-        // Then
+        });
         expect(result.metadata).toStrictEqual({
-            sequenceNumber: 42,
-            timestamp: 1234567890,
-            highResolutionTimestamp: 78343.570643
+            responseTimeMs: 100.25,
+            timestamp: 1100
         });
-    });
-
-    test('should add timestamp to response metadata', () => {
-        // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
-        const responseStub: HttpResponse = {
-            url: 'http://example.com/api',
-            status: 200,
-            statusText: 'OK',
-            body: { data: 'test' }
-        };
-
-        // When
-        const result = interceptor.interceptResponse(responseStub);
-
-        // Then
-        expect(result).toStrictEqual({
-            url: 'http://example.com/api',
-            status: 200,
-            statusText: 'OK',
-            body: { data: 'test' },
-            metadata: {
-                timestamp: 1234567890
-            }
-        });
-    });
-
-    test('should override existing timestamp in response metadata', () => {
-        // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: () => 1234567890
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
-        const responseStub: HttpResponse = {
-            url: 'http://example.com/api',
-            status: 200,
-            statusText: 'OK',
-            body: {},
-            metadata: {
-                timestamp: 999
-            }
-        };
-
-        // When
-        const result = interceptor.interceptResponse(responseStub);
-
-        // Then
-        expect(result.metadata?.timestamp).toBe(1234567890);
     });
 });

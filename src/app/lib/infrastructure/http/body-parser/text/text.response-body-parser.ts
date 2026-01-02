@@ -1,4 +1,4 @@
-import { type ResponseBodyParser } from './response-body-parser.interface';
+import { type ResponseBodyParser } from '../response-body-parser.interface';
 
 export class TextResponseBodyParser implements ResponseBodyParser {
     public canParse(contentType: string): boolean {

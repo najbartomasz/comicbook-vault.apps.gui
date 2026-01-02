@@ -544,7 +544,7 @@ export default [
             ],
             '@stylistic/multiline-comment-style': [
                 'error',
-                'starred-block'
+                'separate-lines'
             ],
             '@stylistic/multiline-ternary': [
                 'error',
@@ -780,14 +780,7 @@ export default [
                 'error',
                 'never'
             ],
-            '@stylistic/type-annotation-spacing': [
-                'error',
-                {
-                    before: false,
-                    after: true,
-                    overrides: {}
-                }
-            ],
+            '@stylistic/type-annotation-spacing': 'error',
             '@stylistic/type-generic-spacing': 'error',
             '@stylistic/type-named-tuple-spacing': 'error',
             '@stylistic/wrap-iife': [
@@ -1787,6 +1780,12 @@ export default [
         }
     },
     {
+        files: ['**/index.ts'],
+        rules: {
+            'import/max-dependencies': 'off'
+        }
+    },
+    {
         files: ['**/*.spec.ts'],
         languageOptions: {
             parser: tsParser,
@@ -1871,6 +1870,7 @@ export default [
             // Promise Rules
             'promise/avoid-new': 'off',
             // SonarJS Rules
+            'sonarjs/max-lines': 'off',
             'sonarjs/max-lines-per-function': 'off',
             'sonarjs/no-duplicate-string': 'off',
             'sonarjs/no-nested-functions': 'off',
@@ -1960,6 +1960,13 @@ export default [
             'vitest/valid-expect-in-promise': 'error',
             'vitest/valid-title': 'error',
             'vitest/warn-todo': 'error'
+        }
+    },
+    {
+        files: ['**/*.integration.spec.ts'],
+        rules: {
+            // Vitest Rules
+            'vitest/max-expects': 'off'
         }
     },
     {

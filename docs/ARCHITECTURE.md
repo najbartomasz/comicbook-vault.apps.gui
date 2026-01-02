@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-79%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-21%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-73%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-28%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -81,14 +81,14 @@ flowchart TB
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 68
-- **Production Files**: 50
+- **Total TypeScript Files**: 58
+- **Production Files**: 40
 - **Test Files**: 18
-- **Framework-Agnostic Files**: 39 (78%)
-- **Angular-Specific Files**: 11 (22%)
+- **Framework-Agnostic Files**: 29 (73%)
+- **Angular-Specific Files**: 11 (28%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-01*
+*Last generated: 2026-01-02*
 
 ---
 
@@ -102,10 +102,21 @@ src/app/
 │   │   └── performance/        # Performance monitoring utilities
 │   ├── infrastructure/          # 🟣 Pure TypeScript (framework-agnostic)
 │   │   └── http/                # HTTP client implementation
+│   │       ├── body-parser/     # Response body parsers
+│   │       │   ├── json/       # JSON body parser
+│   │       │   └── text/       # Text body parser
 │   │       ├── error/           # HTTP error types
-│   │       ├── executor/        # Request execution logic
+│   │       │   ├── abort/      # Request abort errors
+│   │       │   ├── network/    # Network errors
+│   │       │   └── payload/    # Payload parsing errors
 │   │       ├── interceptor/     # HTTP interceptors
-│   │       └── method/          # HTTP method types
+│   │       │   ├── logger/     # Request/response logging
+│   │       │   ├── response-time/ # Response time tracking
+│   │       │   ├── sequence-number/ # Request sequencing
+│   │       │   └── timestamp/  # Request timestamping
+│   │       ├── method/          # HTTP method types
+│   │       └── request-executor/ # Request execution logic
+│   │           └── fetch/      # Fetch API implementation
 │   └── presentation/            # 🔵 Angular-specific shared components
 │       └── http-client/         # HTTP client UI components
 │
@@ -279,4 +290,4 @@ src/app/
 
 ---
 
-**Last Updated**: January 1, 2026
+**Last Updated**: January 2, 2026

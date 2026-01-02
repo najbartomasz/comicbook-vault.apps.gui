@@ -11,6 +11,8 @@ export default defineConfig({
         globals: true,
         restoreMocks: true,
         mockReset: true,
+        unstubGlobals: true,
+        unstubEnvs: true,
         reporters: ['tree'],
         coverage: {
             reportsDirectory: './coverage/comicbook-vault.apps.gui',

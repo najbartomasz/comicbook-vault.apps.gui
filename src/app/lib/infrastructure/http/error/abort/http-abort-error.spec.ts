@@ -4,14 +4,16 @@ describe(HttpAbortError, () => {
     test('should create an instance', () => {
         // Given, When
         const error = new HttpAbortError({
-            url: 'http://example.com/api'
+            url: 'https://example.com/api'
         });
 
         // Then
         expect(error).toBeInstanceOf(HttpAbortError);
-        expect(error.name).toBe('HttpAbortError');
-        expect(error.url).toBe('http://example.com/api');
-        expect(error.message).toBe('HTTP Request Aborted (URL: http://example.com/api)');
+        expect(error).toStrictEqual(expect.objectContaining({
+            name: 'HttpAbortError',
+            url: 'https://example.com/api',
+            message: 'HTTP Request Aborted (URL: https://example.com/api)'
+        }));
     });
 
     test('should create an instance with cause option', () => {
@@ -20,15 +22,17 @@ describe(HttpAbortError, () => {
 
         // When
         const error = new HttpAbortError(
-            { url: 'http://example.com/api' },
+            { url: 'https://example.com/api' },
             { cause }
         );
 
         // Then
         expect(error).toBeInstanceOf(HttpAbortError);
-        expect(error.name).toBe('HttpAbortError');
-        expect(error.url).toBe('http://example.com/api');
-        expect(error.message).toBe('HTTP Request Aborted (URL: http://example.com/api)');
-        expect(error.cause).toBe(cause);
+        expect(error).toStrictEqual(expect.objectContaining({
+            name: 'HttpAbortError',
+            url: 'https://example.com/api',
+            message: 'HTTP Request Aborted (URL: https://example.com/api)',
+            cause
+        }));
     });
 });

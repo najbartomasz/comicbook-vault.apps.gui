@@ -23,6 +23,17 @@ describe(TextResponseBodyParser, () => {
         expect(result).toBe(true);
     });
 
+    test('should return false when content-type is not text/plain', () => {
+        // Given
+        const parser = new TextResponseBodyParser();
+
+        // When
+        const result = parser.canParse('application/json');
+
+        // Then
+        expect(result).toBe(false);
+    });
+
     test('should return true when content-type is empty', () => {
         // Given
         const parser = new TextResponseBodyParser();
@@ -32,17 +43,6 @@ describe(TextResponseBodyParser, () => {
 
         // Then
         expect(result).toBe(true);
-    });
-
-    test('should return false when content-type is application/json', () => {
-        // Given
-        const parser = new TextResponseBodyParser();
-
-        // When
-        const result = parser.canParse('application/json');
-
-        // Then
-        expect(result).toBe(false);
     });
 
     test('should parse text response body', async () => {
