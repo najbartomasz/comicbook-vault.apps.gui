@@ -1,0 +1,10 @@
+{
+    "excludeRegExp": [
+        "\\.spec\\.ts$",
+        "testing/"
+    ],
+    "tsConfig": "tsconfig.app.json",
+    "fileExtensions": [
+        "ts"
+    ]
+}

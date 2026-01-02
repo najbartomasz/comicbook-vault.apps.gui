@@ -36,7 +36,8 @@ export default [
                 clearTimeout: 'readonly',
                 setInterval: 'readonly',
                 clearInterval: 'readonly',
-                performance: 'readonly'
+                performance: 'readonly',
+                window: 'readonly'
             }
         },
         settings: {
@@ -46,65 +47,90 @@ export default [
                     project: './tsconfig.app.json'
                 }
             },
-            'import/internal-regex': '^@(lib|features|shell)/',
+            'import/internal-regex': '^@(lib|features|shell|di|config|testing)/',
+            'boundaries/root-path': import.meta.dirname,
+            'boundaries/dependency-nodes': ['import'],
             'boundaries/elements': [
+                {
+                    type: 'config',
+                    pattern: 'src/config/**',
+                    mode: 'file'
+                },
                 {
                     type: 'shell',
                     pattern: 'src/app/shell/**',
-                    mode: 'folder'
+                    mode: 'file'
                 },
                 {
-                    type: 'lib-core',
-                    pattern: 'src/app/lib/core/**',
-                    mode: 'folder'
+                    type: 'di-injection-tokens',
+                    pattern: 'src/app/di/*/injection-tokens/**',
+                    mode: 'file',
+                    capture: ['contextName']
+                },
+                {
+                    type: 'di-inject-functions',
+                    pattern: 'src/app/di/*/inject-functions/**',
+                    mode: 'file',
+                    capture: ['contextName']
+                },
+                {
+                    type: 'di-providers',
+                    pattern: 'src/app/di/*/providers/**',
+                    mode: 'file',
+                    capture: ['contextName']
                 },
                 {
                     type: 'lib-domain',
-                    pattern: 'src/app/lib/domain/**',
-                    mode: 'folder'
+                    pattern: 'src/app/lib/*/domain/**',
+                    mode: 'file'
+                },
+                {
+                    type: 'lib-application',
+                    pattern: 'src/app/lib/*/application/**',
+                    mode: 'file'
                 },
                 {
                     type: 'lib-infrastructure',
-                    pattern: 'src/app/lib/infrastructure/**',
-                    mode: 'folder'
+                    pattern: 'src/app/lib/*/infrastructure/**',
+                    mode: 'file'
                 },
                 {
                     type: 'lib-presentation',
-                    pattern: 'src/app/lib/presentation/**',
-                    mode: 'folder'
-                },
-                {
-                    type: 'feature',
-                    pattern: 'src/app/features/*',
-                    mode: 'folder',
-                    capture: ['featureName']
-                },
-                {
-                    type: 'feature-core',
-                    pattern: 'src/app/features/*/core/**',
-                    mode: 'folder',
-                    capture: ['featureName']
+                    pattern: 'src/app/lib/*/presentation/**',
+                    mode: 'file'
                 },
                 {
                     type: 'feature-domain',
                     pattern: 'src/app/features/*/domain/**',
-                    mode: 'folder',
+                    mode: 'file',
+                    capture: ['featureName']
+                },
+                {
+                    type: 'feature-application',
+                    pattern: 'src/app/features/*/application/**',
+                    mode: 'file',
                     capture: ['featureName']
                 },
                 {
                     type: 'feature-infrastructure',
                     pattern: 'src/app/features/*/infrastructure/**',
-                    mode: 'folder',
+                    mode: 'file',
                     capture: ['featureName']
                 },
                 {
                     type: 'feature-presentation',
                     pattern: 'src/app/features/*/presentation/**',
-                    mode: 'folder',
+                    mode: 'file',
                     capture: ['featureName']
+                },
+                {
+                    type: 'testing',
+                    pattern: 'src/testing/**',
+                    mode: 'file'
                 }
             ],
-            'boundaries/include': ['src/app/**']
+            'boundaries/include': ['src/app/**', 'src/config/**', 'src/testing/**'],
+            'boundaries/ignore': ['**/*.spec.ts', '**/*.e2e.spec.ts', '**/*.integration.spec.ts', '**/*.visual.spec.ts']
         },
         plugins: {
             '@angular-eslint': angularEslint,
@@ -544,7 +570,7 @@ export default [
             ],
             '@stylistic/multiline-comment-style': [
                 'error',
-                'starred-block'
+                'separate-lines'
             ],
             '@stylistic/multiline-ternary': [
                 'error',
@@ -780,14 +806,7 @@ export default [
                 'error',
                 'never'
             ],
-            '@stylistic/type-annotation-spacing': [
-                'error',
-                {
-                    before: false,
-                    after: true,
-                    overrides: {}
-                }
-            ],
+            '@stylistic/type-annotation-spacing': 'error',
             '@stylistic/type-generic-spacing': 'error',
             '@stylistic/type-named-tuple-spacing': 'error',
             '@stylistic/wrap-iife': [
@@ -825,7 +844,7 @@ export default [
             '@angular-eslint/no-developer-preview': 'error',
             '@angular-eslint/no-duplicates-in-metadata-arrays': 'error',
             '@angular-eslint/no-empty-lifecycle-method': 'error',
-            '@angular-eslint/no-experimental': 'error',
+            '@angular-eslint/no-experimental': 'off',
             '@angular-eslint/no-forward-ref': 'error',
             '@angular-eslint/no-input-prefix': 'error',
             '@angular-eslint/no-input-rename': 'error',
@@ -954,7 +973,7 @@ export default [
                 },
                 {
                     selector: 'variable',
-                    format: ['camelCase', 'UPPER_CASE'],
+                    format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
                     leadingUnderscore: 'forbid',
                     trailingUnderscore: 'forbid'
                 },
@@ -1038,7 +1057,21 @@ export default [
             '@typescript-eslint/no-redeclare': 'error',
             '@typescript-eslint/no-redundant-type-constituents': 'error',
             '@typescript-eslint/no-require-imports': 'error',
-            '@typescript-eslint/no-restricted-imports': 'off',
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            regex: '@features/[^/]+$',
+                            message: 'Cannot import from top-level feature barrel (@features/feature-name). Import from specific layer instead: @features/*/domain, @features/*/application, @features/*/infrastructure, etc.'
+                        },
+                        {
+                            regex: '@lib/[^/]+$',
+                            message: 'Cannot import from top-level lib barrel (@lib/feature-name). Import from specific layer instead: @lib/*/domain, @lib/*/application, @lib/*/infrastructure, etc.'
+                        }
+                    ]
+                }
+            ],
             '@typescript-eslint/no-restricted-types': 'error',
             '@typescript-eslint/no-shadow': [
                 'error',
@@ -1271,7 +1304,12 @@ export default [
             'import/no-restricted-paths': 'error',
             'import/no-self-import': 'error',
             'import/no-unassigned-import': 'error',
-            'import/no-unresolved': 'error',
+            'import/no-unresolved': [
+                'error',
+                {
+                    ignore: ['^@di/']
+                }
+            ],
             'import/no-unused-modules': 'error',
             'import/no-useless-path-segments': 'error',
             'import/no-webpack-loader-syntax': 'error',
@@ -1541,7 +1579,7 @@ export default [
             'sonarjs/no-table-as-layout': 'error',
             'sonarjs/no-try-promise': 'error',
             'sonarjs/no-undefined-argument': 'error',
-            'sonarjs/no-undefined-assignment': 'error',
+            'sonarjs/no-undefined-assignment': 'off',
             'sonarjs/no-unenclosed-multiline-block': 'error',
             'sonarjs/no-uniq-key': 'error',
             'sonarjs/no-unsafe-unzip': 'error',
@@ -1635,79 +1673,118 @@ export default [
             'security/detect-pseudoRandomBytes': 'error',
             'security/detect-unsafe-regex': 'error',
             // Boundaries Rules
+            'boundaries/no-unknown': 'warn',
             'boundaries/element-types': [
                 'error',
                 {
                     default: 'disallow',
                     rules: [
-                        // Shell can import from lib and features (orchestration layer)
+                        // Config can import from lib layers
+                        {
+                            from: 'config',
+                            allow: ['config', 'lib-domain', 'lib-application', 'lib-infrastructure']
+                        },
+                        // Shell can import from lib, features, and config
                         {
                             from: 'shell',
-                            allow: ['shell', 'lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'feature']
+                            allow: ['shell', 'di-inject-functions', 'di-providers', 'config', 'lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'testing'],
+                            message: 'Shell cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
                         },
-                        // Lib core is the lowest layer (no imports from app code)
+                        // DI tokens can use lib layers for factory definitions
                         {
-                            from: 'lib-core',
-                            allow: ['lib-core']
+                            from: 'di-injection-tokens',
+                            allow: ['di-injection-tokens', 'di-inject-functions', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config'],
+                            message: 'DI tokens can import from other tokens, injections, lib layers, and config, but must not depend on providers.'
+                        },
+                        // DI injections can use tokens and lib layers
+                        {
+                            from: 'di-inject-functions',
+                            allow: ['di-injection-tokens', 'di-inject-functions', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config'],
+                            message: 'DI injections can import tokens, lib layers, and config, but not providers.'
+                        },
+                        // DI providers can use everything in DI
+                        {
+                            from: 'di-providers',
+                            allow: ['di-injection-tokens', 'di-inject-functions', 'di-providers', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config']
                         },
                         // Lib domain is framework-agnostic (pure TypeScript only)
                         {
                             from: 'lib-domain',
-                            allow: ['lib-core', 'lib-domain']
+                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            allow: ['lib-domain'],
+                            message: 'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.'
                         },
-                        // Lib infrastructure is framework-agnostic (can use lib-domain)
+                        // Lib application is framework-agnostic (use cases and orchestration)
+                        {
+                            from: 'lib-application',
+                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            allow: ['lib-domain', 'lib-application', 'feature-domain'],
+                            message: 'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.'
+                        },
+                        // Lib infrastructure is framework-agnostic (can use application and domain)
                         {
                             from: 'lib-infrastructure',
-                            allow: ['lib-core', 'lib-domain', 'lib-infrastructure']
+                            disallow: ['lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'feature-domain', 'feature-application'],
+                            message: 'Infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.'
                         },
                         // Lib presentation can use Angular and lower layers
                         {
                             from: 'lib-presentation',
-                            allow: ['lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation']
+                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'config'],
+                            message: 'Lib presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
                         },
-                        // Feature domain is framework-agnostic (pure TypeScript)
+                        // Feature domain is framework-agnostic (pure TypeScript only)
                         {
                             from: 'feature-domain',
+                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
                             allow: [
-                                'lib-core',
                                 'lib-domain',
-                                ['feature-core', { featureName: '${from.featureName}' }],
                                 ['feature-domain', { featureName: '${from.featureName}' }]
-                            ]
+                            ],
+                            message: 'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.'
                         },
-                        // Feature infrastructure is framework-agnostic (can use domain)
+                        // Feature application is framework-agnostic (use cases and orchestration)
+                        {
+                            from: 'feature-application',
+                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            allow: [
+                                'lib-domain',
+                                'lib-application',
+                                ['feature-domain', { featureName: '${from.featureName}' }],
+                                ['feature-application', { featureName: '${from.featureName}' }]
+                            ],
+                            message: 'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.'
+                        },
+                        // Feature infrastructure is framework-agnostic (can use application and domain)
                         {
                             from: 'feature-infrastructure',
+                            disallow: ['lib-presentation', 'feature-presentation', 'shell', 'config'],
                             allow: [
-                                'lib-core',
                                 'lib-domain',
+                                'lib-application',
                                 'lib-infrastructure',
-                                ['feature-core', { featureName: '${from.featureName}' }],
                                 ['feature-domain', { featureName: '${from.featureName}' }],
+                                ['feature-application', { featureName: '${from.featureName}' }],
                                 ['feature-infrastructure', { featureName: '${from.featureName}' }]
-                            ]
+                            ],
+                            message: 'Infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.'
                         },
                         // Feature presentation is Angular-specific (can use all layers)
                         {
                             from: 'feature-presentation',
                             allow: [
-                                'lib-core',
                                 'lib-domain',
+                                'lib-application',
                                 'lib-infrastructure',
                                 'lib-presentation',
-                                ['feature-core', { featureName: '${from.featureName}' }],
+                                'config',
                                 ['feature-domain', { featureName: '${from.featureName}' }],
+                                ['feature-application', { featureName: '${from.featureName}' }],
                                 ['feature-infrastructure', { featureName: '${from.featureName}' }],
                                 ['feature-presentation', { featureName: '${from.featureName}' }]
-                            ]
-                        },
-                        // Feature core is framework-agnostic (lowest feature layer)
-                        {
-                            from: 'feature-core',
-                            allow: [
-                                'lib-core',
-                                ['feature-core', { featureName: '${from.featureName}' }]
-                            ]
+                            ],
+                            message: 'Feature presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
                         }
                     ]
                 }
@@ -1717,25 +1794,50 @@ export default [
                 {
                     default: 'disallow',
                     rules: [
+                        // Config allows all internal imports
+                        {
+                            target: 'config',
+                            allow: '**'
+                        },
                         // Shell can access internal pages
                         {
                             target: 'shell',
                             allow: '**'
                         },
-                        // Features must export through index.ts
+                        // DI tokens must export through their index.ts (but can be imported directly within same context)
                         {
-                            target: 'feature',
+                            target: 'di-injection-tokens',
+                            allow: '**/index.ts'
+                        },
+                        // DI injections must export through their index.ts (but can import tokens directly)
+                        {
+                            target: 'di-inject-functions',
+                            allow: '**/index.ts'
+                        },
+                        // DI providers must export through their index.ts (but can import injections/tokens directly)
+                        {
+                            target: 'di-providers',
+                            allow: '**/index.ts'
+                        },
+                        // Feature layers must export through their index.ts
+                        {
+                            target: ['feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation'],
                             allow: 'index.ts'
                         },
-                        // Internal feature files allowed
+                        // Lib layers must export through their index.ts (barrel files only)
                         {
-                            target: ['feature-core', 'feature-domain', 'feature-infrastructure', 'feature-presentation'],
+                            target: ['lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation'],
+                            allow: 'index.ts'
+                        },
+                        // Shell can access internal files
+                        {
+                            target: 'shell',
                             allow: '**'
                         },
-                        // Lib sublayers allow all imports
+                        // Testing utilities must be imported through index.ts
                         {
-                            target: ['lib-core', 'lib-domain', 'lib-infrastructure', 'lib-presentation', 'shell'],
-                            allow: '**'
+                            target: 'testing',
+                            allow: '**/index.ts'
                         }
                     ]
                 }
@@ -1745,17 +1847,17 @@ export default [
                 {
                     default: 'allow',
                     rules: [
-                        // Core cannot import Angular
-                        {
-                            from: 'lib-core',
-                            disallow: ['@angular/**'],
-                            message: 'Core layer cannot import Angular. Keep core utilities framework-agnostic.'
-                        },
                         // Domain cannot import Angular
                         {
                             from: 'lib-domain',
                             disallow: ['@angular/**'],
                             message: 'Domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // Application cannot import Angular
+                        {
+                            from: 'lib-application',
+                            disallow: ['@angular/**'],
+                            message: 'Application layer cannot import Angular. Keep application logic framework-agnostic.'
                         },
                         // Infrastructure cannot import Angular
                         {
@@ -1763,17 +1865,17 @@ export default [
                             disallow: ['@angular/**'],
                             message: 'Infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
                         },
-                        // Feature core cannot import Angular
-                        {
-                            from: 'feature-core',
-                            disallow: ['@angular/**'],
-                            message: 'Feature core layer cannot import Angular. Keep core utilities framework-agnostic.'
-                        },
                         // Feature domain cannot import Angular
                         {
                             from: 'feature-domain',
                             disallow: ['@angular/**'],
                             message: 'Feature domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // Feature application cannot import Angular
+                        {
+                            from: 'feature-application',
+                            disallow: ['@angular/**'],
+                            message: 'Feature application layer cannot import Angular. Keep application logic framework-agnostic.'
                         },
                         // Feature infrastructure cannot import Angular
                         {
@@ -1787,7 +1889,13 @@ export default [
         }
     },
     {
-        files: ['**/*.spec.ts'],
+        files: ['**/index.ts'],
+        rules: {
+            'import/max-dependencies': 'off'
+        }
+    },
+    {
+        files: ['**/*.spec.ts', 'vitest*.ts'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -1870,7 +1978,7 @@ export default [
             ],
             // Promise Rules
             'promise/avoid-new': 'off',
-            // SonarJS Rules
+            'sonarjs/max-lines': 'off',
             'sonarjs/max-lines-per-function': 'off',
             'sonarjs/no-duplicate-string': 'off',
             'sonarjs/no-nested-functions': 'off',
@@ -1935,7 +2043,7 @@ export default [
             'vitest/prefer-hooks-on-top': 'error',
             'vitest/prefer-import-in-mock': 'error',
             'vitest/prefer-importing-vitest-globals': 'off',
-            'vitest/prefer-lowercase-title': 'error',
+            'vitest/prefer-lowercase-title': ['error', { ignore: ['describe'] }],
             'vitest/prefer-mock-promise-shorthand': 'error',
             'vitest/prefer-snapshot-hint': 'error',
             'vitest/prefer-spy-on': 'error',
@@ -1963,6 +2071,13 @@ export default [
         }
     },
     {
+        files: ['**/*.integration.spec.ts'],
+        rules: {
+            // Vitest Rules
+            'vitest/max-expects': 'off'
+        }
+    },
+    {
         files: ['**/testing/**/*.ts'],
         languageOptions: {
             parser: tsParser,
@@ -1984,19 +2099,12 @@ export default [
         },
         rules: {
             // Allow direct vitest imports in testing utilities (adapter layer)
+            // Also allow internal testing module organization
             'no-restricted-imports': 'off',
             '@typescript-eslint/explicit-function-return-type': 'off',
             '@typescript-eslint/explicit-module-boundary-types': 'off',
             '@typescript-eslint/no-unsafe-type-assertion': 'off',
-            'import/no-internal-modules': [
-                'error',
-                {
-                    allow: [
-                        '@angular/core/testing',
-                        'vitest/browser'
-                    ]
-                }
-            ]
+            'import/no-internal-modules': 'off'
         }
     },
     {

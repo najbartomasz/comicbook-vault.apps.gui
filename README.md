@@ -136,4 +136,3 @@ Always runs on push:
 ## 📚 Documentation
 
 - [Architecture Guide](docs/ARCHITECTURE.md) - Detailed architecture principles and patterns
-- [Architecture Draft](docs/ARCHITECTURE-DRAFT.md) - Future architecture considerations

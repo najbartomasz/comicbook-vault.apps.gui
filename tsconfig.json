@@ -18,7 +18,8 @@
         "lib": [
             "ESNext",
             "DOM"
-        ]
+        ],
+        "baseUrl": "./"
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

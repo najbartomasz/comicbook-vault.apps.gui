@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 
-import { AppComponent, appConfig } from '@shell';
+import { AppComponent, appConfigClient } from '@shell';
 
 try {
-    await bootstrapApplication(AppComponent, appConfig);
+    await bootstrapApplication(AppComponent, appConfigClient);
 } catch (err: unknown) {
     // eslint-disable-next-line no-console
     console.error(err);

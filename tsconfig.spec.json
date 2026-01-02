@@ -5,25 +5,57 @@
         "types": [
             "vitest/globals"
         ],
-        "baseUrl": "./",
         "paths": {
+            "@di/*/inject-functions": [
+                "src/app/di/*/inject-functions/index.ts"
+            ],
+            "@di/*/injection-tokens": [
+                "src/app/di/*/injection-tokens/index.ts"
+            ],
+            "@di/*/providers": [
+                "src/app/di/*/providers/index.ts"
+            ],
             "@shell": [
                 "src/app/shell/index.ts"
             ],
-            "@shell/*": [
-                "src/app/shell/*"
+            "@config/user": [
+                "src/config/user/index.ts"
             ],
-            "@lib/*": [
-                "src/app/lib/*/index.ts"
+            "@lib/*/core": [
+                "src/app/lib/*/core/index.ts"
             ],
-            "@features/*": [
-                "src/app/features/*/index.ts"
+            "@lib/*/domain": [
+                "src/app/lib/*/domain/index.ts"
             ],
-            "@testing/*": [
-                "src/testing/*/index.ts"
+            "@lib/*/application": [
+                "src/app/lib/*/application/index.ts"
+            ],
+            "@lib/*/infrastructure": [
+                "src/app/lib/*/infrastructure/index.ts"
+            ],
+            "@lib/*/presentation": [
+                "src/app/lib/*/presentation/index.ts"
+            ],
+            "@features/*core": [
+                "src/app/features/*/core/index.ts"
+            ],
+            "@features/*domain": [
+                "src/app/features/*/domain/index.ts"
+            ],
+            "@features/*application": [
+                "src/app/features/*/application/index.ts"
+            ],
+            "@features/*infrastructure": [
+                "src/app/features/*/infrastructure/index.ts"
+            ],
+            "@features/*presentation": [
+                "src/app/features/*/presentation/index.ts"
             ],
             "@testing/unit": [
                 "src/testing/unit/index.ts"
+            ],
+            "@testing/unit/*": [
+                "src/testing/unit/*/index.ts"
             ],
             "@testing/e2e/page-objects": [
                 "src/testing/e2e/page-objects/index.ts"
@@ -34,6 +66,7 @@
         "src/**/*.d.ts",
         "src/**/*.spec.ts",
         "vitest*.config.ts",
+        "vitest.setup.ts",
         "src/testing/**/*.ts"
     ]
 }

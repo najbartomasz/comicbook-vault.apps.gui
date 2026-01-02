@@ -27,59 +27,15 @@ module.exports = {
                     '(^|/)[.][^/]+[.](?:js|cjs|mjs|ts|cts|mts|json)$',                  // dot files
                     '[.]d[.]ts$',                                                       // TypeScript declaration files
                     '(^|/)tsconfig[.]json$',                                            // TypeScript config
-                    '(^|/)(?:babel|webpack)[.]config[.](?:js|cjs|mjs|ts|cts|mts|json)$' // other configs
+                    '(^|/)(?:babel|webpack)[.]config[.](?:js|cjs|mjs|ts|cts|mts|json)$', // other configs
+                    '^src/main[.]ts$',                                                  // main entry point
+                    '^src/main[.]server[.]ts$',                                         // server main entry point
+                    '^src/server[.]ts$'                                                 // SSR server entry point
                 ]
             },
             to: {},
         },
-        {
-            name: 'no-deprecated-core',
-            comment:
-                'A module depends on a node core module that has been deprecated. Find an alternative - these are ' +
-                "bound to exist - node doesn't deprecate lightly.",
-            severity: 'warn',
-            from: {},
-            to: {
-                dependencyTypes: [
-                    'core'
-                ],
-                path: [
-                    '^v8/tools/codemap$',
-                    '^v8/tools/consarray$',
-                    '^v8/tools/csvparser$',
-                    '^v8/tools/logreader$',
-                    '^v8/tools/profile_view$',
-                    '^v8/tools/profile$',
-                    '^v8/tools/SourceMap$',
-                    '^v8/tools/splaytree$',
-                    '^v8/tools/tickprocessor-driver$',
-                    '^v8/tools/tickprocessor$',
-                    '^node-inspect/lib/_inspect$',
-                    '^node-inspect/lib/internal/inspect_client$',
-                    '^node-inspect/lib/internal/inspect_repl$',
-                    '^async_hooks$',
-                    '^punycode$',
-                    '^domain$',
-                    '^constants$',
-                    '^sys$',
-                    '^_linklist$',
-                    '^_stream_wrap$'
-                ],
-            }
-        },
-        {
-            name: 'not-to-deprecated',
-            comment:
-                'This module uses a (version of an) npm module that has been deprecated. Either upgrade to a later ' +
-                'version of that module, or find an alternative. Deprecated modules are a security risk.',
-            severity: 'warn',
-            from: {},
-            to: {
-                dependencyTypes: [
-                    'deprecated'
-                ]
-            }
-        },
+
         {
             name: 'no-non-package-json',
             severity: 'error',
@@ -165,244 +121,327 @@ module.exports = {
                 ]
             }
         },
+
+
+        /* Architecture boundary rules - layered architecture enforcement */
+
+        // Domain layer rules (lib-domain and feature-domain)
         {
-            name: 'optional-deps-used',
-            severity: 'info',
-            comment:
-                "This module depends on an npm package that is declared as an optional dependency " +
-                "in your package.json. As this makes sense in limited situations only, it's flagged here. " +
-                "If you're using an optional dependency here by design - add an exception to your" +
-                "dependency-cruiser configuration.",
-            from: {},
+            name: 'lib-domain-no-angular',
+            severity: 'error',
+            comment: 'Domain layer cannot import Angular. Keep domain logic framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/domain/'
+            },
             to: {
-                dependencyTypes: [
-                    'npm-optional'
-                ]
+                path: 'node_modules/@angular/'
             }
         },
         {
-            name: 'peer-deps-used',
-            comment:
-                "This module depends on an npm package that is declared as a peer dependency " +
-                "in your package.json. This makes sense if your package is e.g. a plugin, but in " +
-                "other cases - maybe not so much. If the use of a peer dependency is intentional " +
-                "add an exception to your dependency-cruiser configuration.",
-            severity: 'warn',
-            from: {},
+            name: 'lib-domain-pure',
+            severity: 'error',
+            comment: 'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/domain/'
+            },
             to: {
-                dependencyTypes: [
-                    'npm-peer'
+                path: '^src/app/(lib/[^/]+/(application|infrastructure|presentation)|features/|shell/|config/)'
+            }
+        },
+        {
+            name: 'feature-domain-no-angular',
+            severity: 'error',
+            comment: 'Feature domain layer cannot import Angular. Keep domain logic framework-agnostic.',
+            from: {
+                path: '^src/app/features/[^/]+/domain/'
+            },
+            to: {
+                path: 'node_modules/@angular/'
+            }
+        },
+        {
+            name: 'feature-domain-pure',
+            severity: 'error',
+            comment: 'Feature domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.',
+            from: {
+                path: '^src/app/features/([^/]+)/domain/'
+            },
+            to: {
+                pathNot: [
+                    '^src/app/lib/[^/]+/domain/',
+                    '^src/app/features/\\1/domain/'
                 ]
+            }
+        },
+
+        // Application layer rules (lib-application and feature-application)
+        {
+            name: 'lib-application-no-angular',
+            severity: 'error',
+            comment: 'Application layer cannot import Angular. Keep application logic framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/application/'
+            },
+            to: {
+                path: 'node_modules/@angular/'
+            }
+        },
+        {
+            name: 'lib-application-framework-agnostic',
+            severity: 'error',
+            comment: 'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/application/'
+            },
+            to: {
+                path: '^src/app/(lib/[^/]+/(infrastructure|presentation)|features/[^/]+/(application|infrastructure|presentation)|shell/|config/)'
+            }
+        },
+        {
+            name: 'feature-application-no-angular',
+            severity: 'error',
+            comment: 'Feature application layer cannot import Angular. Keep application logic framework-agnostic.',
+            from: {
+                path: '^src/app/features/[^/]+/application/'
+            },
+            to: {
+                path: 'node_modules/@angular/'
+            }
+        },
+        {
+            name: 'feature-application-framework-agnostic',
+            severity: 'error',
+            comment: 'Feature application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.',
+            from: {
+                path: '^src/app/features/([^/]+)/application/'
+            },
+            to: {
+                path: '^src/app/(lib/[^/]+/(infrastructure|presentation)|features/(?!\\1/)[^/]+/|features/\\1/(infrastructure|presentation)|shell/|config/)'
+            }
+        },
+
+        // Infrastructure layer rules (lib-infrastructure and feature-infrastructure)
+        {
+            name: 'lib-infrastructure-no-angular',
+            severity: 'error',
+            comment: 'Infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/infrastructure/'
+            },
+            to: {
+                path: 'node_modules/@angular/'
+            }
+        },
+        {
+            name: 'lib-infrastructure-no-presentation',
+            severity: 'error',
+            comment: 'Infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.',
+            from: {
+                path: '^src/app/lib/[^/]+/infrastructure/'
+            },
+            to: {
+                path: '^src/app/(lib/[^/]+/presentation|features/[^/]+/(infrastructure|presentation)|shell/|config/)'
+            }
+        },
+        {
+            name: 'feature-infrastructure-no-angular',
+            severity: 'error',
+            comment: 'Feature infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.',
+            from: {
+                path: '^src/app/features/[^/]+/infrastructure/'
+            },
+            to: {
+                path: 'node_modules/@angular/'
+            }
+        },
+        {
+            name: 'feature-infrastructure-no-presentation',
+            severity: 'error',
+            comment: 'Feature infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.',
+            from: {
+                path: '^src/app/features/([^/]+)/infrastructure/'
+            },
+            to: {
+                path: '^src/app/(lib/[^/]+/presentation|features/(?!\\1/)[^/]+/|features/\\1/presentation|shell/|config/)'
+            }
+        },
+
+        // Presentation layer rules (lib-presentation and feature-presentation)
+        {
+            name: 'lib-presentation-no-di-tokens',
+            severity: 'error',
+            comment: 'Lib presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.',
+            from: {
+                path: '^src/app/lib/[^/]+/presentation/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/injection-tokens/'
+            }
+        },
+        {
+            name: 'feature-presentation-no-di-tokens',
+            severity: 'error',
+            comment: 'Feature presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.',
+            from: {
+                path: '^src/app/features/[^/]+/presentation/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/injection-tokens/'
+            }
+        },
+        {
+            name: 'feature-presentation-same-feature-only',
+            severity: 'error',
+            comment: 'Feature presentation can only import from its own feature or shared lib modules.',
+            from: {
+                path: '^src/app/features/([^/]+)/presentation/'
+            },
+            to: {
+                path: '^src/app/features/(?!\\1/)[^/]+/'
+            }
+        },
+
+        // DI layer rules
+        {
+            name: 'di-injection-tokens-no-providers',
+            severity: 'error',
+            comment: 'DI tokens can import from other tokens, injections, lib layers, and config, but must not depend on providers.',
+            from: {
+                path: '^src/app/di/[^/]+/injection-tokens/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/providers/'
+            }
+        },
+        {
+            name: 'di-inject-functions-no-providers',
+            severity: 'error',
+            comment: 'DI injections can import tokens, lib layers, and config, but not providers.',
+            from: {
+                path: '^src/app/di/[^/]+/inject-functions/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/providers/'
+            }
+        },
+        {
+            name: 'shell-no-di-tokens',
+            severity: 'error',
+            comment: 'Shell cannot import DI tokens directly. Use injection functions from di-inject-functions instead.',
+            from: {
+                path: '^src/app/shell/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/injection-tokens/'
+            }
+        },
+
+        // Entry point rules - enforce index.ts barrel exports
+        {
+            name: 'di-tokens-entry-point',
+            severity: 'error',
+            comment: 'DI tokens must export through their index.ts. Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/app/di/([^/]+)/injection-tokens/'
+            },
+            to: {
+                path: '^src/app/di/([^/]+)/injection-tokens/(?!index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
+            }
+        },
+        {
+            name: 'di-inject-functions-entry-point',
+            severity: 'error',
+            comment: 'DI injections must export through their index.ts. Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/app/di/([^/]+)/inject-functions/'
+            },
+            to: {
+                path: '^src/app/di/([^/]+)/inject-functions/(?!index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
+            }
+        },
+        {
+            name: 'di-providers-entry-point',
+            severity: 'error',
+            comment: 'DI providers must export through their index.ts. Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/app/di/([^/]+)/providers/'
+            },
+            to: {
+                path: '^src/app/di/([^/]+)/providers/(?!index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
+            }
+        },
+        {
+            name: 'lib-layer-entry-point',
+            severity: 'error',
+            comment: 'Lib layers must export through their index.ts (barrel files only). Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/app/lib/([^/]+)/(domain|application|infrastructure|presentation)/'
+            },
+            to: {
+                path: '^src/app/lib/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
+            }
+        },
+        {
+            name: 'feature-layer-entry-point',
+            severity: 'error',
+            comment: 'Feature layers must export through their index.ts. Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/app/features/([^/]+)/(domain|application|infrastructure|presentation)/'
+            },
+            to: {
+                path: '^src/app/features/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
+            }
+        },
+        {
+            name: 'testing-entry-point',
+            severity: 'error',
+            comment: 'Testing utilities must be imported through index.ts. Import from the index.ts barrel file.',
+            from: {
+                pathNot: '^src/testing/'
+            },
+            to: {
+                path: '^src/testing/(?!.*/index\\.ts$)',
+                pathNot: '[.]spec[.]ts$'
             }
         }
     ],
     options: {
-
-        /* Which modules not to follow further when encountered */
         doNotFollow: {
-            /* path: an array of regular expressions in strings to match against */
             path: ['node_modules']
         },
-
-        /* Which modules to exclude */
         exclude: {
-            /* path: an array of regular expressions in strings to match against */
-            path: [String.raw`\.spec\.ts$`],
+            path: [String.raw`\.spec\.ts$`]
         },
-
-        /* Which modules to exclusively include (array of regular expressions in strings)
-           dependency-cruiser will skip everything not matching this pattern
-        */
         includeOnly: ['^src/(?!testing/)'],
-
-        /* List of module systems to cruise.
-           When left out dependency-cruiser will fall back to the list of _all_
-           module systems it knows of. It's the default because it's the safe option
-           It might come at a performance penalty, though.
-           moduleSystems: ['amd', 'cjs', 'es6', 'tsd']
-
-           As in practice only commonjs ('cjs') and ecmascript modules ('es6')
-           are widely used, you can limit the moduleSystems to those.
-         */
-
-        // moduleSystems: ['cjs', 'es6'],
-
-        /*
-          false: don't look at JSDoc imports (the default)
-          true: dependency-cruiser will detect dependencies in JSDoc-style
-          import statements. Implies "parser": "tsc", so the dependency-cruiser
-          will use the typescript parser for JavaScript files.
-
-          For this to work the typescript compiler will need to be installed in the
-          same spot as you're running dependency-cruiser from.
-         */
-        // detectJSDocImports: true,
-
-        /*
-          false: don't look at process.getBuiltinModule calls (the default)
-          true: dependency-cruiser will detect calls to process.getBuiltinModule/
-          globalThis.process.getBuiltinModule as imports.
-         */
-        // detectProcessBuiltinModuleCalls: true,
-
-        /* prefix for links in html and svg output (e.g. 'https://github.com/you/yourrepo/blob/main/'
-           to open it on your online repo or `vscode://file/${process.cwd()}/` to
-           open it in visual studio code),
-         */
         prefix: 'https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/',
-
-        /* false (the default): ignore dependencies that only exist before typescript-to-javascript compilation
-           true: also detect dependencies that only exist before typescript-to-javascript compilation
-           "specify": for each dependency identify whether it only exists before compilation or also after
-         */
         tsPreCompilationDeps: true,
-
-        /* list of extensions to scan that aren't javascript or compile-to-javascript.
-           Empty by default. Only put extensions in here that you want to take into
-           account that are _not_ parsable.
-        */
-        // extraExtensionsToScan: [".json", ".jpg", ".png", ".svg", ".webp"],
-
-        /* if true combines the package.jsons found from the module up to the base
-           folder the cruise is initiated from. Useful for how (some) mono-repos
-           manage dependencies & dependency definitions.
-         */
-        // combinedDependencies: false,
-
-        /* if true leave symlinks untouched, otherwise use the realpath */
-        // preserveSymlinks: false,
-
-        /* TypeScript project file ('tsconfig.json') to use for
-           (1) compilation and
-           (2) resolution (e.g. with the paths property)
-
-           The (optional) fileName attribute specifies which file to take (relative to
-           dependency-cruiser's current working directory). When not provided
-           defaults to './tsconfig.json'.
-         */
         tsConfig: {
             fileName: 'tsconfig.app.json'
         },
-
-        /* Webpack configuration to use to get resolve options from.
-
-           The (optional) fileName attribute specifies which file to take (relative
-           to dependency-cruiser's current working directory. When not provided defaults
-           to './webpack.conf.js'.
-
-           The (optional) `env` and `arguments` attributes contain the parameters
-           to be passed if your webpack config is a function and takes them (see
-            webpack documentation for details)
-         */
-        // webpackConfig: {
-        //  fileName: 'webpack.config.js',
-        //  env: {},
-        //  arguments: {}
-        // },
-
-        /* Babel config ('.babelrc', '.babelrc.json', '.babelrc.json5', ...) to use
-          for compilation
-         */
-        // babelConfig: {
-        //   fileName: '.babelrc',
-        // },
-
-        /* List of strings you have in use in addition to cjs/ es6 requires
-           & imports to declare module dependencies. Use this e.g. if you've
-           re-declared require, use a require-wrapper or use window.require as
-           a hack.
-        */
-        // exoticRequireStrings: [],
-
-        /* options to pass on to enhanced-resolve, the package dependency-cruiser
-           uses to resolve module references to disk. The values below should be
-           suitable for most situations
-
-           If you use webpack: you can also set these in webpack.conf.js. The set
-           there will override the ones specified here.
-         */
         enhancedResolveOptions: {
-            /* What to consider as an 'exports' field in package.jsons */
             exportsFields: ["exports"],
-            /* List of conditions to check for in the exports field.
-               Only works when the 'exportsFields' array is non-empty.
-            */
             conditionNames: ["import", "require", "node", "default", "types"],
-            /* The extensions, by default are the same as the ones dependency-cruiser
-               can access (run `npx depcruise --info` to see which ones that are in
-               _your_ environment). If that list is larger than you need you can pass
-               the extensions you actually use (e.g. [".js", ".jsx"]). This can speed
-               up module resolution, which is the most expensive step.
-             */
-            // extensions: [".js", ".jsx", ".ts", ".tsx", ".d.ts"],
-            /* What to consider a 'main' field in package.json */
-
-            // if you migrate to ESM (or are in an ESM environment already) you will want to
-            // have "module" in the list of mainFields, like so:
-            // mainFields: ["module", "main", "types", "typings"],
-            mainFields: ["main", "types", "typings"],
-            /* A list of alias fields in package.jsons
-
-               See [this specification](https://github.com/defunctzombie/package-browser-field-spec) and
-               the webpack [resolve.alias](https://webpack.js.org/configuration/resolve/#resolvealiasfields)
-               documentation.
-
-               Defaults to an empty array (= don't use alias fields).
-             */
-            // aliasFields: ["browser"],
+            mainFields: ["main", "types", "typings"]
         },
-
-        /* skipAnalysisNotInRules will make dependency-cruiser execute
-           analysis strictly necessary for checking the rule set only.
-
-           See https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#skipanalysisnotinrules
-           for details
-         */
         skipAnalysisNotInRules: true,
-
         reporterOptions: {
             dot: {
-                /* pattern of modules that can be consolidated in the detailed
-                   graphical dependency graph. The default pattern in this configuration
-                   collapses everything in node_modules to one folder deep so you see
-                   the external modules, but their innards.
-                 */
                 collapsePattern: 'node_modules/(?:@[^/]+/[^/]+|[^/]+)',
-
-                /* Options to tweak the appearance of your graph.See
-                   https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#reporteroptions
-                   for details and some examples. If you don't specify a theme
-                   dependency-cruiser falls back to a built-in one.
-                */
                 theme: {
                     graph: {
-                        /* splines: "ortho" gives straight lines, but is slow on big graphs
-                           splines: "true" gives bezier curves (fast, not as nice as ortho)
-                           splines: "polyline" is a good middle ground
-                       */
                         splines: "polyline",
                         rankdir: "LR"
-                    },
+                    }
                 }
             },
-            archi: {
-                /* pattern of modules that can be consolidated in the high level
-                   graphical dependency graph. If you use the high level graphical
-                   dependency graph reporter (`archi`) you probably want to tweak
-                   this collapsePattern to your situation.
-                */
-                collapsePattern: '^(?:packages|src|lib(s?)|app(s?)|bin|test(s?)|spec(s?))/[^/]+|node_modules/(?:@[^/]+/[^/]+|[^/]+)',
-
-                /* Options to tweak the appearance of your graph. If you don't specify a
-                   theme for 'archi' dependency-cruiser will use the one specified in the
-                   dot section above and otherwise use the default one.
-                 */
-                // theme: { },
-            },
-            "text": {
-                "highlightFocused": true
-            },
+            text: {
+                highlightFocused: true
+            }
         }
     }
 };
-// generated: dependency-cruiser@17.3.3 on 2025-12-14T22:33:30.883Z

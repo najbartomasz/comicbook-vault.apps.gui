@@ -11,13 +11,16 @@
         "test:unit": "ng test --configuration=unit --exclude='**/*.integration.spec.ts'",
         "test:integration": "ng test --configuration=integration --include='**/*.integration.spec.ts'",
         "test:visual": "ng test --configuration=visual --include='**/*.visual.spec.ts'",
-        "lint": "ng lint && stylelint \"**/*.scss\"",
-        "lint:fix": "ng lint --fix && stylelint \"**/*.scss\" --fix",
+        "lint": "ng lint && npm run lint:styles && npm run lint:deps",
+        "lint:fix": "ng lint --fix && npm run lint:styles:fix",
+        "lint:code": "ng lint",
+        "lint:code:fix": "ng lint --fix",
         "lint:styles": "stylelint \"**/*.scss\"",
         "lint:styles:fix": "stylelint \"**/*.scss\" --fix",
-        "analyze:deps": "madge --circular --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
-        "analyze:orphans": "madge --orphans --extensions ts --exclude 'testing/' --ts-config tsconfig.app.json --warning src",
-        "visualize:modules": "madge --image docs/module-dependencies.svg --extensions ts --exclude '\\.spec\\.ts$|testing/' --ts-config tsconfig.app.json --warning src",
+        "lint:deps": "depcruise --validate .dependency-cruiser.js src/",
+        "analyze:deps": "madge --circular --warning src",
+        "analyze:orphans": "madge --orphans --warning src",
+        "visualize:modules": "madge --image docs/module-dependencies.svg --warning src",
         "visualize:layers": "depcruise --output-type dot src/ | node docs/scripts/dependency-cruiser/colorize-dependencies.js | docs/scripts/dependency-cruiser/render-dot.sh",
         "docs:metrics": "node docs/scripts/metrics/generate-architecture-metrics.js",
         "docs:validate": "npm run analyze:deps && npm run visualize:modules && npm run visualize:layers && npm run docs:metrics",
@@ -89,7 +92,6 @@
         "typescript": "5.9.2",
         "typescript-eslint": "8.51.0",
         "vite-tsconfig-paths": "6.0.3",
-        "vitest": "4.0.16",
-        "vitest-when": "0.10.0"
+        "vitest": "4.0.16"
     }
 }

@@ -23,7 +23,6 @@ You are an expert documenter. You know markdown language very well. You know how
   7. Documentation
 - Keep links to architecture documentation synchronized with actual paths:
   - Architecture Guide: `docs/ARCHITECTURE.md`
-  - Architecture Draft: `docs/ARCHITECTURE-DRAFT.md`
 - Verify all internal links work after path changes
 - Use relative paths for all internal documentation links
 - Keep command examples accurate and up to date with package.json scripts

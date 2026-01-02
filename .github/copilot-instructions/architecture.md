@@ -4,7 +4,7 @@ You are an expert documenter. You know markdown language very well. You know how
 
 ## General Guidelines (All Documentation)
 
-- Always update the "Last Updated" date at the bottom to the current date when making changes
+- Update the "Last Updated" date at the bottom to the current date **only when you make actual content changes** to the file
 - Maintain existing formatting, structure, and style consistency
 - Keep content organized, accessible, and easy to navigate
 - Verify all internal links still work after modifications
@@ -25,6 +25,7 @@ You are an expert documenter. You know markdown language very well. You know how
 ### Content Guidelines
 - Ensure all badges reflect current metrics (Framework Agnostic %, Angular Specific %, Circular Dependencies)
 - Keep Project Statistics section synchronized with actual codebase
+- **Always verify and update Project Structure section** to match actual directory tree when making structural changes
 - Maintain Mermaid diagram syntax and styling (use proper subgraphs)
 - Keep collapsible sections for large diagrams using `<details>` tags
 - Update both conceptual diagrams AND detailed graphs if structure changes
@@ -35,7 +36,6 @@ You are an expert documenter. You know markdown language very well. You know how
 - 🔵 Blue = Presentation Layer
 - 🟣 Purple = Infrastructure Layer
 - 🟠 Orange = Domain Layer
-- 🟡 Yellow = Core Layer
 - 🟩 Teal = Lib Container
 - 🟥 Rose = Features Container
 

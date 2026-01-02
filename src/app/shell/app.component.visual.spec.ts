@@ -5,16 +5,17 @@ import { page } from 'vitest/browser';
 import { setupComponent } from '@testing/unit';
 
 import { AppComponent } from './app.component';
-import { appConfig } from './app.config';
-import { config } from './app.config.server';
+import { config as appConfigClient } from './app.config.client';
+import { config as appConfigServer } from './app.config.server';
 
 describe(AppComponent, () => {
     test('should display dashboard page by default', async () => {
         // Given
+        vi.spyOn(console, 'info').mockImplementation(vi.fn());
         await setupComponent(AppComponent, {
             providers: [
-                ...appConfig.providers,
-                ...config.providers
+                ...appConfigClient.providers,
+                ...appConfigServer.providers
             ]
         });
 
@@ -24,10 +25,11 @@ describe(AppComponent, () => {
 
     test('should redirect to dashboard when navigating to unknown route', async () => {
         // Given
+        vi.spyOn(console, 'info').mockImplementation(vi.fn());
         await setupComponent(AppComponent, {
             providers: [
-                ...appConfig.providers,
-                ...config.providers
+                ...appConfigClient.providers,
+                ...appConfigServer.providers
             ]
         });
         const router = TestBed.inject(Router);

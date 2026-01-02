@@ -8,7 +8,7 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
-        loadComponent: async () => (await import('./pages/dashboard-page')).DashboardPageComponent
+        loadComponent: async () => (await import('./pages/dashboard-page/dashboard-page.component')).DashboardPageComponent
     },
     {
         path: '**',
