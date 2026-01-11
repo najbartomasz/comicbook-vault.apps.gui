@@ -39,26 +39,27 @@ You are an expert documenter. You know markdown language very well. You know how
 - 🟩 Teal = Lib Container
 - 🟥 Rose = Features Container
 
-## When modifying `/docs/ADR.md`:
+## When creating or modifying ADRs:
+
+### File Structure
+- **Always create individual ADR files** in `docs/adr/` directory
+- Never consolidate ADRs into a single file
+- Name files descriptively: `docs/adr/NNN-brief-description.md` (e.g., `001-layered-architecture.md`)
+- Number ADRs sequentially (001, 002, 003, etc.)
 
 ### ADR Format Standards
-- Number ADRs sequentially (ADR-001, ADR-002, etc.)
-- Follow consistent format for each ADR:
-  - **Status**: ✅ Accepted, 🔄 Proposed, ⛔ Rejected, 📦 Deprecated
-  - **Context**: Why the decision was needed
-  - **Decision**: What was chosen
-  - **Rationale**: Bullet points explaining why (when applicable)
-  - **Consequences**: Pros/cons with ✅ and ⚠️ emojis
-  - **Alternatives Considered**: When applicable
+Each ADR file must follow this structure:
+- **Title**: Clear, descriptive heading with ADR number
+- **Status**: ✅ Accepted, 🔄 Proposed, ⛔ Rejected, 📦 Deprecated
+- **Context**: Why the decision was needed (problem statement)
+- **Decision**: What was chosen (clear statement)
+- **Rationale**: Bullet points explaining why (when applicable)
+- **Consequences**: Pros/cons with ✅ and ⚠️ emojis
+- **Alternatives Considered**: When applicable (rejected options)
 
 ### ADR Management
-- Maintain table of contents with ADR numbers, titles, and status indicators
+- **Always update `docs/adr/README.md`** index when creating a new ADR
+- Add new entry to the table with number, title, status, and summary
 - Keep ADRs immutable - mark old ones as deprecated and create new ADR if decision changes
 - Link related ADRs when they reference each other
-
-### Scaling Strategy
-When file exceeds 25 ADRs, split into individual files:
-1. Create `docs/adr/` directory
-2. Move each ADR to `docs/adr/001-layered-architecture.md`, `002-framework-agnostic-core.md`, etc.
-3. Create `docs/adr/README.md` as index with links to all ADRs
-4. Update `docs/ARCHITECTURE.md` to link to `docs/adr/README.md` instead of `docs/ADR.md`
+- Maintain consistent formatting and style across all ADRs

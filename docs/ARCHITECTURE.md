@@ -484,9 +484,9 @@ This prevents architectural issues from being pushed to the repository.
 
 ## Architecture Decision Records (ADRs)
 
-Key architectural decisions are documented in a separate file for better organization and readability.
+Key architectural decisions are documented in individual files for better organization and readability.
 
-📋 **[View Architecture Decision Records →](ADR.md)**
+📋 **[View Architecture Decision Records →](adr/README.md)**
 
 This includes decisions about:
 - Layered architecture and framework separation
