@@ -202,7 +202,7 @@ export class NetworkError extends Error {
 
 **Example:**
 ```typescript
-// ✅ di/http-client/injection-tokens/vault-http-client.token.ts
+// ✅ di/http-client/injection-tokens/vault-http-client.injection-token.ts
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 
 // ✅ di/http-client/providers/vault-http-client.provider.ts

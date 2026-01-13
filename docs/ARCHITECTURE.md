@@ -296,8 +296,8 @@ src/app/
 │   │   │   ├── assets-http-client.inject-function.ts
 │   │   │   └── vault-http-client.inject-function.ts
 │   │   ├── injection-tokens/   # DI tokens
-│   │   │   ├── assets-http-client.token.ts
-│   │   │   └── vault-http-client.token.ts
+│   │   │   ├── assets-http-client.injection-token.ts
+│   │   │   └── vault-http-client.injection-token.ts
 │   │   └── providers/          # Provider configurations
 │   │       ├── assets-http-client.provider.ts
 │   │       └── vault-http-client.provider.ts
@@ -306,7 +306,7 @@ src/app/
 │       ├── inject-functions/   # Injectable functions
 │       │   └── user-config.inject-function.ts
 │       ├── injection-tokens/   # DI tokens
-│       │   └── user-config.token.ts
+│       │   └── user-config.injection-token.ts
 │       └── providers/          # Provider configurations
 │           └── user-config.provider.ts
 │

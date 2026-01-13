@@ -67,7 +67,7 @@ export function injectVaultHttpClient(): HttpClient {
   return inject(VAULT_HTTP_CLIENT);
 }
 
-// In di/http-client/injection-tokens/vault-http-client.token.ts:
+// In di/http-client/injection-tokens/vault-http-client.injection-token.ts:
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 
 export function provideVaultHttpClient(): Provider {

@@ -39,29 +39,29 @@
 <path fill="none" stroke="#757575" d="M3195.7,-220.03C3571.66,-233.82 4328.9,-262.19 4342,-267.5 4425.95,-301.55 4497.74,-387.12 4527.42,-426.32"/>
 <polygon fill="#757575" stroke="#757575" points="4524.95,-428.87 4533.73,-434.8 4530.57,-424.69 4524.95,-428.87"/>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts -->
 <g id="node6" class="node">
-<title>app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts</title>
-<path fill="none" stroke="#c6c5fe" d="M4285.33,-341C4285.33,-341 3930.67,-341 3930.67,-341 3926.83,-341 3923,-337.17 3923,-333.33 3923,-333.33 3923,-325.67 3923,-325.67 3923,-321.83 3926.83,-318 3930.67,-318 3930.67,-318 4285.33,-318 4285.33,-318 4289.17,-318 4293,-321.83 4293,-325.67 4293,-325.67 4293,-333.33 4293,-333.33 4293,-337.17 4289.17,-341 4285.33,-341"/>
-<text text-anchor="middle" x="4108" y="-325.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts</text>
+<title>app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts</title>
+<path fill="none" stroke="#c6c5fe" d="M4312.33,-341C4312.33,-341 3903.67,-341 3903.67,-341 3899.83,-341 3896,-337.17 3896,-333.33 3896,-333.33 3896,-325.67 3896,-325.67 3896,-321.83 3899.83,-318 3903.67,-318 3903.67,-318 4312.33,-318 4312.33,-318 4316.17,-318 4320,-321.83 4320,-325.67 4320,-325.67 4320,-333.33 4320,-333.33 4320,-337.17 4316.17,-341 4312.33,-341"/>
+<text text-anchor="middle" x="4108" y="-325.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts</text>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts -->
 <g id="edge8" class="edge">
-<title>app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts</title>
+<title>app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts</title>
 <path fill="none" stroke="#757575" d="M3711.32,-298.69C3783.31,-304.29 3873.17,-311.29 3949.05,-317.2"/>
 <polygon fill="#757575" stroke="#757575" points="3948.95,-320.7 3959.19,-317.99 3949.49,-313.72 3948.95,-320.7"/>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts -->
 <g id="node7" class="node">
-<title>app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts</title>
-<path fill="none" stroke="#c6c5fe" d="M4279.83,-300C4279.83,-300 3936.17,-300 3936.17,-300 3932.33,-300 3928.5,-296.17 3928.5,-292.33 3928.5,-292.33 3928.5,-284.67 3928.5,-284.67 3928.5,-280.83 3932.33,-277 3936.17,-277 3936.17,-277 4279.83,-277 4279.83,-277 4283.67,-277 4287.5,-280.83 4287.5,-284.67 4287.5,-284.67 4287.5,-292.33 4287.5,-292.33 4287.5,-296.17 4283.67,-300 4279.83,-300"/>
-<text text-anchor="middle" x="4108" y="-284.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts</text>
+<title>app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts</title>
+<path fill="none" stroke="#c6c5fe" d="M4306.83,-300C4306.83,-300 3909.17,-300 3909.17,-300 3905.33,-300 3901.5,-296.17 3901.5,-292.33 3901.5,-292.33 3901.5,-284.67 3901.5,-284.67 3901.5,-280.83 3905.33,-277 3909.17,-277 3909.17,-277 4306.83,-277 4306.83,-277 4310.67,-277 4314.5,-280.83 4314.5,-284.67 4314.5,-284.67 4314.5,-292.33 4314.5,-292.33 4314.5,-296.17 4310.67,-300 4306.83,-300"/>
+<text text-anchor="middle" x="4108" y="-284.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts</text>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts -->
 <g id="edge9" class="edge">
-<title>app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts</title>
-<path fill="none" stroke="#757575" d="M3711.32,-288.5C3773.73,-288.5 3849.57,-288.5 3918.08,-288.5"/>
-<polygon fill="#757575" stroke="#757575" points="3918.14,-292 3928.14,-288.5 3918.14,-285 3918.14,-292"/>
+<title>app/di/http&#45;client/injection&#45;tokens/index.ts&#45;&gt;app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts</title>
+<path fill="none" stroke="#757575" d="M3711.32,-288.5C3765.7,-288.5 3830.28,-288.5 3891.32,-288.5"/>
+<polygon fill="#757575" stroke="#757575" points="3891.48,-292 3901.48,-288.5 3891.48,-285 3891.48,-292"/>
 </g>
 <!-- app/lib/http&#45;client/domain/http&#45;client.interface.ts -->
 <g id="node38" class="node">
@@ -171,16 +171,16 @@
 <path fill="none" stroke="#757575" d="M3190.65,-174.04C3542.53,-179.65 4240.02,-196.49 4342,-242.5 4431.71,-282.98 4502.52,-383.28 4529.82,-426.34"/>
 <polygon fill="#757575" stroke="#757575" points="4526.86,-428.21 4535.12,-434.84 4532.8,-424.51 4526.86,-428.21"/>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts -->
 <g id="edge7" class="edge">
-<title>app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts</title>
+<title>app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.injection&#45;token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts</title>
 <path fill="none" stroke="#757575" d="M4271.95,-341.03C4295.68,-344.62 4319.63,-349.33 4342,-355.5 4405.91,-373.12 4475.21,-408.75 4513.13,-429.82"/>
 <polygon fill="#757575" stroke="#757575" points="4511.64,-433 4522.08,-434.84 4515.07,-426.89 4511.64,-433"/>
 </g>
-<!-- app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts -->
+<!-- app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts -->
 <g id="edge10" class="edge">
-<title>app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts</title>
-<path fill="none" stroke="#757575" d="M4287.57,-295.12C4306.25,-298.6 4324.71,-303.28 4342,-309.5 4416.06,-336.14 4488.65,-396.96 4522.39,-427.82"/>
+<title>app/di/http&#45;client/injection&#45;tokens/vault&#45;http&#45;client.injection&#45;token.ts&#45;&gt;app/lib/http&#45;client/domain/index.ts</title>
+<path fill="none" stroke="#757575" d="M4310.3,-300.01C4321.15,-302.69 4331.78,-305.82 4342,-309.5 4416.06,-336.14 4488.65,-396.96 4522.39,-427.82"/>
 <polygon fill="#757575" stroke="#757575" points="4520.02,-430.39 4529.74,-434.62 4524.78,-425.26 4520.02,-430.39"/>
 </g>
 <!-- app/di/http&#45;client/providers/assets&#45;http&#45;client.provider.ts -->
@@ -513,17 +513,17 @@
 <path fill="none" stroke="#757575" d="M974.23,-394.67C1001.53,-362.45 1082.79,-273.3 1173,-238.5 1480.58,-119.87 2325,-173.43 2654,-152.5 2742.16,-146.89 2843.42,-139.79 2910.8,-134.98"/>
 <polygon fill="#757575" stroke="#757575" points="2911.18,-138.46 2920.9,-134.25 2910.68,-131.48 2911.18,-138.46"/>
 </g>
-<!-- app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts -->
+<!-- app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts -->
 <g id="node19" class="node">
-<title>app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts</title>
-<path fill="none" stroke="#c6c5fe" d="M2558.83,-144C2558.83,-144 2231.17,-144 2231.17,-144 2227.33,-144 2223.5,-140.17 2223.5,-136.33 2223.5,-136.33 2223.5,-128.67 2223.5,-128.67 2223.5,-124.83 2227.33,-121 2231.17,-121 2231.17,-121 2558.83,-121 2558.83,-121 2562.67,-121 2566.5,-124.83 2566.5,-128.67 2566.5,-128.67 2566.5,-136.33 2566.5,-136.33 2566.5,-140.17 2562.67,-144 2558.83,-144"/>
-<text text-anchor="middle" x="2395" y="-128.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts</text>
+<title>app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts</title>
+<path fill="none" stroke="#c6c5fe" d="M2585.83,-144C2585.83,-144 2204.17,-144 2204.17,-144 2200.33,-144 2196.5,-140.17 2196.5,-136.33 2196.5,-136.33 2196.5,-128.67 2196.5,-128.67 2196.5,-124.83 2200.33,-121 2204.17,-121 2204.17,-121 2585.83,-121 2585.83,-121 2589.67,-121 2593.5,-124.83 2593.5,-128.67 2593.5,-128.67 2593.5,-136.33 2593.5,-136.33 2593.5,-140.17 2589.67,-144 2585.83,-144"/>
+<text text-anchor="middle" x="2395" y="-128.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts</text>
 </g>
-<!-- app/di/user&#45;config/injection&#45;tokens/index.ts&#45;&gt;app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts -->
+<!-- app/di/user&#45;config/injection&#45;tokens/index.ts&#45;&gt;app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts -->
 <g id="edge30" class="edge">
-<title>app/di/user&#45;config/injection&#45;tokens/index.ts&#45;&gt;app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts</title>
-<path fill="none" stroke="#757575" d="M1991.07,-132.5C2058.25,-132.5 2140.4,-132.5 2212.96,-132.5"/>
-<polygon fill="#757575" stroke="#757575" points="2213.13,-136 2223.13,-132.5 2213.13,-129 2213.13,-136"/>
+<title>app/di/user&#45;config/injection&#45;tokens/index.ts&#45;&gt;app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts</title>
+<path fill="none" stroke="#757575" d="M1991.07,-132.5C2050.13,-132.5 2120.76,-132.5 2186.27,-132.5"/>
+<polygon fill="#757575" stroke="#757575" points="2186.32,-136 2196.32,-132.5 2186.32,-129 2186.32,-136"/>
 </g>
 <!-- config/user/user&#45;config&#45;loader.ts -->
 <g id="node63" class="node">
@@ -579,11 +579,11 @@
 <path fill="none" stroke="#757575" d="M1475.49,-41.98C1517.09,-37.78 1565.8,-33.56 1610,-31.5 1827.54,-21.36 1882.55,-19.52 2100,-31.5 2401.33,-48.1 2757.66,-96.23 2910.6,-118.25"/>
 <polygon fill="#757575" stroke="#757575" points="2910.42,-121.76 2920.81,-119.73 2911.42,-114.84 2910.42,-121.76"/>
 </g>
-<!-- app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts&#45;&gt;config/user/index.ts -->
+<!-- app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts&#45;&gt;config/user/index.ts -->
 <g id="edge31" class="edge">
-<title>app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts&#45;&gt;config/user/index.ts</title>
-<path fill="none" stroke="#757575" d="M2566.8,-131.63C2680.37,-131.06 2824.03,-130.33 2910.41,-129.89"/>
-<polygon fill="#757575" stroke="#757575" points="2910.67,-133.39 2920.65,-129.83 2910.64,-126.39 2910.67,-133.39"/>
+<title>app/di/user&#45;config/injection&#45;tokens/user&#45;config.injection&#45;token.ts&#45;&gt;config/user/index.ts</title>
+<path fill="none" stroke="#757575" d="M2593.86,-131.49C2702.44,-130.94 2830.81,-130.29 2910.45,-129.89"/>
+<polygon fill="#757575" stroke="#757575" points="2910.9,-133.38 2920.88,-129.83 2910.86,-126.38 2910.9,-133.38"/>
 </g>
 <!-- app/di/user&#45;config/providers/index.ts -->
 <g id="node20" class="node">

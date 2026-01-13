@@ -338,7 +338,7 @@ export class JsonResponseBodyParser implements ResponseBodyParser {
 ### ❌ Pitfall 3: DI tokens in infrastructure
 
 ```typescript
-// ❌ WRONG - infrastructure/http-client.token.ts
+// ❌ WRONG - infrastructure/http-client.injection-token.ts
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 ```
 
@@ -346,7 +346,7 @@ export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient
 
 **✅ Solution:**
 ```typescript
-// ✅ di/http-client/injection-tokens/vault-http-client.token.ts
+// ✅ di/http-client/injection-tokens/vault-http-client.injection-token.ts
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 
 // ✅ di/http-client/inject-functions/vault-http-client.inject-function.ts

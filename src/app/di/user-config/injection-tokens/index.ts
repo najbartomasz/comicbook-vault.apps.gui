@@ -1,1 +1,1 @@
-export { USER_CONFIG_TOKEN } from './user-config.token';
+export { USER_CONFIG_TOKEN } from './user-config.injection-token';
