@@ -1,6 +1,6 @@
 import { type HttpRequest, type HttpResponse } from '../../../domain';
 import { type ResponseBodyParser } from '../../body-parsers/response-body-parser.interface';
-import { TextResponseBodyParser } from '../../body-parsers/text/text.response-body-parser';
+import { TextPlainResponseBodyParser } from '../../body-parsers/text/text-plain.response-body-parser';
 import { HttpAbortError } from '../../errors/abort/http-abort-error';
 import { HttpNetworkError } from '../../errors/network/http-network-error';
 import { HttpPayloadError } from '../../errors/payload/http-payload-error';
@@ -13,7 +13,7 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
 
     public constructor(
         bodyParsers: readonly ResponseBodyParser[],
-        defaultParser: ResponseBodyParser = new TextResponseBodyParser(),
+        defaultParser: ResponseBodyParser = new TextPlainResponseBodyParser(),
         fetcher: typeof fetch = async (url, options) => fetch(url, options)
     ) {
         this.#fetcher = fetcher;

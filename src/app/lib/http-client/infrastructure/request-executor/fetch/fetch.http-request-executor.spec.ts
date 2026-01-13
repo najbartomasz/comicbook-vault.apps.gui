@@ -3,7 +3,7 @@ import { stubResponse } from '@testing/unit/http';
 import { HttpMethod, type HttpRequest } from '../../../domain';
 import { JsonResponseBodyParser } from '../../body-parsers/json/json.response-body-parser';
 import { type ResponseBodyParser } from '../../body-parsers/response-body-parser.interface';
-import { TextResponseBodyParser } from '../../body-parsers/text/text.response-body-parser';
+import { TextPlainResponseBodyParser } from '../../body-parsers/text/text-plain.response-body-parser';
 import { HttpAbortError } from '../../errors/abort/http-abort-error';
 import { HttpNetworkError } from '../../errors/network/http-network-error';
 import { HttpPayloadError } from '../../errors/payload/http-payload-error';
@@ -57,7 +57,7 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new TextResponseBodyParser()]);
+        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
         // When
         const result = await executor.execute(request);
@@ -86,7 +86,7 @@ describe(FetchHttpRequestExecutor, () => {
         });
         vi.spyOn(responseStub.headers, 'get').mockReturnValueOnce(null);
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(responseStub));
-        const executor = new FetchHttpRequestExecutor([new TextResponseBodyParser()]);
+        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
         // When
         const result = await executor.execute(request);
@@ -299,7 +299,7 @@ describe(FetchHttpRequestExecutor, () => {
         const textError = new TypeError('Failed to read body');
         vi.spyOn(responseStub, 'text').mockRejectedValue(textError);
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(responseStub));
-        const executor = new FetchHttpRequestExecutor([new TextResponseBodyParser()]);
+        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
         // When
         const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;

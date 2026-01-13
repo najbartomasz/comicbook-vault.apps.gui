@@ -1,9 +1,9 @@
-import { TextResponseBodyParser } from './text.response-body-parser';
+import { TextPlainResponseBodyParser } from './text-plain.response-body-parser';
 
-describe(TextResponseBodyParser, () => {
+describe(TextPlainResponseBodyParser, () => {
     test('should return true when content-type is text/plain', () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = parser.canParse('text/plain');
@@ -14,7 +14,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should return true when content-type is text/plain with charset', () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = parser.canParse('text/plain; charset=utf-8');
@@ -25,7 +25,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should return false when content-type is not text/plain', () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = parser.canParse('application/json');
@@ -36,7 +36,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should return true when content-type is empty', () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = parser.canParse('');
@@ -47,7 +47,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should parse text response body', async () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = await parser.parse(new Response('Hello, World!'));
@@ -58,7 +58,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should parse empty text response body', async () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = await parser.parse(new Response(''));
@@ -69,7 +69,7 @@ describe(TextResponseBodyParser, () => {
 
     test('should parse multiline text response body', async () => {
         // Given
-        const parser = new TextResponseBodyParser();
+        const parser = new TextPlainResponseBodyParser();
 
         // When
         const result = await parser.parse(new Response('Line 1\nLine 2\nLine 3'));

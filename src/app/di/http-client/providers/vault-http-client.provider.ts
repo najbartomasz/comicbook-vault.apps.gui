@@ -12,7 +12,7 @@ import {
     TimestampHttpInterceptor
 } from '@lib/http-client/application';
 import { type HttpClient } from '@lib/http-client/domain';
-import { FetchHttpClient, JsonResponseBodyParser, TextResponseBodyParser } from '@lib/http-client/infrastructure';
+import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/http-client/infrastructure';
 import { PerformanceTimestampProvider } from '@lib/performance/infrastructure';
 
 import { VAULT_HTTP_CLIENT_TOKEN } from '../injection-tokens';
@@ -29,7 +29,7 @@ export const provideVaultHttpClient = (): Provider => ({
         ];
         return new FetchHttpClient(
             userConfig.vaultApiUrl,
-            [new JsonResponseBodyParser(), new TextResponseBodyParser()],
+            [new JsonResponseBodyParser(), new TextPlainResponseBodyParser()],
             httpInterceptors
         );
     },

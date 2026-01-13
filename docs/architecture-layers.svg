@@ -156,8 +156,8 @@
 </g>
 <g id="clust30" class="cluster">
 <title>cluster_src/app/lib/http&#45;client/infrastructure/body&#45;parsers</title>
-<path fill="#ede7f6" stroke="#673ab7" stroke-width="2" d="M596.5,-606C596.5,-606 972,-606 972,-606 978,-606 984,-612 984,-618 984,-618 984,-744 984,-744 984,-750 978,-756 972,-756 972,-756 596.5,-756 596.5,-756 590.5,-756 584.5,-750 584.5,-744 584.5,-744 584.5,-618 584.5,-618 584.5,-612 590.5,-606 596.5,-606"/>
-<text text-anchor="middle" x="784.25" y="-744.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">body&#45;parsers</text>
+<path fill="#ede7f6" stroke="#673ab7" stroke-width="2" d="M586,-606C586,-606 972,-606 972,-606 978,-606 984,-612 984,-618 984,-618 984,-744 984,-744 984,-750 978,-756 972,-756 972,-756 586,-756 586,-756 580,-756 574,-750 574,-744 574,-744 574,-618 574,-618 574,-612 580,-606 586,-606"/>
+<text text-anchor="middle" x="779" y="-744.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">body&#45;parsers</text>
 </g>
 <g id="clust31" class="cluster">
 <title>cluster_src/app/lib/http&#45;client/infrastructure/body&#45;parsers/json</title>
@@ -166,7 +166,7 @@
 </g>
 <g id="clust32" class="cluster">
 <title>cluster_src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text</title>
-<path fill="#ede7f6" stroke="#673ab7" stroke-width="2" d="M605.5,-614C605.5,-614 738.5,-614 738.5,-614 744.5,-614 750.5,-620 750.5,-626 750.5,-626 750.5,-656 750.5,-656 750.5,-662 744.5,-668 738.5,-668 738.5,-668 605.5,-668 605.5,-668 599.5,-668 593.5,-662 593.5,-656 593.5,-656 593.5,-626 593.5,-626 593.5,-620 599.5,-614 605.5,-614"/>
+<path fill="#ede7f6" stroke="#673ab7" stroke-width="2" d="M594,-614C594,-614 750,-614 750,-614 756,-614 762,-620 762,-626 762,-626 762,-656 762,-656 762,-662 756,-668 750,-668 750,-668 594,-668 594,-668 588,-668 582,-662 582,-656 582,-656 582,-626 582,-626 582,-620 588,-614 594,-614"/>
 <text text-anchor="middle" x="672" y="-656.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">text</text>
 </g>
 <g id="clust33" class="cluster">
@@ -1007,20 +1007,20 @@
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M724.51,-684.45C758.58,-678.13 797,-671 797,-671 797,-671 834.01,-656.12 862.31,-644.74"/>
 <polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="863.64,-647.22 870.02,-641.64 861.56,-642.03 863.64,-647.22"/>
 </g>
-<!-- src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="node43" class="node">
-<title>src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
-<g id="a_node43"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/lib/http-client/infrastructure/body-parsers/text/text.response-body-parser.ts" xlink:title="text.response&#45;body&#45;parser.ts">
-<path fill="#b39ddb" stroke="#673ab7" d="M736.17,-641.5C736.17,-641.5 607.83,-641.5 607.83,-641.5 604.67,-641.5 601.5,-638.33 601.5,-635.17 601.5,-635.17 601.5,-628.83 601.5,-628.83 601.5,-625.67 604.67,-622.5 607.83,-622.5 607.83,-622.5 736.17,-622.5 736.17,-622.5 739.33,-622.5 742.5,-625.67 742.5,-628.83 742.5,-628.83 742.5,-635.17 742.5,-635.17 742.5,-638.33 739.33,-641.5 736.17,-641.5"/>
-<text text-anchor="start" x="609.5" y="-629.5" font-family="Arial" font-size="10.00">text.response&#45;body&#45;parser.ts</text>
+<title>src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
+<g id="a_node43"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/lib/http-client/infrastructure/body-parsers/text/text-plain.response-body-parser.ts" xlink:title="text&#45;plain.response&#45;body&#45;parser.ts">
+<path fill="#b39ddb" stroke="#673ab7" d="M747.67,-641.5C747.67,-641.5 596.33,-641.5 596.33,-641.5 593.17,-641.5 590,-638.33 590,-635.17 590,-635.17 590,-628.83 590,-628.83 590,-625.67 593.17,-622.5 596.33,-622.5 596.33,-622.5 747.67,-622.5 747.67,-622.5 750.83,-622.5 754,-625.67 754,-628.83 754,-628.83 754,-635.17 754,-635.17 754,-638.33 750.83,-641.5 747.67,-641.5"/>
+<text text-anchor="start" x="598" y="-629.5" font-family="Arial" font-size="10.00">text&#45;plain.response&#45;body&#45;parser.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts -->
+<!-- src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts -->
 <g id="edge61" class="edge">
-<title>src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M742.62,-632C762.7,-632 784.88,-632 805.93,-632"/>
-<polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="805.93,-634.8 813.93,-632 805.93,-629.2 805.93,-634.8"/>
+<title>src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M754.04,-632C770.76,-632 788.46,-632 805.44,-632"/>
+<polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="805.71,-634.8 813.71,-632 805.71,-629.2 805.71,-634.8"/>
 </g>
 <!-- src/app/lib/http&#45;client/infrastructure/errors/abort/http&#45;abort&#45;error.ts -->
 <g id="node44" class="node">
@@ -1118,9 +1118,9 @@
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M547.25,-537.34C642,-539.11 797,-542 797,-542 797,-542 849.79,-590.98 877.48,-616.68"/>
 <polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="875.85,-618.98 883.62,-622.37 879.66,-614.87 875.85,-618.98"/>
 </g>
-<!-- src/app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- src/app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="edge76" class="edge">
-<title>src/app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
+<title>src/app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M529.85,-545.57C543.82,-548.03 555,-550 555,-550 555,-550 563,-601 563,-601 563,-601 599.22,-611.4 629.71,-620.15"/>
 <polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="629.25,-622.93 637.72,-622.45 630.8,-617.55 629.25,-622.93"/>
 </g>
@@ -1175,9 +1175,9 @@
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M168.59,-430.26C179.37,-411.45 202,-372 202,-372 202,-372 563,-295 563,-295 563,-295 797,-295 797,-295 797,-295 869.01,-545.17 888.94,-614.42"/>
 <polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="886.3,-615.36 891.2,-622.28 891.68,-613.82 886.3,-615.36"/>
 </g>
-<!-- src/app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- src/app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="edge69" class="edge">
-<title>src/app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
+<title>src/app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;src/app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M179.04,-449.71C230.17,-480.66 386,-575 386,-575 386,-575 532.26,-604.25 615.23,-620.85"/>
 <polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="622.75,-625.21 615.45,-620.89 623.85,-619.71 622.75,-625.21"/>
 </g>

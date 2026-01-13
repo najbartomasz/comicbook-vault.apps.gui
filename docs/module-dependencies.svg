@@ -357,17 +357,17 @@
 <path fill="none" stroke="#757575" d="M1388.17,-512.92C1422.6,-484.59 1516.82,-412.25 1610,-386.5 1770.72,-342.09 2830.39,-354.93 3325.01,-363.54"/>
 <polygon fill="#757575" stroke="#757575" points="3325.08,-367.04 3335.14,-363.72 3325.2,-360.04 3325.08,-367.04"/>
 </g>
-<!-- app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="node46" class="node">
-<title>app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
-<path fill="none" stroke="#c6c5fe" d="M3221.83,-494C3221.83,-494 2753.17,-494 2753.17,-494 2749.33,-494 2745.5,-490.17 2745.5,-486.33 2745.5,-486.33 2745.5,-478.67 2745.5,-478.67 2745.5,-474.83 2749.33,-471 2753.17,-471 2753.17,-471 3221.83,-471 3221.83,-471 3225.67,-471 3229.5,-474.83 3229.5,-478.67 3229.5,-478.67 3229.5,-486.33 3229.5,-486.33 3229.5,-490.17 3225.67,-494 3221.83,-494"/>
-<text text-anchor="middle" x="2987.5" y="-478.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</text>
+<title>app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
+<path fill="none" stroke="#c6c5fe" d="M3238.33,-494C3238.33,-494 2736.67,-494 2736.67,-494 2732.83,-494 2729,-490.17 2729,-486.33 2729,-486.33 2729,-478.67 2729,-478.67 2729,-474.83 2732.83,-471 2736.67,-471 2736.67,-471 3238.33,-471 3238.33,-471 3242.17,-471 3246,-474.83 3246,-478.67 3246,-478.67 3246,-486.33 3246,-486.33 3246,-490.17 3242.17,-494 3238.33,-494"/>
+<text text-anchor="middle" x="2987.5" y="-478.8" font-family="Arial" font-size="14.00" fill="#c6c5fe">app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</text>
 </g>
-<!-- app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="edge88" class="edge">
-<title>app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
-<path fill="none" stroke="#757575" d="M1499.32,-521.25C1763.87,-514.36 2385.36,-498.16 2735.43,-489.04"/>
-<polygon fill="#757575" stroke="#757575" points="2735.54,-492.54 2745.45,-488.78 2735.36,-485.54 2735.54,-492.54"/>
+<title>app/lib/http&#45;client/infrastructure/index.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
+<path fill="none" stroke="#757575" d="M1499.32,-521.25C1759.75,-514.46 2366.1,-498.66 2718.88,-489.47"/>
+<polygon fill="#757575" stroke="#757575" points="2719.08,-492.97 2728.99,-489.21 2718.9,-485.97 2719.08,-492.97"/>
 </g>
 <!-- app/lib/http&#45;client/infrastructure/errors/abort/http&#45;abort&#45;error.ts -->
 <g id="node47" class="node">
@@ -873,9 +873,9 @@
 <path fill="none" stroke="#757575" d="M2100.04,-403.74C2384.56,-400.14 2868.94,-392.79 3285,-380.5 3298.1,-380.11 3311.53,-379.68 3325.09,-379.22"/>
 <polygon fill="#757575" stroke="#757575" points="3325.6,-382.71 3335.48,-378.86 3325.36,-375.71 3325.6,-382.71"/>
 </g>
-<!-- app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts -->
+<!-- app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts -->
 <g id="edge80" class="edge">
-<title>app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts</title>
+<title>app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/response&#45;body&#45;parser.interface.ts</title>
 <path fill="none" stroke="#757575" d="M3063.35,-494.03C3127.22,-499.88 3218.93,-498.49 3285,-456.5 3311.89,-439.41 3294.22,-411.77 3321,-394.5 3326.77,-390.78 3332.77,-387.41 3338.95,-384.36"/>
 <polygon fill="#757575" stroke="#757575" points="3340.52,-387.49 3348.14,-380.13 3337.59,-381.14 3340.52,-387.49"/>
 </g>
@@ -933,9 +933,9 @@
 <path fill="none" stroke="#757575" d="M2422.01,-843.84C2474.17,-819.09 2591.86,-756.26 2654,-667.5 2687.15,-620.14 2644.97,-578.76 2690,-542.5 2793.21,-459.4 3180.21,-584.6 3285,-503.5 3325.35,-472.28 3281.21,-426.43 3321,-394.5 3371.81,-353.73 3447.65,-350.8 3503.88,-355.93"/>
 <polygon fill="#757575" stroke="#757575" points="3503.84,-359.44 3514.14,-356.97 3504.55,-352.48 3503.84,-359.44"/>
 </g>
-<!-- app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts -->
+<!-- app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts -->
 <g id="edge95" class="edge">
-<title>app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text.response&#45;body&#45;parser.ts</title>
+<title>app/lib/http&#45;client/infrastructure/request&#45;executor/fetch/fetch.http&#45;request&#45;executor.ts&#45;&gt;app/lib/http&#45;client/infrastructure/body&#45;parsers/text/text&#45;plain.response&#45;body&#45;parser.ts</title>
 <path fill="none" stroke="#757575" d="M2422.85,-843.94C2476,-819.61 2594.6,-757.79 2654,-667.5 2693.82,-606.97 2635.42,-556.16 2690,-508.5 2755.07,-451.68 2861.59,-457.98 2927.68,-469.2"/>
 <polygon fill="#757575" stroke="#757575" points="2927.07,-472.64 2937.52,-470.95 2928.3,-465.75 2927.07,-472.64"/>
 </g>

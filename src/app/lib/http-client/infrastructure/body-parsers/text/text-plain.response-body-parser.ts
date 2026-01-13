@@ -1,6 +1,6 @@
 import { type ResponseBodyParser } from '../response-body-parser.interface';
 
-export class TextResponseBodyParser implements ResponseBodyParser {
+export class TextPlainResponseBodyParser implements ResponseBodyParser {
     public canParse(contentType: string): boolean {
         return contentType.includes('text/plain') || contentType === '';
     }

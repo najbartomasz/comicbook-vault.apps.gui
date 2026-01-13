@@ -11,7 +11,7 @@ import {
     type HttpInterceptor
 } from '@lib/http-client/application';
 import { HttpUrl, type HttpClient } from '@lib/http-client/domain';
-import { FetchHttpClient, JsonResponseBodyParser, TextResponseBodyParser } from '@lib/http-client/infrastructure';
+import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/http-client/infrastructure';
 import { PerformanceTimestampProvider } from '@lib/performance/infrastructure';
 
 import { ASSETS_HTTP_CLIENT_TOKEN } from '../injection-tokens';
@@ -31,7 +31,7 @@ export const provideAssetsHttpClient = (): Provider => ({
         ];
         return new FetchHttpClient(
             HttpUrl.create(globalThis.location.origin),
-            [new JsonResponseBodyParser(), new TextResponseBodyParser()],
+            [new JsonResponseBodyParser(), new TextPlainResponseBodyParser()],
             httpInterceptors
         );
     },
