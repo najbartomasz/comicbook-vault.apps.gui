@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { stubResponse } from '@testing/unit/http';
 
-import { injectAssetsHttpClient } from './inject-functions/assets-http-client.inject';
+import { injectAssetsHttpClient } from './inject-functions/assets-http-client.inject-function';
 import { provideAssetsHttpClient } from './providers';
 
 describe(injectAssetsHttpClient, () => {

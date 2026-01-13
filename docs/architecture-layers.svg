@@ -31,8 +31,8 @@
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_src/app/di/http&#45;client/inject&#45;functions</title>
-<path fill="#e0f7fa" stroke="#00acc1" stroke-width="2" d="M451.5,-1413C451.5,-1413 732.5,-1413 732.5,-1413 738.5,-1413 744.5,-1419 744.5,-1425 744.5,-1425 744.5,-1486 744.5,-1486 744.5,-1492 738.5,-1498 732.5,-1498 732.5,-1498 451.5,-1498 451.5,-1498 445.5,-1498 439.5,-1492 439.5,-1486 439.5,-1486 439.5,-1425 439.5,-1425 439.5,-1419 445.5,-1413 451.5,-1413"/>
-<text text-anchor="middle" x="592" y="-1486.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">inject&#45;functions</text>
+<path fill="#e0f7fa" stroke="#00acc1" stroke-width="2" d="M451.5,-1413C451.5,-1413 751.5,-1413 751.5,-1413 757.5,-1413 763.5,-1419 763.5,-1425 763.5,-1425 763.5,-1486 763.5,-1486 763.5,-1492 757.5,-1498 751.5,-1498 751.5,-1498 451.5,-1498 451.5,-1498 445.5,-1498 439.5,-1492 439.5,-1486 439.5,-1486 439.5,-1425 439.5,-1425 439.5,-1419 445.5,-1413 451.5,-1413"/>
+<text text-anchor="middle" x="601.5" y="-1486.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">inject&#45;functions</text>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_src/app/di/http&#45;client/injection&#45;tokens</title>
@@ -51,8 +51,8 @@
 </g>
 <g id="clust9" class="cluster">
 <title>cluster_src/app/di/user&#45;config/inject&#45;functions</title>
-<path fill="#e0f7fa" stroke="#00acc1" stroke-width="2" d="M139,-1695C139,-1695 333,-1695 333,-1695 339,-1695 345,-1701 345,-1707 345,-1707 345,-1737 345,-1737 345,-1743 339,-1749 333,-1749 333,-1749 139,-1749 139,-1749 133,-1749 127,-1743 127,-1737 127,-1737 127,-1707 127,-1707 127,-1701 133,-1695 139,-1695"/>
-<text text-anchor="middle" x="236" y="-1737.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">inject&#45;functions</text>
+<path fill="#e0f7fa" stroke="#00acc1" stroke-width="2" d="M139,-1695C139,-1695 352,-1695 352,-1695 358,-1695 364,-1701 364,-1707 364,-1707 364,-1737 364,-1737 364,-1743 358,-1749 352,-1749 352,-1749 139,-1749 139,-1749 133,-1749 127,-1743 127,-1737 127,-1737 127,-1707 127,-1707 127,-1701 133,-1695 139,-1695"/>
+<text text-anchor="middle" x="245.5" y="-1737.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">inject&#45;functions</text>
 </g>
 <g id="clust10" class="cluster">
 <title>cluster_src/app/di/user&#45;config/injection&#45;tokens</title>
@@ -239,12 +239,12 @@
 <path fill="#ffffff" stroke="black" stroke-width="2" d="M872,-1843C872,-1843 1278.5,-1843 1278.5,-1843 1284.5,-1843 1290.5,-1849 1290.5,-1855 1290.5,-1855 1290.5,-1916 1290.5,-1916 1290.5,-1922 1284.5,-1928 1278.5,-1928 1278.5,-1928 872,-1928 872,-1928 866,-1928 860,-1922 860,-1916 860,-1916 860,-1855 860,-1855 860,-1849 866,-1843 872,-1843"/>
 <text text-anchor="middle" x="1075.25" y="-1916.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">user</text>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts -->
 <g id="node1" class="node">
-<title>src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts</title>
-<g id="a_node1"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/http-client/inject-functions/assets-http-client.inject.ts" xlink:title="assets&#45;http&#45;client.inject.ts">
-<path fill="#80deea" stroke="#00acc1" d="M730.17,-1440.5C730.17,-1440.5 613.83,-1440.5 613.83,-1440.5 610.67,-1440.5 607.5,-1437.33 607.5,-1434.17 607.5,-1434.17 607.5,-1427.83 607.5,-1427.83 607.5,-1424.67 610.67,-1421.5 613.83,-1421.5 613.83,-1421.5 730.17,-1421.5 730.17,-1421.5 733.33,-1421.5 736.5,-1424.67 736.5,-1427.83 736.5,-1427.83 736.5,-1434.17 736.5,-1434.17 736.5,-1437.33 733.33,-1440.5 730.17,-1440.5"/>
-<text text-anchor="start" x="615.5" y="-1428.5" font-family="Arial" font-size="10.00">assets&#45;http&#45;client.inject.ts</text>
+<title>src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts</title>
+<g id="a_node1"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/http-client/inject-functions/assets-http-client.inject-function.ts" xlink:title="assets&#45;http&#45;client.inject&#45;function.ts">
+<path fill="#80deea" stroke="#00acc1" d="M749.17,-1440.5C749.17,-1440.5 594.83,-1440.5 594.83,-1440.5 591.67,-1440.5 588.5,-1437.33 588.5,-1434.17 588.5,-1434.17 588.5,-1427.83 588.5,-1427.83 588.5,-1424.67 591.67,-1421.5 594.83,-1421.5 594.83,-1421.5 749.17,-1421.5 749.17,-1421.5 752.33,-1421.5 755.5,-1424.67 755.5,-1427.83 755.5,-1427.83 755.5,-1434.17 755.5,-1434.17 755.5,-1437.33 752.33,-1440.5 749.17,-1440.5"/>
+<text text-anchor="start" x="596.5" y="-1428.5" font-family="Arial" font-size="10.00">assets&#45;http&#45;client.inject&#45;function.ts</text>
 </a>
 </g>
 </g>
@@ -257,10 +257,10 @@
 </a>
 </g>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts -->
 <g id="edge1" class="edge">
-<title>src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M736.82,-1439.23C767.2,-1443.15 797,-1447 797,-1447 797,-1447 837.86,-1466.38 866.54,-1479.98"/>
+<title>src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M746.92,-1440.54C773.48,-1443.96 797,-1447 797,-1447 797,-1447 837.86,-1466.38 866.54,-1479.98"/>
 <polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="865.47,-1482.57 873.9,-1483.47 867.87,-1477.51 865.47,-1482.57"/>
 </g>
 <!-- src/app/di/http&#45;client/injection&#45;tokens/assets&#45;http&#45;client.token.ts -->
@@ -302,32 +302,32 @@
 </a>
 </g>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts -->
 <g id="edge2" class="edge">
-<title>src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M501.75,-1457.5C527.53,-1453.08 563,-1447 563,-1447 563,-1447 579.25,-1444.59 599.15,-1441.64"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="607.65,-1443.22 599.33,-1441.62 606.83,-1437.68 607.65,-1443.22"/>
+<title>src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/assets&#45;http&#45;client.inject&#45;function.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M501.75,-1457.5C527.53,-1453.08 563,-1447 563,-1447 563,-1447 578.97,-1444.63 598.62,-1441.72"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="607.03,-1443.31 598.7,-1441.71 606.21,-1437.77 607.03,-1443.31"/>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts -->
 <g id="node4" class="node">
-<title>src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts</title>
-<g id="a_node4"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/http-client/inject-functions/vault-http-client.inject.ts" xlink:title="vault&#45;http&#45;client.inject.ts">
-<path fill="#80deea" stroke="#00acc1" d="M726.17,-1471.5C726.17,-1471.5 617.83,-1471.5 617.83,-1471.5 614.67,-1471.5 611.5,-1468.33 611.5,-1465.17 611.5,-1465.17 611.5,-1458.83 611.5,-1458.83 611.5,-1455.67 614.67,-1452.5 617.83,-1452.5 617.83,-1452.5 726.17,-1452.5 726.17,-1452.5 729.33,-1452.5 732.5,-1455.67 732.5,-1458.83 732.5,-1458.83 732.5,-1465.17 732.5,-1465.17 732.5,-1468.33 729.33,-1471.5 726.17,-1471.5"/>
-<text text-anchor="start" x="619.5" y="-1459.5" font-family="Arial" font-size="10.00">vault&#45;http&#45;client.inject.ts</text>
+<title>src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts</title>
+<g id="a_node4"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/http-client/inject-functions/vault-http-client.inject-function.ts" xlink:title="vault&#45;http&#45;client.inject&#45;function.ts">
+<path fill="#80deea" stroke="#00acc1" d="M744.67,-1471.5C744.67,-1471.5 599.33,-1471.5 599.33,-1471.5 596.17,-1471.5 593,-1468.33 593,-1465.17 593,-1465.17 593,-1458.83 593,-1458.83 593,-1455.67 596.17,-1452.5 599.33,-1452.5 599.33,-1452.5 744.67,-1452.5 744.67,-1452.5 747.83,-1452.5 751,-1455.67 751,-1458.83 751,-1458.83 751,-1465.17 751,-1465.17 751,-1468.33 747.83,-1471.5 744.67,-1471.5"/>
+<text text-anchor="start" x="601" y="-1459.5" font-family="Arial" font-size="10.00">vault&#45;http&#45;client.inject&#45;function.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts -->
 <g id="edge3" class="edge">
-<title>src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M501.87,-1462C527.73,-1462 568.24,-1462 603.13,-1462"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="611.41,-1464.8 603.41,-1462 611.41,-1459.2 611.41,-1464.8"/>
+<title>src/app/di/http&#45;client/inject&#45;functions/index.ts&#45;&gt;src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M501.87,-1462C523.3,-1462 554.79,-1462 584.82,-1462"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="592.82,-1464.8 584.82,-1462 592.82,-1459.2 592.82,-1464.8"/>
 </g>
-<!-- src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts -->
+<!-- src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts -->
 <g id="edge4" class="edge">
-<title>src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M732.51,-1470.35C773.18,-1476.05 825.63,-1483.41 859.54,-1488.17"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="859.43,-1490.98 867.74,-1489.32 860.21,-1485.43 859.43,-1490.98"/>
+<title>src/app/di/http&#45;client/inject&#45;functions/vault&#45;http&#45;client.inject&#45;function.ts&#45;&gt;src/app/di/http&#45;client/injection&#45;tokens/index.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M740.81,-1471.51C780.18,-1477.03 828.09,-1483.75 859.73,-1488.19"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="859.5,-1490.99 867.81,-1489.33 860.27,-1485.44 859.5,-1490.99"/>
 </g>
 <!-- src/app/di/http&#45;client/providers/assets&#45;http&#45;client.provider.ts -->
 <g id="node7" class="node">
@@ -434,24 +434,24 @@
 </a>
 </g>
 </g>
-<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts -->
+<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts -->
 <g id="node12" class="node">
-<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts</title>
-<g id="a_node12"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/user-config/inject-functions/user-config.inject.ts" xlink:title="user&#45;config.inject.ts">
-<path fill="#80deea" stroke="#00acc1" d="M330.67,-1722.5C330.67,-1722.5 241.33,-1722.5 241.33,-1722.5 238.17,-1722.5 235,-1719.33 235,-1716.17 235,-1716.17 235,-1709.83 235,-1709.83 235,-1706.67 238.17,-1703.5 241.33,-1703.5 241.33,-1703.5 330.67,-1703.5 330.67,-1703.5 333.83,-1703.5 337,-1706.67 337,-1709.83 337,-1709.83 337,-1716.17 337,-1716.17 337,-1719.33 333.83,-1722.5 330.67,-1722.5"/>
-<text text-anchor="start" x="243" y="-1710.5" font-family="Arial" font-size="10.00">user&#45;config.inject.ts</text>
+<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts</title>
+<g id="a_node12"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/di/user-config/inject-functions/user-config.inject-function.ts" xlink:title="user&#45;config.inject&#45;function.ts">
+<path fill="#80deea" stroke="#00acc1" d="M349.67,-1722.5C349.67,-1722.5 222.33,-1722.5 222.33,-1722.5 219.17,-1722.5 216,-1719.33 216,-1716.17 216,-1716.17 216,-1709.83 216,-1709.83 216,-1706.67 219.17,-1703.5 222.33,-1703.5 222.33,-1703.5 349.67,-1703.5 349.67,-1703.5 352.83,-1703.5 356,-1706.67 356,-1709.83 356,-1709.83 356,-1716.17 356,-1716.17 356,-1719.33 352.83,-1722.5 349.67,-1722.5"/>
+<text text-anchor="start" x="224" y="-1710.5" font-family="Arial" font-size="10.00">user&#45;config.inject&#45;function.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/di/user&#45;config/inject&#45;functions/index.ts&#45;&gt;src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts -->
+<!-- src/app/di/user&#45;config/inject&#45;functions/index.ts&#45;&gt;src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts -->
 <g id="edge12" class="edge">
-<title>src/app/di/user&#45;config/inject&#45;functions/index.ts&#45;&gt;src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M189.17,-1713C200.19,-1713 213.48,-1713 226.62,-1713"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="234.75,-1715.8 226.75,-1713 234.75,-1710.2 234.75,-1715.8"/>
+<title>src/app/di/user&#45;config/inject&#45;functions/index.ts&#45;&gt;src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M189.17,-1713C194.78,-1713 200.99,-1713 207.46,-1713"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="215.78,-1715.8 207.78,-1713 215.78,-1710.2 215.78,-1715.8"/>
 </g>
-<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts&#45;&gt;src/config/user/index.ts -->
+<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts&#45;&gt;src/config/user/index.ts -->
 <g id="edge14" class="edge">
-<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts&#45;&gt;src/config/user/index.ts</title>
+<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts&#45;&gt;src/config/user/index.ts</title>
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M300.35,-1722.58C327.37,-1741.96 386,-1784 386,-1784 386,-1784 745.51,-1838.49 859.66,-1855.79"/>
 <polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="859.43,-1858.59 867.76,-1857.02 860.27,-1853.05 859.43,-1858.59"/>
 </g>
@@ -464,11 +464,11 @@
 </a>
 </g>
 </g>
-<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts&#45;&gt;src/app/di/user&#45;config/injection&#45;tokens/index.ts -->
+<!-- src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts&#45;&gt;src/app/di/user&#45;config/injection&#45;tokens/index.ts -->
 <g id="edge13" class="edge">
-<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject.ts&#45;&gt;src/app/di/user&#45;config/injection&#45;tokens/index.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M337.47,-1713C369.77,-1713 410.82,-1713 439.33,-1713"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="439.39,-1715.8 447.39,-1713 439.39,-1710.2 439.39,-1715.8"/>
+<title>src/app/di/user&#45;config/inject&#45;functions/user&#45;config.inject&#45;function.ts&#45;&gt;src/app/di/user&#45;config/injection&#45;tokens/index.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M356.18,-1713C384.43,-1713 415.85,-1713 439.05,-1713"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="439.21,-1715.8 447.21,-1713 439.21,-1710.2 439.21,-1715.8"/>
 </g>
 <!-- src/app/di/user&#45;config/injection&#45;tokens/user&#45;config.token.ts -->
 <g id="node14" class="node">

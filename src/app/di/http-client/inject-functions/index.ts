@@ -1,2 +1,2 @@
-export { injectAssetsHttpClient } from './assets-http-client.inject';
-export { injectVaultHttpClient } from './vault-http-client.inject';
+export { injectAssetsHttpClient } from './assets-http-client.inject-function';
+export { injectVaultHttpClient } from './vault-http-client.inject-function';

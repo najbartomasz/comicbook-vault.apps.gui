@@ -30,10 +30,12 @@ The `di/` directory mirrors the structure of `lib/` features, creating a clear m
 src/app/
 ├── di/                       # 🔵 Composition Root
 │   ├── http-client/          # DI config for lib/http-client
-│   │   ├── assets-http-client.inject.ts
-│   │   └── vault-http-client.inject.ts
+│   │   ├── inject-functions/
+│   │   │   ├── assets-http-client.inject-function.ts
+│   │   │   └── vault-http-client.inject-function.ts
 │   └── date-time/            # DI config for lib/date-time
-│       └── current-date-time.inject.ts
+│       └── inject-functions/
+│           └── current-date-time.inject-function.ts
 │
 ├── lib/
 │   ├── http-client/
@@ -49,9 +51,9 @@ src/app/
 ```
 
 **File Naming Convention**:
-- `*.inject.ts` - Contains InjectionToken, provider function, and inject helper
-- Name should match the domain interface (e.g., `HttpClient` → `vault-http-client.inject.ts`)
-- Use kebab-case for file names, PascalCase for tokens
+- `*.inject-function.ts` - Contains inject helper functions using Angular `inject()`
+- Name should match the domain interface (e.g., `HttpClient` → `vault-http-client.inject-function.ts`)
+- Use kebab-case for file names, PascalCase for function names
 
 **Pattern Example**:
 ```typescript
@@ -60,7 +62,12 @@ src/app/
 const client = inject(HttpClient); // Which HttpClient? Where configured?
 
 // ✅ AFTER: Composition Root Pattern
-// In di/http-client/vault-http-client.inject.ts:
+// In di/http-client/inject-functions/vault-http-client.inject-function.ts:
+export function injectVaultHttpClient(): HttpClient {
+  return inject(VAULT_HTTP_CLIENT);
+}
+
+// In di/http-client/injection-tokens/vault-http-client.token.ts:
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 
 export function provideVaultHttpClient(): Provider {

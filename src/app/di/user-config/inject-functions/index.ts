@@ -1,1 +1,1 @@
-export { injectUserConfig } from './user-config.inject';
+export { injectUserConfig } from './user-config.inject-function';

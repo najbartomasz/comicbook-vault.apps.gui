@@ -29,15 +29,16 @@ DI configuration exists at two levels:
 src/app/
 ├── di/                     # ✅ Application-level DI (composition root)
 │   └── http-client/
-│       ├── assets-http-client.inject.ts
-│       └── vault-http-client.inject.ts
+│       ├── inject-functions/
+│       │   ├── assets-http-client.inject-function.ts
+│       │   └── vault-http-client.inject-function.ts
 │
 ├── lib/
 │   ├── infrastructure/      # Framework-agnostic implementations
 │   │
 │   ├── di/                 # ✅ Feature-level DI (reusable tokens)
 │   │   └── http-client/
-│   │       └── http-client.inject.ts  # Shared/base tokens
+│   │       └── http-client.inject-function.ts  # Shared/base tokens
 │   │
 │   └── presentation/       # Angular UI components only
 │
@@ -45,7 +46,7 @@ src/app/
     └── app.config.ts       # Imports from app/di/
 ```
 
-**Note**: All DI files use `.inject.ts` extension containing the token, provider function, and inject helper (see ADR-006).
+**Note**: DI layer uses a three-tier structure with `inject-functions/*.inject-function.ts` files containing inject helper functions, `injection-tokens/*.token.ts` for DI tokens, and `providers/*.provider.ts` for provider configurations (see ADR-006).
 
 **ESLint Boundary Rules**:
 

@@ -202,11 +202,17 @@ export class NetworkError extends Error {
 
 **Example:**
 ```typescript
-// ✅ di/vault-http-client.inject.ts
+// ✅ di/http-client/injection-tokens/vault-http-client.token.ts
 export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
 
+// ✅ di/http-client/providers/vault-http-client.provider.ts
 export function provideVaultHttpClient(): Provider {
   return { provide: VAULT_HTTP_CLIENT, useClass: FetchHttpClient };
+}
+
+// ✅ di/http-client/inject-functions/vault-http-client.inject-function.ts
+export function injectVaultHttpClient(): HttpClient {
+  return inject(VAULT_HTTP_CLIENT);
 }
 
 export function injectVaultHttpClient(): HttpClient {

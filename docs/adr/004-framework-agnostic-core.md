@@ -61,10 +61,17 @@ export class HttpUserRepository implements UserRepository { // Pure class
   }
 }
 
-// di/user-repository.inject.ts (Angular-specific)
+// di/user-repository/injection-tokens/user-repository.token.ts (Angular-specific)
 export const USER_REPOSITORY = new InjectionToken<UserRepository>('UserRepository');
+
+// di/user-repository/providers/user-repository.provider.ts
 export function provideUserRepository(): Provider {
   return { provide: USER_REPOSITORY, useClass: HttpUserRepository };
+}
+
+// di/user-repository/inject-functions/user-repository.inject-function.ts
+export function injectUserRepository(): UserRepository {
+  return inject(USER_REPOSITORY);
 }
 ```
 

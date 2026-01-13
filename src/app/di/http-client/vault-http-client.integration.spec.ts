@@ -5,7 +5,7 @@ import { USER_CONFIG_TOKEN } from '@di/user-config/injection-tokens';
 import { HttpUrl } from '@lib/http-client/domain';
 import { stubResponse } from '@testing/unit/http';
 
-import { injectVaultHttpClient } from './inject-functions/vault-http-client.inject';
+import { injectVaultHttpClient } from './inject-functions/vault-http-client.inject-function';
 import { provideVaultHttpClient } from './providers/vault-http-client.provider';
 
 describe(injectVaultHttpClient, () => {

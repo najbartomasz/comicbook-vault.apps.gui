@@ -235,7 +235,7 @@ flowchart TB
 - **Angular-Specific Files**: 8 (13%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-11*
+*Last generated: 2026-01-13*
 
 ---
 
@@ -293,8 +293,8 @@ src/app/
 ├── di/                          # 🔵 Dependency injection layer
 │   ├── http-client/            # HTTP client DI configuration
 │   │   ├── inject-functions/   # Injectable functions
-│   │   │   ├── assets-http-client.inject.ts
-│   │   │   └── vault-http-client.inject.ts
+│   │   │   ├── assets-http-client.inject-function.ts
+│   │   │   └── vault-http-client.inject-function.ts
 │   │   ├── injection-tokens/   # DI tokens
 │   │   │   ├── assets-http-client.token.ts
 │   │   │   └── vault-http-client.token.ts
@@ -304,7 +304,7 @@ src/app/
 │   │
 │   └── user-config/            # User configuration DI
 │       ├── inject-functions/   # Injectable functions
-│       │   └── user-config.inject.ts
+│       │   └── user-config.inject-function.ts
 │       ├── injection-tokens/   # DI tokens
 │       │   └── user-config.token.ts
 │       └── providers/          # Provider configurations
@@ -525,4 +525,4 @@ src/app/
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 13, 2026
