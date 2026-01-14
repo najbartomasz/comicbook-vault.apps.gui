@@ -1,4 +1,4 @@
-import { type HttpRequest, type HttpResponse } from '../../../domain';
+import { HttpStatus, type HttpRequest, type HttpResponse } from '../../../domain';
 import { type ResponseBodyParser } from '../../body-parsers/response-body-parser.interface';
 import { TextPlainResponseBodyParser } from '../../body-parsers/text/text-plain.response-body-parser';
 import { HttpAbortError } from '../../errors/abort/http-abort-error';
@@ -22,9 +22,14 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
     }
 
     public async execute(request: HttpRequest): Promise<HttpResponse> {
-        let response: Response;
+        const response = await this.#fetchResponse(request);
+        const body = await this.#getResponseBody(response);
+        return this.#buildHttpResponse(response, body);
+    }
+
+    async #fetchResponse(request: HttpRequest): Promise<Response> {
         try {
-            response = await this.#fetcher(request.url, {
+            return await this.#fetcher(request.url, {
                 method: request.method,
                 signal: request.signal
             });
@@ -37,19 +42,35 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
             }
             throw new HttpNetworkError({ url, description: this.#getErrorMessage(error) }, { cause: error });
         }
-        let responseBody: unknown;
-        const contentType = response.headers.get('Content-Type') ?? '';
+    }
+
+    async #getResponseBody(response: Response): Promise<unknown> {
+        if (response.status === HttpStatus.NO_CONTENT) {
+            return undefined;
+        }
         try {
-            const bodyParser = this.#parsers.find((parser) => parser.canParse(contentType)) ?? this.#defaultParser;
-            responseBody = await bodyParser.parse(response);
+            return await this.#parseResponseBody(response);
         } catch (error) {
             throw new HttpPayloadError({ url: response.url }, { cause: error });
         }
+    }
+
+    async #parseResponseBody(response: Response): Promise<unknown> {
+        for (const parser of this.#parsers) {
+            const result = await parser.parse(response);
+            if (result !== undefined) {
+                return result;
+            }
+        }
+        return this.#defaultParser.parse(response);
+    }
+
+    #buildHttpResponse(response: Response, body: unknown): HttpResponse {
         return {
             url: response.url,
             status: response.status,
             statusText: response.statusText,
-            body: responseBody
+            body
         };
     }
 

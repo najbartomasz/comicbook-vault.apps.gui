@@ -130,6 +130,34 @@ describe(FetchHttpRequestExecutor, () => {
         });
     });
 
+    test('should return undefined body for 204 No Content responses', async () => {
+        // Given
+        const request: HttpRequest = {
+            url: 'https://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
+            stubResponse({
+                url: 'https://example.com/api',
+                status: 204,
+                statusText: 'No Content'
+            })
+        ));
+        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+
+        // When
+        const result = await executor.execute(request);
+
+        // Then
+        expect(result).toStrictEqual({
+            status: 204,
+            statusText: 'No Content',
+            url: 'https://example.com/api',
+            body: undefined
+        });
+    });
+
     test('should throw abort error when fetch is aborted', async () => {
         // Given
         const request: HttpRequest = {
@@ -311,21 +339,19 @@ describe(FetchHttpRequestExecutor, () => {
         expect(error.cause).toBe(textError);
     });
 
-    test('should use first matching parser', async () => {
+    test('should use first parser that returns non-undefined result', async () => {
         // Given
         const request: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
-        const parser1ParseMock = vi.fn<ResponseBodyParser['parse']>();
+        const parser1ParseMock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue(undefined);
         const parser1Stub: ResponseBodyParser = {
-            canParse: () => false,
             parse: parser1ParseMock
         };
-        const parser2ParseMock = vi.fn<ResponseBodyParser['parse']>();
+        const parser2ParseMock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'test' });
         const parser2Stub: ResponseBodyParser = {
-            canParse: () => true,
             parse: parser2ParseMock
         };
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
@@ -343,25 +369,23 @@ describe(FetchHttpRequestExecutor, () => {
         await executor.execute(request);
 
         // Then
-        expect(parser1ParseMock).not.toHaveBeenCalled();
+        expect(parser1ParseMock).toHaveBeenCalledTimes(1);
         expect(parser2ParseMock).toHaveBeenCalledTimes(1);
     });
 
-    test('should use first matching parser when multiple parsers match content-type', async () => {
+    test('should use first parser that successfully parses when multiple parsers could handle content-type', async () => {
         // Given
         const request: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
-        const parser1ParseMock = vi.fn<ResponseBodyParser['parse']>();
+        const parser1ParseMock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'test' });
         const parser1Stub: ResponseBodyParser = {
-            canParse: () => true,
             parse: parser1ParseMock
         };
-        const parser2ParseMock = vi.fn<ResponseBodyParser['parse']>();
+        const parser2ParseMock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'test' });
         const parser2Stub: ResponseBodyParser = {
-            canParse: () => true,
             parse: parser2ParseMock
         };
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
@@ -383,7 +407,44 @@ describe(FetchHttpRequestExecutor, () => {
         expect(parser2ParseMock).not.toHaveBeenCalled();
     });
 
-    test('should fall back to default text parser when no parser matches content-type', async () => {
+    test('should try parsers in exact order until one returns non-undefined', async () => {
+        // Given
+        const request: HttpRequest = {
+            url: 'https://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: { data: 'success' },
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'application/json' })
+            })
+        ));
+        const parser1Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue(undefined);
+        const parser2Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue(undefined);
+        const parser3Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'success' });
+        const parser4Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'should not be called' });
+        const executor = new FetchHttpRequestExecutor([
+            { parse: parser1Mock },
+            { parse: parser2Mock },
+            { parse: parser3Mock },
+            { parse: parser4Mock }
+        ]);
+
+        // When
+        const result = await executor.execute(request);
+
+        // Then
+        expect(parser1Mock).toHaveBeenCalledBefore(parser2Mock);
+        expect(parser2Mock).toHaveBeenCalledBefore(parser3Mock);
+        expect(parser4Mock).not.toHaveBeenCalled();
+        expect(result.body).toStrictEqual({ data: 'success' });
+    });
+
+    test('should fall back to default text parser when all parsers return undefined', async () => {
         // Given
         const request: HttpRequest = {
             url: 'https://example.com/api',
@@ -396,7 +457,7 @@ describe(FetchHttpRequestExecutor, () => {
                 body: 'text content',
                 status: 200,
                 statusText: 'OK',
-                headers: new Headers({ 'Content-Type': 'application/xml' })
+                headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
         const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
@@ -421,7 +482,7 @@ describe(FetchHttpRequestExecutor, () => {
                 body: 'any content',
                 status: 200,
                 statusText: 'OK',
-                headers: new Headers({ 'Content-Type': 'application/json' })
+                headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
         const executor = new FetchHttpRequestExecutor([]);
@@ -433,7 +494,7 @@ describe(FetchHttpRequestExecutor, () => {
         expect(result.body).toBe('any content');
     });
 
-    test('should use custom default parser when no parser matches', async () => {
+    test('should use custom default parser when all parsers return undefined', async () => {
         // Given
         const request: HttpRequest = {
             url: 'https://example.com/api',
@@ -442,7 +503,6 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const customDefaultParserMock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue('custom parsed');
         const customDefaultParserStub: ResponseBodyParser = {
-            canParse: () => true,
             parse: customDefaultParserMock
         };
         const fetcherMock = vi.fn<typeof fetch>().mockResolvedValueOnce(
@@ -462,5 +522,31 @@ describe(FetchHttpRequestExecutor, () => {
         // Then
         expect(result.body).toBe('custom parsed');
         expect(customDefaultParserMock).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return final URL when response URL differs from request URL due to redirects', async () => {
+        // Given
+        const request: HttpRequest = {
+            url: 'https://example.com/api',
+            method: HttpMethod.Get,
+            signal: new AbortController().signal
+        };
+        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
+            stubResponse({
+                url: 'https://example.com/api/v2/resource',
+                body: { data: 'redirected' },
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'application/json' })
+            })
+        ));
+        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+
+        // When
+        const result = await executor.execute(request);
+
+        // Then
+        expect(result.url).toBe('https://example.com/api/v2/resource');
+        expect(result.body).toStrictEqual({ data: 'redirected' });
     });
 });

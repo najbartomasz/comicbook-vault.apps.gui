@@ -221,7 +221,7 @@ export default [
             'no-useless-escape': 'error',
             'no-var': 'error',
             'no-with': 'error',
-            'no-await-in-loop': 'error',
+            'no-await-in-loop': 'off',
             'no-constructor-return': 'error',
             'no-promise-executor-return': 'error',
             'no-template-curly-in-string': 'error',
@@ -1225,10 +1225,7 @@ export default [
                     allowRegExp: false
                 }
             ],
-            '@typescript-eslint/return-await': [
-                'error',
-                'never'
-            ],
+            '@typescript-eslint/return-await': ['error', 'in-try-catch'],
             '@typescript-eslint/strict-boolean-expressions': 'off',
             '@typescript-eslint/switch-exhaustiveness-check': [
                 'error',
