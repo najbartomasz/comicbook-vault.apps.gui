@@ -13,11 +13,18 @@ has_file_changes() {
     # Pre-commit context: check currently staged files
     git diff --cached --name-only | grep -q "$pattern"
   else
-    # Pre-push context: read push info from stdin and check commits being pushed
-    while read local_ref local_sha remote_ref remote_sha; do
-      range="${remote_sha}..${local_sha}"
-      git diff --name-only "$range" 2>/dev/null | grep -q "$pattern" && return 0
-    done
-    return 1
+    # Pre-push context: check commits being pushed
+    # Get the current branch and its remote tracking branch
+    current_branch=$(git symbolic-ref --short HEAD)
+    remote_branch="origin/$current_branch"
+
+    # Check if remote branch exists
+    if git rev-parse --verify "$remote_branch" >/dev/null 2>&1; then
+      # Compare with remote branch
+      git diff --name-only "$remote_branch"...HEAD 2>/dev/null | grep -q "$pattern"
+    else
+      # No remote branch exists, check all commits
+      git log --name-only --pretty=format: HEAD | grep -q "$pattern"
+    fi
   fi
 }
