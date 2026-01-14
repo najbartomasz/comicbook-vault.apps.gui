@@ -5,14 +5,14 @@ import { HttpAssetLoader } from './http-asset-loader';
 describe(HttpAssetLoader, () => {
     test('should load asset', async () => {
         // Given
-        interface MessageAsset {
-            readonly message: string;
+        interface UserConfigAsset {
+            readonly serverUrl: string;
         }
         const httpGetMock = vi.fn<HttpClient['get']>().mockResolvedValueOnce({
-            url: 'https://localhost:4200/assets/test.json',
+            url: 'https://localhost:4200/assets/user-config.json',
             status: 200,
             statusText: 'OK',
-            body: { message: 'Hello, World!' }
+            body: { serverUrl: 'https://example.com/api' }
         });
         const httpClientMock: HttpClient = {
             get: httpGetMock
@@ -20,21 +20,21 @@ describe(HttpAssetLoader, () => {
         const assetLoader = new HttpAssetLoader(httpClientMock);
 
         // When
-        const asset = await assetLoader.load<MessageAsset>('/assets/test.json', (data) => data as MessageAsset);
+        const asset = await assetLoader.load<UserConfigAsset>('/assets/user-config.json', (data) => data as UserConfigAsset);
 
         // Then
-        expect(asset).toStrictEqual({ message: 'Hello, World!' });
-        expect(httpGetMock).toHaveBeenCalledExactlyOnceWith('/assets/test.json');
+        expect(asset).toStrictEqual({ serverUrl: 'https://example.com/api' });
+        expect(httpGetMock).toHaveBeenCalledExactlyOnceWith('/assets/user-config.json');
     });
 
     test('should throw error when response status is not OK', async () => {
         // Given
-        interface IconAsset {
-            readonly img: SVGElement;
+        interface IconsAsset {
+            readonly icons: SVGElement[];
         }
         const httpClientMock: HttpClient = {
             get: vi.fn<HttpClient['get']>().mockResolvedValueOnce({
-                url: 'https://localhost:4200/assets/test.json',
+                url: 'https://localhost:4200/assets/icons.json',
                 status: 404,
                 statusText: 'Not Found',
                 body: {}
@@ -43,8 +43,8 @@ describe(HttpAssetLoader, () => {
         const loader = new HttpAssetLoader(httpClientMock);
 
         // When, Then
-        await expect(loader.load<IconAsset>('/assets/test.json', (data) => data as IconAsset)).rejects.toThrowError(
-            'Failed to load asset from /assets/test.json: Not Found'
+        await expect(loader.load<IconsAsset>('/assets/icons.json', (data) => data as IconsAsset)).rejects.toThrowError(
+            'Failed to load asset from /assets/icons.json: Not Found'
         );
     });
 

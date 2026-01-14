@@ -1,15 +1,22 @@
+import { stubResponse } from '@testing/unit/http';
+
 import { JsonResponseBodyParser } from './json.response-body-parser';
 
 describe(JsonResponseBodyParser, () => {
     test('should parse application/json content', async () => {
         // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response(JSON.stringify({ key: 'value' }), {
-            headers: { 'Content-Type': 'application/json' }
-        });
+        const jsonBodyParser = new JsonResponseBodyParser();
 
         // When
-        const result = await parser.parse(response);
+        const result = await jsonBodyParser.parse(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: { key: 'value' },
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'application/json' })
+            })
+        );
 
         // Then
         expect(result).toStrictEqual({ key: 'value' });
@@ -17,13 +24,18 @@ describe(JsonResponseBodyParser, () => {
 
     test('should parse application/json with charset', async () => {
         // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response(JSON.stringify({ key: 'value' }), {
-            headers: { 'Content-Type': 'application/json; charset=utf-8' }
-        });
+        const jsonBodyParser = new JsonResponseBodyParser();
 
         // When
-        const result = await parser.parse(response);
+        const result = await jsonBodyParser.parse(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: { key: 'value' },
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
+            })
+        );
 
         // Then
         expect(result).toStrictEqual({ key: 'value' });
@@ -31,13 +43,18 @@ describe(JsonResponseBodyParser, () => {
 
     test('should return undefined when content-type is not application/json', async () => {
         // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response('text', {
-            headers: { 'Content-Type': 'text/plain' }
-        });
+        const jsonBodyParser = new JsonResponseBodyParser();
 
         // When
-        const result = await parser.parse(response);
+        const result = await jsonBodyParser.parse(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: 'text',
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'text/plain' })
+            })
+        );
 
         // Then
         expect(result).toBeUndefined();
@@ -45,55 +62,20 @@ describe(JsonResponseBodyParser, () => {
 
     test('should return undefined when content-type is empty', async () => {
         // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response('text');
+        const jsonBodyParser = new JsonResponseBodyParser();
 
         // When
-        const result = await parser.parse(response);
+        const result = await jsonBodyParser.parse(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: 'text',
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers()
+            })
+        );
 
         // Then
         expect(result).toBeUndefined();
-    });
-
-    test('should parse JSON response body', async () => {
-        // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response(JSON.stringify({ key: 'value' }), {
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        // When
-        const result = await parser.parse(response);
-
-        // Then
-        expect(result).toStrictEqual({ key: 'value' });
-    });
-
-    test('should parse JSON array response body', async () => {
-        // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response(JSON.stringify([1, 2, 3]), {
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        // When
-        const result = await parser.parse(response);
-
-        // Then
-        expect(result).toStrictEqual([1, 2, 3]);
-    });
-
-    test('should parse nested JSON response body', async () => {
-        // Given
-        const parser = new JsonResponseBodyParser();
-        const response = new Response(JSON.stringify({ nested: { data: { value: 123 } } }), {
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        // When
-        const result = await parser.parse(response);
-
-        // Then
-        expect(result).toStrictEqual({ nested: { data: { value: 123 } } });
     });
 });

@@ -19,7 +19,7 @@ describe(injectVaultHttpClient, () => {
         return TestBed.runInInjectionContext(() => injectVaultHttpClient());
     };
 
-    test('should send GET request, receive expected response and log to console', async () => {
+    test('should send request, receive expected response and log to console', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
@@ -32,7 +32,7 @@ describe(injectVaultHttpClient, () => {
             })
         ));
 
-        const httpClient = setup({
+        const vaultHttpClient = setup({
             providers: [
                 {
                     provide: USER_CONFIG_TOKEN,
@@ -42,7 +42,7 @@ describe(injectVaultHttpClient, () => {
         });
 
         // When
-        const response = await httpClient.get('/comics/42');
+        const response = await vaultHttpClient.get('/comics/42');
 
         // Then
         expect(response.status).toBe(200);
@@ -67,7 +67,7 @@ describe(injectVaultHttpClient, () => {
         );
     });
 
-    test('should send GET request and handle HTTP error response', async () => {
+    test('should send request and handle HTTP error response', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
@@ -79,7 +79,7 @@ describe(injectVaultHttpClient, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const httpClient = setup({
+        const vaultHttpClient = setup({
             providers: [
                 {
                     provide: USER_CONFIG_TOKEN,
@@ -89,7 +89,7 @@ describe(injectVaultHttpClient, () => {
         });
 
         // When
-        const response = await httpClient.get('/comics/999');
+        const response = await vaultHttpClient.get('/comics/999');
 
         // Then
         expect(response.status).toBe(404);
@@ -136,7 +136,7 @@ describe(injectVaultHttpClient, () => {
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const httpClient = setup({
+        const vaultHttpClient = setup({
             providers: [
                 {
                     provide: USER_CONFIG_TOKEN,
@@ -146,8 +146,8 @@ describe(injectVaultHttpClient, () => {
         });
 
         // When
-        await httpClient.get('/comics/1');
-        await httpClient.get('/comics/2');
+        await vaultHttpClient.get('/comics/1');
+        await vaultHttpClient.get('/comics/2');
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
@@ -204,7 +204,7 @@ describe(injectVaultHttpClient, () => {
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const httpClient = setup({
+        const vaultHttpClient = setup({
             providers: [
                 {
                     provide: USER_CONFIG_TOKEN,
@@ -214,8 +214,8 @@ describe(injectVaultHttpClient, () => {
         });
 
         // When
-        const deferredFirstRequestResponse = httpClient.get('/comics/1');
-        const secondRequestResponse = await httpClient.get('/comics/2');
+        const deferredFirstRequestResponse = vaultHttpClient.get('/comics/1');
+        const secondRequestResponse = await vaultHttpClient.get('/comics/2');
         firstRequest.resolve(
             stubResponse({
                 url: 'https://localhost:3000/vault/comics/1',

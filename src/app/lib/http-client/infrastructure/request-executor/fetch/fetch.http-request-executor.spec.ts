@@ -27,10 +27,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result).toStrictEqual({
@@ -57,10 +57,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result).toStrictEqual({
@@ -78,18 +78,19 @@ describe(FetchHttpRequestExecutor, () => {
             method: HttpMethod.Get,
             signal: new AbortController().signal
         };
-        const responseStub = stubResponse({
-            url: 'https://example.com/api',
-            body: 'response without content-type',
-            status: 200,
-            statusText: 'OK'
-        });
-        vi.spyOn(responseStub.headers, 'get').mockReturnValueOnce(null);
-        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(responseStub));
-        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
+        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
+            stubResponse({
+                url: 'https://example.com/api',
+                body: 'response without content-type',
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers()
+            })
+        ));
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result).toStrictEqual({
@@ -116,10 +117,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result).toStrictEqual({
@@ -144,10 +145,10 @@ describe(FetchHttpRequestExecutor, () => {
                 statusText: 'No Content'
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result).toStrictEqual({
@@ -167,15 +168,12 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const abortError = new DOMException('The operation was aborted.', 'AbortError');
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(abortError));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpAbortError) as HttpAbortError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpAbortError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.cause).toBe(abortError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpAbortError({ url: 'https://example.com/api' }, { cause: abortError })
+        );
     });
 
     test('should throw network error when fetch fails with an exception', async () => {
@@ -187,16 +185,12 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const networkError = new Error('Network failure');
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(networkError));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Network failure');
-        expect(error.cause).toBe(networkError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpNetworkError({ url: 'https://example.com/api', description: 'Network failure' }, { cause: networkError })
+        );
     });
 
     test('should throw network error when fetch fails with a primitive value', async () => {
@@ -208,16 +202,12 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const primitiveError = 'Network unreachable';
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(primitiveError));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Network unreachable');
-        expect(error.cause).toBe(primitiveError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpNetworkError({ url: 'https://example.com/api', description: 'Network unreachable' }, { cause: primitiveError })
+        );
     });
 
     test('should throw network error with object message when fetch fails with object containing message property', async () => {
@@ -229,16 +219,12 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const objectError = { message: 'Connection timeout', code: 'ETIMEDOUT' };
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(objectError));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Connection timeout');
-        expect(error.cause).toBe(objectError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpNetworkError({ url: 'https://example.com/api', description: 'Connection timeout' }, { cause: objectError })
+        );
     });
 
     test('should throw network error with "Unknown error" when fetch fails with non-standard value', async () => {
@@ -250,16 +236,12 @@ describe(FetchHttpRequestExecutor, () => {
         };
         const unknownError = 42;
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(unknownError));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Unknown error');
-        expect(error.cause).toBe(unknownError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpNetworkError({ url: 'https://example.com/api', description: 'Unknown error' }, { cause: unknownError })
+        );
     });
 
     test('should throw network error with "Unknown error" when fetch fails with null', async () => {
@@ -270,16 +252,12 @@ describe(FetchHttpRequestExecutor, () => {
             signal: new AbortController().signal
         };
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(null));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpNetworkError) as HttpNetworkError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpNetworkError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Unknown error');
-        expect(error.cause).toBeNull();
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpNetworkError({ url: 'https://example.com/api', description: 'Unknown error' }, { cause: null })
+        );
     });
 
     test('should throw payload error when JSON parsing fails', async () => {
@@ -298,16 +276,12 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Failed to parse response');
-        expect(error.cause).toBeInstanceOf(SyntaxError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpPayloadError({ url: 'https://example.com/api' }, { cause: expect.any(SyntaxError) })
+        );
     });
 
     test('should throw payload error when text parsing fails', async () => {
@@ -324,19 +298,14 @@ describe(FetchHttpRequestExecutor, () => {
             statusText: 'OK',
             headers: new Headers({ 'Content-Type': 'text/plain' })
         });
-        const textError = new TypeError('Failed to read body');
-        vi.spyOn(responseStub, 'text').mockRejectedValue(textError);
+        vi.spyOn(responseStub, 'text').mockRejectedValue(new TypeError('Failed to read body'));
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(responseStub));
-        const executor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new TextPlainResponseBodyParser()]);
 
-        // When
-        const error = await executor.execute(request).catch((err: unknown) => err as HttpPayloadError) as HttpPayloadError;
-
-        // Then
-        expect(error).toBeInstanceOf(HttpPayloadError);
-        expect(error.url).toBe('https://example.com/api');
-        expect(error.description).toBe('Failed to parse response');
-        expect(error.cause).toBe(textError);
+        // When, Then
+        await expect(async () => httpRequestExecutor.execute(request)).rejects.toThrowError(
+            new HttpPayloadError({ url: 'https://example.com/api' }, { cause: new TypeError('Failed to read body') })
+        );
     });
 
     test('should use first parser that returns non-undefined result', async () => {
@@ -354,23 +323,22 @@ describe(FetchHttpRequestExecutor, () => {
         const parser2Stub: ResponseBodyParser = {
             parse: parser2ParseMock
         };
-        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
-            stubResponse({
-                url: 'https://example.com/api',
-                body: { data: 'test' },
-                status: 200,
-                statusText: 'OK',
-                headers: new Headers({ 'Content-Type': 'application/json' })
-            })
-        ));
-        const executor = new FetchHttpRequestExecutor([parser1Stub, parser2Stub]);
+        const responseStub = stubResponse({
+            url: 'https://example.com/api',
+            body: { data: 'test' },
+            status: 200,
+            statusText: 'OK',
+            headers: new Headers({ 'Content-Type': 'application/json' })
+        });
+        vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(responseStub));
+        const httpRequestExecutor = new FetchHttpRequestExecutor([parser1Stub, parser2Stub]);
 
         // When
-        await executor.execute(request);
+        await httpRequestExecutor.execute(request);
 
         // Then
-        expect(parser1ParseMock).toHaveBeenCalledTimes(1);
-        expect(parser2ParseMock).toHaveBeenCalledTimes(1);
+        expect(parser1ParseMock).toHaveBeenCalledExactlyOnceWith(responseStub);
+        expect(parser2ParseMock).toHaveBeenCalledExactlyOnceWith(responseStub);
     });
 
     test('should use first parser that successfully parses when multiple parsers could handle content-type', async () => {
@@ -397,10 +365,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([parser1Stub, parser2Stub]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([parser1Stub, parser2Stub]);
 
         // When
-        await executor.execute(request);
+        await httpRequestExecutor.execute(request);
 
         // Then
         expect(parser1ParseMock).toHaveBeenCalledTimes(1);
@@ -427,7 +395,7 @@ describe(FetchHttpRequestExecutor, () => {
         const parser2Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue(undefined);
         const parser3Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'success' });
         const parser4Mock = vi.fn<ResponseBodyParser['parse']>().mockResolvedValue({ data: 'should not be called' });
-        const executor = new FetchHttpRequestExecutor([
+        const httpRequestExecutor = new FetchHttpRequestExecutor([
             { parse: parser1Mock },
             { parse: parser2Mock },
             { parse: parser3Mock },
@@ -435,7 +403,7 @@ describe(FetchHttpRequestExecutor, () => {
         ]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(parser1Mock).toHaveBeenCalledBefore(parser2Mock);
@@ -460,10 +428,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result.body).toBe('text content');
@@ -485,10 +453,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result.body).toBe('any content');
@@ -514,10 +482,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/xml' })
             })
         );
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()], customDefaultParserStub, fetcherMock);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()], customDefaultParserStub, fetcherMock);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result.body).toBe('custom parsed');
@@ -540,10 +508,10 @@ describe(FetchHttpRequestExecutor, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const executor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
+        const httpRequestExecutor = new FetchHttpRequestExecutor([new JsonResponseBodyParser()]);
 
         // When
-        const result = await executor.execute(request);
+        const result = await httpRequestExecutor.execute(request);
 
         // Then
         expect(result.url).toBe('https://example.com/api/v2/resource');

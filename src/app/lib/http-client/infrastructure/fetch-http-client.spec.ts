@@ -20,10 +20,10 @@ describe(FetchHttpClient, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const httpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
+        const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        const result = await httpClient.get('/api');
+        const result = await fetchHttpClient.get('/api');
 
         // Then
         expect(result).toStrictEqual({
@@ -39,14 +39,15 @@ describe(FetchHttpClient, () => {
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValueOnce(
             new Error('Network failure')
         ));
-        const httpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
+        const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When, Then
-        await expect(httpClient.get('/api'))
-            .rejects.toThrowError(new HttpNetworkError({
+        await expect(fetchHttpClient.get('/api')).rejects.toThrowError(
+            new HttpNetworkError({
                 url: 'https://example.com/api',
                 description: 'Network failure'
-            }));
+            })
+        );
     });
 
     test('should pass abort signal to executor when provided', async () => {
@@ -62,16 +63,19 @@ describe(FetchHttpClient, () => {
             })
         );
         vi.stubGlobal('fetch', fetchMock);
-        const httpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
+        const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        await httpClient.get('/api', { abortSignal: abortController.signal });
+        await fetchHttpClient.get('/api', { abortSignal: abortController.signal });
 
         // Then
-        expect(fetchMock).toHaveBeenCalledExactlyOnceWith('https://example.com/api', {
-            method: HttpMethod.Get,
-            signal: abortController.signal
-        });
+        expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+            'https://example.com/api',
+            {
+                method: HttpMethod.Get,
+                signal: abortController.signal
+            }
+        );
     });
 
     test('should not pass signal to executor when abort signal not provided', async () => {
@@ -86,15 +90,18 @@ describe(FetchHttpClient, () => {
             })
         );
         vi.stubGlobal('fetch', fetchMock);
-        const httpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
+        const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        await httpClient.get('/api');
+        await fetchHttpClient.get('/api');
 
         // Then
-        expect(fetchMock).toHaveBeenCalledExactlyOnceWith('https://example.com/api', {
-            method: HttpMethod.Get
-        });
+        expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+            'https://example.com/api',
+            {
+                method: HttpMethod.Get
+            }
+        );
     });
 
     test('should execute interceptors in order', async () => {
@@ -119,14 +126,14 @@ describe(FetchHttpClient, () => {
                 const modifiedRequest = { ...request, url: `${request.url}&param2=value2` };
                 return next(modifiedRequest);
             });
-        const httpClient = new FetchHttpClient(
+        const fetchHttpClient = new FetchHttpClient(
             HttpUrl.create('https://example.com'),
             [new JsonResponseBodyParser()],
             [{ intercept: intercept1Mock }, { intercept: intercept2Mock }]
         );
 
         // When
-        await httpClient.get('/api');
+        await fetchHttpClient.get('/api');
 
         // Then
         expect(intercept1Mock).toHaveBeenCalledExactlyOnceWith(
@@ -144,9 +151,12 @@ describe(FetchHttpClient, () => {
             expect.any(Function)
         );
         expect(intercept1Mock).toHaveBeenCalledBefore(intercept2Mock);
-        expect(fetchMock).toHaveBeenCalledExactlyOnceWith('https://example.com/api?param1=value1&param2=value2', {
-            method: HttpMethod.Get
-        });
+        expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+            'https://example.com/api?param1=value1&param2=value2',
+            {
+                method: HttpMethod.Get
+            }
+        );
     });
 
     test('should execute response handling in interceptors', async () => {
@@ -175,14 +185,14 @@ describe(FetchHttpClient, () => {
                     body: { ...response.body as object, interceptor1: 'applied' }
                 };
             });
-        const httpClient = new FetchHttpClient(
+        const fetchHttpClient = new FetchHttpClient(
             HttpUrl.create('https://example.com'),
             [new JsonResponseBodyParser()],
             [{ intercept: intercept1Mock }, { intercept: intercept2Mock }]
         );
 
         // When
-        const result = await httpClient.get('/api');
+        const result = await fetchHttpClient.get('/api');
 
         // Then
         expect(intercept1Mock).toHaveBeenCalledExactlyOnceWith(
@@ -219,7 +229,7 @@ describe(FetchHttpClient, () => {
         const customExecutor: HttpRequestExecutor = {
             execute: customExecutorMock
         };
-        const httpClient = new FetchHttpClient(
+        const fetchHttpClient = new FetchHttpClient(
             HttpUrl.create('https://example.com'),
             [new JsonResponseBodyParser()],
             [],
@@ -227,7 +237,7 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        const result = await httpClient.get('/api');
+        const result = await fetchHttpClient.get('/api');
 
         // Then
         expect(customExecutorMock).toHaveBeenCalledExactlyOnceWith({

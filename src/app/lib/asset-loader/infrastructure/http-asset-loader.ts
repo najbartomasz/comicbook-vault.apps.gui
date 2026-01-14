@@ -14,7 +14,6 @@ export class HttpAssetLoader implements AssetLoader {
         if (response.status !== HttpStatus.OK) {
             throw new Error(`Failed to load asset from ${path}: ${response.statusText}`);
         }
-
         return validator(response.body);
     }
 }

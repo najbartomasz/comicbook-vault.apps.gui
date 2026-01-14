@@ -8,12 +8,6 @@ import { ResponseTimeHttpInterceptor } from './response-time.http-interceptor';
 describe(ResponseTimeHttpInterceptor, () => {
     test('should calculate response time', async () => {
         // Given
-        const highResolutionTimestampProviderStub = {
-            now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100.25)
-        };
-        const interceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get
@@ -25,9 +19,15 @@ describe(ResponseTimeHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const highResolutionTimestampProviderStub = {
+            now: vi.fn<HighResolutionTimestampProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100.25)
+        };
+        const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await responseTimeInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(result).toStrictEqual({
@@ -43,12 +43,6 @@ describe(ResponseTimeHttpInterceptor, () => {
 
     test('should preserve existing response metadata while adding response time', async () => {
         // Given
-        const highResolutionTimestampProviderStub = {
-            now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100.25)
-        };
-        const interceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get
@@ -63,9 +57,15 @@ describe(ResponseTimeHttpInterceptor, () => {
             }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const highResolutionTimestampProviderStub = {
+            now: vi.fn<HighResolutionTimestampProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100.25)
+        };
+        const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await responseTimeInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(result.metadata).toStrictEqual({

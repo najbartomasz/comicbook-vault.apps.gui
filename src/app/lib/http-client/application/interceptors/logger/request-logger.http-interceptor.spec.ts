@@ -7,7 +7,6 @@ describe(RequestLoggerHttpInterceptor, () => {
     test('should log request without metadata', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
-        const interceptor = new RequestLoggerHttpInterceptor();
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get
@@ -19,9 +18,10 @@ describe(RequestLoggerHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const requestLoggerInterceptor = new RequestLoggerHttpInterceptor();
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await requestLoggerInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(consoleInfoMock).toHaveBeenCalledExactlyOnceWith(
@@ -34,7 +34,6 @@ describe(RequestLoggerHttpInterceptor, () => {
     test('should log request with metadata', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
-        const interceptor = new RequestLoggerHttpInterceptor();
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get,
@@ -50,9 +49,10 @@ describe(RequestLoggerHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const requestLoggerInterceptor = new RequestLoggerHttpInterceptor();
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await requestLoggerInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(consoleInfoMock).toHaveBeenCalledExactlyOnceWith(

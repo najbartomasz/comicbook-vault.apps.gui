@@ -7,10 +7,10 @@ describe(PerformanceTimestampProvider, () => {
         const performanceTimestampProvider = new PerformanceTimestampProvider();
 
         // When
-        const result = performanceTimestampProvider.now();
+        const now = performanceTimestampProvider.now();
 
         // Then
-        expect(result).toBe(78343.570643);
+        expect(now).toBe(78343.570643);
         expect(performanceNowSpy).toHaveBeenCalledTimes(1);
     });
 

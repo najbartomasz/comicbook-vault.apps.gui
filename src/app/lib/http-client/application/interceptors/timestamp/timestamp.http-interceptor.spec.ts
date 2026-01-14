@@ -8,12 +8,6 @@ import { TimestampHttpInterceptor } from './timestamp.http-interceptor';
 describe(TimestampHttpInterceptor, () => {
     test('should add timestamp to request and response metadata', async () => {
         // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: vi.fn<CurrentDateTimeProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100)
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get
@@ -25,9 +19,15 @@ describe(TimestampHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: vi.fn<CurrentDateTimeProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100)
+        };
+        const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await timestampInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(nextMock).toHaveBeenCalledExactlyOnceWith({
@@ -49,12 +49,6 @@ describe(TimestampHttpInterceptor, () => {
 
     test('should preserve existing metadata while adding timestamp', async () => {
         // Given
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: vi.fn<CurrentDateTimeProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100)
-        };
-        const interceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
         const requestStub: HttpRequest = {
             url: 'https://example.com/api',
             method: HttpMethod.Get,
@@ -72,9 +66,15 @@ describe(TimestampHttpInterceptor, () => {
             }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        const dateTimeProviderStub: CurrentDateTimeProvider = {
+            now: vi.fn<CurrentDateTimeProvider['now']>()
+                .mockReturnValueOnce(1000)
+                .mockReturnValueOnce(1100)
+        };
+        const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 
         // When
-        const result = await interceptor.intercept(requestStub, nextMock);
+        const result = await timestampInterceptor.intercept(requestStub, nextMock);
 
         // Then
         expect(nextMock).toHaveBeenCalledExactlyOnceWith({

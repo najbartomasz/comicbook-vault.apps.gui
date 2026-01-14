@@ -45,7 +45,7 @@ export class FetchHttpRequestExecutor implements HttpRequestExecutor {
     }
 
     async #getResponseBody(response: Response): Promise<unknown> {
-        if (response.status === HttpStatus.NO_CONTENT) {
+        if (response.status === HttpStatus.NoContent) {
             return undefined;
         }
         try {
