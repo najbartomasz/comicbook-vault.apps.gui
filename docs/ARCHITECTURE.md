@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-87%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-13%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-75%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-25%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -37,144 +37,100 @@ This project follows a **layered architecture** with strict separation between f
 ```mermaid
 flowchart TB
     subgraph Presentation["🔵 Presentation Layer"]
-        Shell["Shell<br/>(Routes, Config)"]
-        Pages["Feature Pages<br/>(Components)"]
+        Shell["Shell<br/>(Routes, Bootstrapping)"]
+        FeatComponents["Feature Pages<br/>(Components)"]
     end
 
-    subgraph DI["🔵 DI Layer"]
-        subgraph FeatureDI["Feature DI"]
-            FDI1["feature-a"]
-            FDI2["feature-b"]
-        end
-        subgraph LibDI["Lib DI"]
-            LDI1["context-x"]
-            LDI2["context-y"]
-        end
+    subgraph Providers["⚪ Application Providers"]
+        CompRoot["Composition Root<br/>(DI Configuration)"]
+    end
+
+    subgraph API["🟣 API Integration"]
+        ExtAPI1["External API A"]
+        ExtAPI2["External API B"]
     end
 
     subgraph Config["🟠 Configuration Layer"]
-        UserConfig["User Config<br/>(Runtime Settings)"]
+        GlobalConfig["App Configuration<br/>(Runtime Settings)"]
     end
 
     subgraph Features["🟥 Features (Vertical Slices)"]
-        subgraph Feature1["feature-a"]
+        subgraph FeatureA["Feature A"]
             F1Domain["🟠 Domain"]
             F1App["🟢 Application"]
             F1Infra["🟣 Infrastructure"]
             F1Pres["🔵 Presentation"]
         end
-        subgraph Feature2["feature-b"]
+        subgraph FeatureB["Feature B"]
             F2Domain["🟠 Domain"]
             F2App["🟢 Application"]
             F2Infra["🟣 Infrastructure"]
             F2Pres["🔵 Presentation"]
         end
-        subgraph Feature3["feature-c"]
-            F3Domain["🟠 Domain"]
-            F3Infra["🟣 Infrastructure"]
-            F3Pres["🔵 Presentation"]
-        end
     end
 
     subgraph Lib["🟩 Lib (Horizontal Slices)"]
-        subgraph Context1["http-client"]
+        subgraph ContextA["Shared Context A"]
             C1Domain["🟠 Domain"]
             C1App["🟢 Application"]
             C1Infra["🟣 Infrastructure"]
         end
-        subgraph Context2["asset-loader"]
+        subgraph ContextB["Shared Context B"]
             C2Domain["🟠 Domain"]
             C2Infra["🟣 Infrastructure"]
-        end
-        subgraph Context3["date-time"]
-            C3Domain["🟠 Domain"]
-            C3Infra["🟣 Infrastructure"]
-        end
-        subgraph Context4["performance"]
-            C4Domain["🟠 Domain"]
-            C4Infra["🟣 Infrastructure"]
         end
     end
 
     %% Presentation Layer
-    Shell --> Pages
-    Pages --> F1Pres
-    Pages --> F2Pres
-    Pages --> F3Pres
+    Shell --> FeatComponents
+    Shell --> CompRoot
+    FeatComponents --> F1Pres
+    FeatComponents --> F2Pres
 
-    %% Feature-a internal
-    F1Pres --> FDI1
+    %% Application Providers
+    CompRoot --> F1Infra
+    CompRoot --> F2Infra
+    CompRoot --> C1Infra
+    CompRoot --> C2Infra
+    CompRoot --> GlobalConfig
+    CompRoot --> ExtAPI1
+    CompRoot --> ExtAPI2
+
+    %% Feature Internal Flow
     F1Pres --> F1App
     F1App --> F1Domain
     F1Infra --> F1Domain
-    FDI1 --> C1Infra
 
-    %% Feature-b internal
-    F2Pres --> FDI2
     F2Pres --> F2App
     F2App --> F2Domain
     F2Infra --> F2Domain
-    FDI2 --> C2Infra
 
-    %% Feature-c internal
-    F3Pres --> F3Infra
-    F3Infra --> F3Domain
-
-    %% Features using other Features
-    F2Infra --> F1Domain
-    F3Infra --> F1Domain
-
-    %% Features using Libs
+    %% Cross-Context Dependencies
     F1Infra --> C1Domain
-    F1Infra --> C2Domain
-    F2Infra --> C1Domain
-    F3Infra --> C3Domain
+    F2Infra --> C2Domain
 
-    %% Lib DI
-    LDI1 --> C1Infra
-    LDI1 --> UserConfig
-    LDI2 --> C2Infra
-    LDI2 --> UserConfig
-
-    %% Libs using other Libs
+    %% Lib Dependencies
     C1App --> C1Domain
     C1Infra --> C1Domain
-    C1Infra --> C2Domain
-    C1Infra --> C3Domain
-    C1Infra --> C4Domain
-
     C2Infra --> C2Domain
-    C2Infra --> C1Domain
-
-    C3Infra --> C3Domain
-
-    C4Infra --> C4Domain
 
     %% Container Styles
     style Presentation fill:#e3f2fd,stroke:#03A9F4,stroke-width:2px,color:#000000
-    style DI fill:#e3f2fd,stroke:#03A9F4,stroke-width:2px,color:#000000
-    style FeatureDI fill:#f5f5f5,stroke:#03A9F4,stroke-width:1px,color:#000000
-    style LibDI fill:#f5f5f5,stroke:#03A9F4,stroke-width:1px,color:#000000
+    style Providers fill:#f5f5f5,stroke:#9E9E9E,stroke-width:2px,color:#000000
     style Config fill:#fff3e0,stroke:#FF9800,stroke-width:2px,color:#000000
     style Features fill:#FCE4EC,stroke:#C2185B,stroke-width:2px,color:#000000
     style Lib fill:#E0F2F1,stroke:#00897B,stroke-width:2px,color:#000000
 
-    style Feature1 fill:#f9f9f9,stroke:#C2185B,stroke-width:1px,color:#000000
-    style Feature2 fill:#f9f9f9,stroke:#C2185B,stroke-width:1px,color:#000000
-    style Feature3 fill:#f9f9f9,stroke:#C2185B,stroke-width:1px,color:#000000
-    style Context1 fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
-    style Context2 fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
-    style Context3 fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
-    style Context4 fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
+    style FeatureA fill:#f9f9f9,stroke:#C2185B,stroke-width:1px,color:#000000
+    style FeatureB fill:#f9f9f9,stroke:#C2185B,stroke-width:1px,color:#000000
+    style ContextA fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
+    style ContextB fill:#f9f9f9,stroke:#00897B,stroke-width:1px,color:#000000
 
     %% Node Styles
     style Shell fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style Pages fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style FDI1 fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style FDI2 fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style LDI1 fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style LDI2 fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-    style UserConfig fill:#FFB74D,color:#000000,stroke:#FF9800,stroke-width:1px
+    style FeatComponents fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
+    style CompRoot fill:#E0E0E0,color:#000000,stroke:#9E9E9E,stroke-width:1px
+    style GlobalConfig fill:#FFB74D,color:#000000,stroke:#FF9800,stroke-width:1px
 
     style F1Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
     style F1App fill:#81C784,color:#000000,stroke:#388E3C,stroke-width:1px
@@ -186,56 +142,48 @@ flowchart TB
     style F2Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
     style F2Pres fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
 
-    style F3Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
-    style F3Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
-    style F3Pres fill:#81D4FA,color:#000000,stroke:#03A9F4,stroke-width:1px
-
     style C1Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
     style C1App fill:#81C784,color:#000000,stroke:#388E3C,stroke-width:1px
     style C1Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
     style C2Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
     style C2Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
-    style C3Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
-    style C3Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
-    style C4Domain fill:#FFCC80,color:#000000,stroke:#FF9800,stroke-width:1px
-    style C4Infra fill:#B39DDB,color:#000000,stroke:#673AB7,stroke-width:1px
 
     linkStyle default stroke:#000000,stroke-width:1px
 ```
 
 **Architectural Pattern:**
 - 🔵 **Presentation** = Angular components & UI (framework-coupled)
-- 🔵 **DI** = Angular dependency injection configuration (framework-coupled)
+- ⚪ **Providers** = Angular dependency injection configuration for features and libs (framework-coupled, composition root)
 - 🟠 **Domain** = Business logic & contracts (framework-agnostic)
 - 🟢 **Application** = Use cases & orchestration (framework-agnostic)
 - 🟣 **Infrastructure** = Technical implementations (framework-agnostic)
 - 🟥 **Features** = Business domain modules (vertical slices)
 - 🟩 **Lib** = Shared bounded contexts (horizontal slices)
-- 🟠 **Config** = Application configuration (framework-agnostic with minimal DI integration)
+- 🟠 **Config** = Application configuration (framework-agnostic)
 
 **Dependency Rules:**
 - ✅ **Features → Features**: Allowed (via domain interfaces)
 - ✅ **Features → Libs**: Allowed (reuse shared contexts)
 - ✅ **Libs → Libs**: Allowed (compose contexts)
 - ❌ **Libs → Features**: Forbidden (libs must remain reusable)
-- ✅ **Presentation** depends on Application, Domain, and DI
+- ✅ **Presentation** depends on Application, Domain, and Providers
 - ✅ **Application** depends on Domain only
 - ✅ **Infrastructure** implements Domain interfaces
-- ✅ **DI** bridges framework-agnostic code to Angular DI system
+- ✅ **Providers** bridges framework-agnostic code to Angular DI system
 - ✅ All framework-agnostic layers testable without Angular
 
 ---
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 85
-- **Production Files**: 61
-- **Test Files**: 24
-- **Framework-Agnostic Files**: 53 (87%)
-- **Angular-Specific Files**: 8 (13%)
+- **Total TypeScript Files**: 95
+- **Production Files**: 60
+- **Test Files**: 35
+- **Framework-Agnostic Files**: 45 (75%)
+- **Angular-Specific Files**: 15 (25%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-14*
+*Last generated: 2026-01-18*
 
 ---
 
@@ -243,93 +191,120 @@ flowchart TB
 
 ```
 src/app/
+├── api/                         # 🟣 External APIs integration
+│   ├── assets/                 # Assets API integration
+│   │   └── infrastructure/     # API implementation
+│   │       ├── assets-api-client.factory.ts
+│   │       ├── assets-api-client.ts
+│   │       └── index.ts
+│   └── vault/                  # Vault API integration
+│       └── infrastructure/     # API implementation
+│           ├── index.ts
+│           ├── vault-api-client.factory.ts
+│           └── vault-api-client.ts
+│
+├── config/                      # 🟠 Configuration Layer
+│   └── app/                    # App configuration context
+│       ├── domain/             # Interfaces & contracts
+│       │   ├── app-config.ts
+│       │   └── index.ts
+│       └── infrastructure/     # Infrastructure implementations
+│           ├── app-config.dto.ts
+│           ├── app-config.provider.ts
+│           └── index.ts
+│
 ├── lib/                         # Shared/reusable code (DDD bounded contexts)
-│   ├── asset-loader/           # 🟢 Asset loading bounded context
-│   │   ├── domain/             # Interfaces & contracts
-│   │   │   └── asset-loader.interface.ts
-│   │   └── infrastructure/     # Asset loading implementations
-│   │       └── http-asset-loader.ts
-│   │
 │   ├── date-time/              # 🟢 Date-time bounded context
 │   │   ├── domain/             # Interfaces & contracts
-│   │   │   └── current-date-time-provider.interface.ts
+│   │   │   ├── current-date-time-provider.interface.ts
+│   │   │   └── index.ts
 │   │   └── infrastructure/     # Platform API adapters
-│   │       └── date-time-provider.ts
+│   │       ├── date-time-provider.ts
+│   │       └── index.ts
 │   │
-│   ├── performance/            # 🟢 Performance monitoring context
-│   │   ├── domain/             # Interfaces & contracts
-│   │   │   └── high-resolution-timestamp-provider.interface.ts
-│   │   └── infrastructure/     # Platform API adapters
-│   │       └── performance-timestamp-provider.ts
+│   ├── http-client/            # 🔵 HTTP communication context
+│   │   ├── application/        # Use cases & orchestration
+│   │   │   ├── interceptors/
+│   │   │   │   ├── logger/
+│   │   │   │   │   ├── request-logger.http-interceptor.ts
+│   │   │   │   │   └── response-logger.http-interceptor.ts
+│   │   │   │   ├── response-time/
+│   │   │   │   │   ├── response-time.constants.ts
+│   │   │   │   │   └── response-time.http-interceptor.ts
+│   │   │   │   ├── sequence-number/
+│   │   │   │   │   └── sequence-number.http-interceptor.ts
+│   │   │   │   ├── timestamp/
+│   │   │   │   │   └── timestamp.http-interceptor.ts
+│   │   │   │   ├── http-interceptor-next.type.ts
+│   │   │   │   └── http-interceptor.interface.ts
+│   │   │   └── index.ts
+│   │   ├── domain/             # Business contracts & value objects
+│   │   │   ├── method/
+│   │   │   │   └── http-method.ts
+│   │   │   ├── status/
+│   │   │   │   └── http-status.ts
+│   │   │   ├── http-client.interface.ts
+│   │   │   ├── http-request.interface.ts
+│   │   │   ├── http-response.interface.ts
+│   │   │   ├── http-url.ts
+│   │   │   └── index.ts
+│   │   └── infrastructure/     # Technical implementations
+│   │       ├── body-parsers/
+│   │       │   ├── json/
+│   │       │   │   └── json.response-body-parser.ts
+│   │       │   ├── text/
+│   │       │   │   └── text-plain.response-body-parser.ts
+│   │       │   └── response-body-parser.interface.ts
+│   │       ├── errors/
+│   │       │   ├── abort/
+│   │       │   │   └── http-abort-error.ts
+│   │       │   ├── network/
+│   │       │   │   └── http-network-error.ts
+│   │       │   └── payload/
+│   │       │       └── http-payload-error.ts
+│   │       ├── request-executor/
+│   │       │   ├── fetch/
+│   │       │   │   └── fetch.http-request-executor.ts
+│   │       │   └── http-request-executor.interface.ts
+│   │       ├── fetch-http-client.ts
+│   │       └── index.ts
 │   │
-│   └── http-client/            # 🔵 HTTP communication context
-│       ├── domain/             # Business contracts & value objects
-│       │   ├── http-client.interface.ts
-│       │   ├── http-request.interface.ts
-│       │   ├── http-response.interface.ts
-│       │   ├── http-url.ts
-│       │   ├── method/         # HTTP methods
-│       │   └── status/         # HTTP status codes
-│       │
-│       ├── application/        # Use cases & orchestration
-│       │   └── interceptors/   # Request/response interceptors
-│       │       ├── logger/     # Request/response logging
-│       │       ├── response-time/ # Response time tracking
-│       │       ├── sequence-number/ # Request sequencing
-│       │       └── timestamp/  # Request timestamping
-│       │
-│       └── infrastructure/     # Technical implementations
-│           ├── fetch-http-client.ts  # Fetch API adapter
-│           ├── body-parsers/         # Response body parsers
-│           │   ├── json/             # JSON parser
-│           │   └── text/             # Text parser
-│           ├── request-executor/     # Request execution
-│           │   └── fetch/            # Fetch implementation
-│           └── errors/               # HTTP error types
-│               ├── abort/            # Abort errors
-│               ├── network/          # Network errors
-│               └── payload/          # Payload errors
-│
-├── di/                          # 🔵 Dependency injection layer
-│   ├── http-client/            # HTTP client DI configuration
-│   │   ├── inject-functions/   # Injectable functions
-│   │   │   ├── assets-http-client.inject-function.ts
-│   │   │   └── vault-http-client.inject-function.ts
-│   │   ├── injection-tokens/   # DI tokens
-│   │   │   ├── assets-http-client.injection-token.ts
-│   │   │   └── vault-http-client.injection-token.ts
-│   │   └── providers/          # Provider configurations
-│   │       ├── assets-http-client.provider.ts
-│   │       └── vault-http-client.provider.ts
-│   │
-│   └── user-config/            # User configuration DI
-│       ├── inject-functions/   # Injectable functions
-│       │   └── user-config.inject-function.ts
-│       ├── injection-tokens/   # DI tokens
-│       │   └── user-config.injection-token.ts
-│       └── providers/          # Provider configurations
-│           └── user-config.provider.ts
+│   └── performance/            # 🟢 Performance monitoring context
+│       ├── domain/             # Interfaces & contracts
+│       │   ├── high-resolution-timestamp-provider.interface.ts
+│       │   └── index.ts
+│       └── infrastructure/     # Platform API adapters
+│           ├── index.ts
+│           └── performance-timestamp-provider.ts
 │
 └── shell/                       # 🔵 Application shell (Angular-specific)
-    ├── app.component.ts
+    ├── pages/
+    │   └── dashboard-page/      # Route components
+    │       ├── dashboard-page.component.html
+    │       ├── dashboard-page.component.scss
+    │       └── dashboard-page.component.ts
     ├── app.component.html
     ├── app.component.scss
-    ├── app.config.client.ts     # Client-side app configuration
-    ├── app.config.server.ts     # Server-side app configuration
-    ├── app.config.shared.ts     # Shared app configuration
-    ├── app.routes.ts            # Client routes
-    ├── app.routes.server.ts     # Server routes
-    └── pages/
-        └── dashboard-page/      # Route components
+    ├── app.component.ts
+    └── index.ts
 
-src/config/
-└── user/                        # 🟠 User configuration management
-    ├── user-config.interface.ts
-    ├── user-config-loader.ts
-    └── user-config-validator.ts
+src/app-providers/               # ⚪ Application-level providers (composition root)
+├── app-config/                  # Application configuration providers
+│   └── app-config.provider.ts
+├── assets-api-client/           # Assets API client providers
+│   └── assets-api-client.provider.ts
+├── vault-api-client/            # Vault API client providers
+│   └── vault-api-client.provider.ts
+└── index.ts                     # Exported provider functions
 
 src/testing/
 └── unit/                        # 🔵 Angular-specific test utilities
+    ├── http/
+    │   ├── fetch/
+    │   │   └── response-builder.ts
+    │   └── index.ts
+    ├── index.ts
+    └── setup-component.ts
 ```
 
 ---
@@ -359,20 +334,17 @@ src/testing/
 - Constructor-based dependency injection
 - Testable without Angular TestBed
 
-🟠 **Configuration Layer** (`config/user`):
-- User configuration management
-- Runtime config loading and validation
+🟠 **Configuration Layer** (`app/config/`):
+- Application configuration management
 - Type-safe configuration interfaces
-- Framework-agnostic business logic with minimal DI integration
+- Framework-agnostic business logic
 
-🔵 **Dependency Injection Layer** (`di/`):
-- Dependency injection configuration and wiring
+⚪ **Application Providers Layer** (`app-providers/`):
+- Application-level dependency injection configuration (composition root)
 - Bridge between framework-agnostic code and Angular DI
-- Organized by context (http-client, user-config, etc.)
-- Three-tier structure:
-  - `injection-tokens/` - DI tokens for type-safe injection
-  - `providers/` - Provider configurations
-  - `inject-functions/` - Convenience functions using Angular `inject()`
+- Provider functions that wire features and libs to Angular DI system
+- Organized by context (features, libs, and app-level configuration)
+- Simple `provide*()` functions that return Angular `Provider` objects
 - Uses `@angular/*` imports
 
 🔵 **Presentation Layer** (`shell/`, `presentation/`):
@@ -509,20 +481,20 @@ src/app/
 │       ├── infrastructure/     # 🟣 Pure TypeScript implementations
 │       └── presentation/       # 🔵 Angular components
 │
-├── lib/
-│   ├── {context-name}/         # Shared bounded context
-│   │   ├── domain/             # 🟠 Shared domain models
-│   │   ├── application/        # 🟢 Shared use cases (e.g., interceptors)
-│   │   └── infrastructure/     # 🟣 Shared implementations
-│   └── presentation/           # 🔵 Shared Angular components (future)
-│
-└── di/
-    └── {context-name}/         # 🔵 DI configuration for context
-        ├── inject-functions/   # Convenience functions using inject()
-        ├── injection-tokens/   # DI tokens
-        └── providers/          # Provider configurations
+└── lib/
+    ├── {context-name}/         # Shared bounded context
+    │   ├── domain/             # 🟠 Shared domain models
+    │   ├── application/        # 🟢 Shared use cases (e.g., interceptors)
+    │   └── infrastructure/     # 🟣 Shared implementations
+    └── presentation/           # 🔵 Shared Angular components (future)
+
+src/app-providers/              # ⚪ Application-level providers
+├── {feature-name}/             # Provider configuration for features
+│   └── {feature-name}.provider.ts  # Provider function
+└── {context-name}/             # Provider configuration for lib contexts
+    └── {context-name}.provider.ts  # Provider function
 ```
 
 ---
 
-**Last Updated**: January 13, 2026
+**Last Updated**: January 18, 2026

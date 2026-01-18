@@ -25,7 +25,7 @@ Keep the majority of codebase framework-agnostic using pure TypeScript. Only the
 - **Domain layer**: Pure TypeScript interfaces, types, and business logic
 - **Application layer**: Pure TypeScript use cases and orchestration
 - **Infrastructure layer**: Pure TypeScript adapters (no Angular decorators)
-- **DI layer**: Angular-specific DI configuration
+- **Application Providers** (`app-providers/`): Angular-specific DI configuration at root level
 - **Presentation layer**: Angular components, directives, pipes
 
 **Examples**:
@@ -61,18 +61,21 @@ export class HttpUserRepository implements UserRepository { // Pure class
   }
 }
 
-// di/user-repository/injection-tokens/user-repository.injection-token.ts (Angular-specific)
-export const USER_REPOSITORY = new InjectionToken<UserRepository>('UserRepository');
+// app-providers/user-repository/user-repository.provider.ts (Angular-specific, root-level)
+import { type Provider } from '@angular/core';
+import { UserRepository } from '@domain/user';
+import { HttpUserRepository } from '@infrastructure/user';
 
-// di/user-repository/providers/user-repository.provider.ts
-export function provideUserRepository(): Provider {
-  return { provide: USER_REPOSITORY, useClass: HttpUserRepository };
-}
+export const provideUserRepository = (): Provider => ({
+  provide: UserRepository,  // Class-based token
+  useClass: HttpUserRepository
+});
 
-// di/user-repository/inject-functions/user-repository.inject-function.ts
-export function injectUserRepository(): UserRepository {
-  return inject(USER_REPOSITORY);
-}
+// In component - use Angular's inject() directly
+import { inject } from '@angular/core';
+import { UserRepository } from '@domain/user';
+
+const userRepo = inject(UserRepository); // Simple, type-safe
 ```
 
 **What "Pure TypeScript" Means**:
@@ -84,7 +87,7 @@ export function injectUserRepository(): UserRepository {
 - ❌ No framework-specific types or utilities
 
 **Consequences**:
-- ✅ Framework migration affects only ~20% of codebase (Presentation + DI layers)
+- ✅ Framework migration affects only ~20% of codebase (Presentation + Providers)
 - ✅ Core business logic (Domain + Application) reusable across platforms
 - ✅ Simple, fast unit tests without TestBed or framework mocking
 - ✅ Easier to reason about dependencies and data flow
@@ -97,9 +100,11 @@ export function injectUserRepository(): UserRepository {
 **Related ADRs**:
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines framework-agnostic layers
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - What belongs in each layer
-- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Isolates Angular dependencies
-- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Wiring framework-agnostic code to Angular
+- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Deprecated, replaced by app-providers
+- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
 
 ---
+
+**Last Updated**: January 18, 2026
 
 **Last Updated**: January 11, 2026

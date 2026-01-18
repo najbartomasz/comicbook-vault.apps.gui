@@ -328,21 +328,18 @@ export class AuthHttpInterceptor implements HttpInterceptor {
 
 ### 5. DI Configuration
 ```typescript
-// lib/http/di/http-client.provider.ts
-import { InjectionToken, Provider } from '@angular/core';
-import { HttpClient } from '../domain/http-client';
-import { FetchHttpClient } from '../infrastructure/fetch-http-client.adapter';
+// app-providers/http-client/http-client.provider.ts
+import { type Provider } from '@angular/core';
+import { HttpClient } from '@lib/http-client/domain';
+import { FetchHttpClient } from '@lib/http-client/infrastructure';
 
-export const HTTP_CLIENT = new InjectionToken<HttpClient>('HttpClient');
-
-export const provideHttpClient = (): Provider[] => [
-  {
-    provide: HTTP_CLIENT,
-    useFactory: () => new FetchHttpClient(
-      'http://localhost:3000/api',  // Base URL from config
-      { 'X-App-Version': '1.0.0' }   // Default headers
-    )
-  }
+export const provideHttpClient = (): Provider => ({
+  provide: HttpClient,  // Class-based token
+  useFactory: () => new FetchHttpClient(
+    'http://localhost:3000/api',  // Base URL from config
+    { 'X-App-Version': '1.0.0' }   // Default headers
+  )
+});
 ];
 ```
 
@@ -635,13 +632,11 @@ If complexity grows and interceptor chains become essential:
 ```typescript
 // Easy to swap implementation
 // DI configuration:
-export const provideHttpClient = (): Provider[] => [
-  {
-    provide: HTTP_CLIENT,
-    // useClass: FetchHttpClient      // Current
-    useClass: AxiosHttpClient          // Future if needed
-  }
-];
+export const provideHttpClient = (): Provider => ({
+  provide: HttpClient,
+  // useClass: FetchHttpClient      // Current
+  useClass: AxiosHttpClient          // Future if needed
+});
 
 // Application and domain layers unchanged!
 // Only swap infrastructure adapter
@@ -650,8 +645,9 @@ export const provideHttpClient = (): Provider[] => [
 **Related ADRs**:
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Fetch client is infrastructure adapter
 - [ADR-004: Framework-Agnostic Core](./004-framework-agnostic-core.md) - Why HTTP client must be framework-agnostic
+- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
 - [ADR-012: Signals for State Management](./012-signals-for-state-management.md) - Promises work seamlessly with signals
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

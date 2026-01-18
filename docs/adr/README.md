@@ -23,10 +23,10 @@ An Architecture Decision Record is a short text file that describes:
 |---|-------|--------|---------|
 | [001](./001-layered-architecture.md) | Layered Architecture | ✅ Accepted | Strict separation of framework-agnostic business logic from framework-specific presentation code |
 | [002](./002-layer-placement-decision-tree.md) | Layer Placement Decision Tree | ✅ Accepted | Question-based guide for determining which layer a file belongs in |
-| [003](./003-ddd-layer-responsibilities.md) | DDD Layer Responsibilities | ✅ Accepted | Feature-first organization with explicit Domain, Application, Infrastructure, and DI layers |
+| [003](./003-ddd-layer-responsibilities.md) | DDD Layer Responsibilities | ✅ Accepted | Feature-first organization with explicit Domain, Application, and Infrastructure layers |
 | [004](./004-framework-agnostic-core.md) | Framework-Agnostic Core | ✅ Accepted | Keep majority of codebase framework-agnostic using pure TypeScript |
-| [005](./005-separate-di-layer.md) | Separate DI Layer | ✅ Accepted | Dedicated DI directory for Angular dependency injection configuration |
-| [006](./006-composition-root-pattern.md) | Composition Root Pattern | ✅ Accepted | Single place for all dependency injection configuration |
+| [005](./005-separate-di-layer.md) | Separate DI Layer | 📦 Deprecated | Replaced by simpler app-providers pattern at root level |
+| [006](./006-composition-root-pattern.md) | Composition Root Pattern | ✅ Accepted | Single place for all dependency injection configuration (updated for app-providers) |
 | [007](./007-dependency-analysis-automation.md) | Dependency Analysis Automation | ✅ Accepted | Automated dependency analysis enforcing layer boundaries with Dependency Cruiser |
 | [008](./008-strict-typescript-configuration.md) | Strict TypeScript Configuration | ✅ Accepted | Enable strict TypeScript mode for compile-time safety and better developer experience |
 | [009](./009-vitest-over-jest.md) | Vitest over Jest | ✅ Accepted | Use Vitest as primary test runner for faster execution and better ESM support |
@@ -87,4 +87,4 @@ When creating a new ADR, use this template:
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

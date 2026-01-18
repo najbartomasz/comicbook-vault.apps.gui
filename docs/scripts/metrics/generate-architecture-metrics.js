@@ -5,11 +5,19 @@ const { readdirSync, readFileSync, statSync, writeFileSync } = require('node:fs'
 const { extname, join, relative } = require('node:path');
 
 const ROOT_DIR = process.cwd();
-const SRC_DIR = join(ROOT_DIR, 'src', 'app');
+const SRC_DIR = join(ROOT_DIR, 'src');
 const ARCH_DOC_PATH = join(ROOT_DIR, 'docs', 'ARCHITECTURE.md');
 
 const isTestFile = (path) => path.includes('.spec.ts') || path.includes('testing/');
-const isAngularSpecific = (path) => path.startsWith('shell') || path.includes('/presentation/');
+const isAngularSpecific = (path) =>
+    path.includes('app/shell') ||
+    path.includes('/presentation/') ||
+    path.includes('app-providers/') ||
+    path.includes('main.') ||
+    path.includes('app.config.') ||
+    path.includes('app.routes.') ||
+    path.endsWith('server.ts'); // catch simple server.ts
+
 const isFrameworkAgnostic = (path) => !isTestFile(path) && !isAngularSpecific(path);
 
 const FILE_CATEGORIES = {

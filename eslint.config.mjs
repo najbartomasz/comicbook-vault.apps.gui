@@ -47,37 +47,44 @@ export default [
                     project: './tsconfig.app.json'
                 }
             },
-            'import/internal-regex': '^@(lib|features|shell|di|config|testing)/',
+            'import/internal-regex': '^@(lib|features|shell|api|config|testing)/',
             'boundaries/root-path': import.meta.dirname,
             'boundaries/dependency-nodes': ['import'],
             'boundaries/elements': [
-                {
-                    type: 'config',
-                    pattern: 'src/config/**',
-                    mode: 'file'
-                },
                 {
                     type: 'shell',
                     pattern: 'src/app/shell/**',
                     mode: 'file'
                 },
                 {
-                    type: 'di-injection-tokens',
-                    pattern: 'src/app/di/*/injection-tokens/**',
+                    type: 'api-domain',
+                    pattern: 'src/app/api/*/domain/**',
                     mode: 'file',
                     capture: ['contextName']
                 },
                 {
-                    type: 'di-inject-functions',
-                    pattern: 'src/app/di/*/inject-functions/**',
+                    type: 'api-application',
+                    pattern: 'src/app/api/*/application/**',
                     mode: 'file',
                     capture: ['contextName']
                 },
                 {
-                    type: 'di-providers',
-                    pattern: 'src/app/di/*/providers/**',
+                    type: 'api-infrastructure',
+                    pattern: 'src/app/api/*/infrastructure/**',
                     mode: 'file',
                     capture: ['contextName']
+                },
+                {
+                    type: 'config-domain',
+                    pattern: 'src/app/config/*/domain/**',
+                    mode: 'file',
+                    capture: ['configName']
+                },
+                {
+                    type: 'config-infrastructure',
+                    pattern: 'src/app/config/*/infrastructure/**',
+                    mode: 'file',
+                    capture: ['configName']
                 },
                 {
                     type: 'lib-domain',
@@ -127,9 +134,14 @@ export default [
                     type: 'testing',
                     pattern: 'src/testing/**',
                     mode: 'file'
+                },
+                {
+                    type: 'app-providers',
+                    pattern: 'src/app-providers/**',
+                    mode: 'file'
                 }
             ],
-            'boundaries/include': ['src/app/**', 'src/config/**', 'src/testing/**'],
+            'boundaries/include': ['src/app/**', 'src/app-providers/**', 'src/testing/**'],
             'boundaries/ignore': ['**/*.spec.ts', '**/*.e2e.spec.ts', '**/*.integration.spec.ts', '**/*.visual.spec.ts']
         },
         plugins: {
@@ -1301,12 +1313,7 @@ export default [
             'import/no-restricted-paths': 'error',
             'import/no-self-import': 'error',
             'import/no-unassigned-import': 'error',
-            'import/no-unresolved': [
-                'error',
-                {
-                    ignore: ['^@di/']
-                }
-            ],
+            'import/no-unresolved': 'error',
             'import/no-unused-modules': 'error',
             'import/no-useless-path-segments': 'error',
             'import/no-webpack-loader-syntax': 'error',
@@ -1676,65 +1683,82 @@ export default [
                 {
                     default: 'disallow',
                     rules: [
-                        // Config can import from lib layers
-                        {
-                            from: 'config',
-                            allow: ['config', 'lib-domain', 'lib-application', 'lib-infrastructure']
-                        },
-                        // Shell can import from lib, features, and config
+                        // Shell can import from lib, features, and api
                         {
                             from: 'shell',
-                            allow: ['shell', 'di-inject-functions', 'di-providers', 'config', 'lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'testing'],
-                            message: 'Shell cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
+                            allow: ['shell', 'api-domain', 'api-application', 'api-infrastructure', 'config-domain', 'config-infrastructure', 'lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'testing'],
+                            message: 'Shell cannot import from app-providers. App-providers should only be imported at application bootstrap level.'
                         },
-                        // DI tokens can use lib layers for factory definitions
+                        // API domain is framework-agnostic (pure TypeScript only)
                         {
-                            from: 'di-injection-tokens',
-                            allow: ['di-injection-tokens', 'di-inject-functions', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config'],
-                            message: 'DI tokens can import from other tokens, injections, lib layers, and config, but must not depend on providers.'
+                            from: 'api-domain',
+                            disallow: ['api-application', 'api-infrastructure', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
+                            allow: ['lib-domain', 'api-domain'],
+                            message: 'API domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.'
                         },
-                        // DI injections can use tokens and lib layers
+                        // API application is framework-agnostic (use cases and orchestration)
                         {
-                            from: 'di-inject-functions',
-                            allow: ['di-injection-tokens', 'di-inject-functions', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config'],
-                            message: 'DI injections can import tokens, lib layers, and config, but not providers.'
+                            from: 'api-application',
+                            disallow: ['api-infrastructure', 'lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
+                            allow: ['lib-domain', 'lib-application', 'api-domain', 'api-application', 'feature-domain'],
+                            message: 'API application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.'
                         },
-                        // DI providers can use everything in DI
+                        // API infrastructure is framework-agnostic (can use application and domain)
                         {
-                            from: 'di-providers',
-                            allow: ['di-injection-tokens', 'di-inject-functions', 'di-providers', 'lib-domain', 'lib-application', 'lib-infrastructure', 'config']
+                            from: 'api-infrastructure',
+                            disallow: ['lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell'],
+                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'api-domain', 'api-application', 'api-infrastructure', 'feature-domain', 'feature-application'],
+                            message: 'API infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.'
+                        },
+                        // Config domain is framework-agnostic (pure TypeScript only)
+                        {
+                            from: 'config-domain',
+                            disallow: ['config-infrastructure', 'api-application', 'api-infrastructure', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
+                            allow: ['lib-domain', 'config-domain'],
+                            message: 'Config domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.'
+                        },
+                        // Config infrastructure is framework-agnostic (can use application and domain)
+                        {
+                            from: 'config-infrastructure',
+                            disallow: ['lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell'],
+                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'config-domain', 'config-infrastructure', 'api-domain', 'api-application', 'api-infrastructure'],
+                            message: 'Config infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.'
+                        },
+                        // app-providers can import from every layer (composition root)
+                        {
+                            from: 'app-providers',
+                            allow: ['shell', 'api-domain', 'api-application', 'api-infrastructure', 'config-domain', 'config-infrastructure', 'lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'testing']
                         },
                         // Lib domain is framework-agnostic (pure TypeScript only)
                         {
                             from: 'lib-domain',
-                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-domain', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
                             allow: ['lib-domain'],
                             message: 'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.'
                         },
                         // Lib application is framework-agnostic (use cases and orchestration)
                         {
                             from: 'lib-application',
-                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
                             allow: ['lib-domain', 'lib-application', 'feature-domain'],
                             message: 'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.'
                         },
                         // Lib infrastructure is framework-agnostic (can use application and domain)
                         {
                             from: 'lib-infrastructure',
-                            disallow: ['lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell'],
                             allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'feature-domain', 'feature-application'],
                             message: 'Infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.'
                         },
                         // Lib presentation can use Angular and lower layers
                         {
                             from: 'lib-presentation',
-                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation', 'config'],
-                            message: 'Lib presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
+                            allow: ['lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation']
                         },
                         // Feature domain is framework-agnostic (pure TypeScript only)
                         {
                             from: 'feature-domain',
-                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-application', 'lib-infrastructure', 'lib-presentation', 'feature-application', 'feature-infrastructure', 'feature-presentation', 'shell'],
                             allow: [
                                 'lib-domain',
                                 ['feature-domain', { featureName: '${from.featureName}' }]
@@ -1744,7 +1768,7 @@ export default [
                         // Feature application is framework-agnostic (use cases and orchestration)
                         {
                             from: 'feature-application',
-                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-infrastructure', 'lib-presentation', 'feature-infrastructure', 'feature-presentation', 'shell'],
                             allow: [
                                 'lib-domain',
                                 'lib-application',
@@ -1756,7 +1780,7 @@ export default [
                         // Feature infrastructure is framework-agnostic (can use application and domain)
                         {
                             from: 'feature-infrastructure',
-                            disallow: ['lib-presentation', 'feature-presentation', 'shell', 'config'],
+                            disallow: ['lib-presentation', 'feature-presentation', 'shell'],
                             allow: [
                                 'lib-domain',
                                 'lib-application',
@@ -1775,13 +1799,11 @@ export default [
                                 'lib-application',
                                 'lib-infrastructure',
                                 'lib-presentation',
-                                'config',
                                 ['feature-domain', { featureName: '${from.featureName}' }],
                                 ['feature-application', { featureName: '${from.featureName}' }],
                                 ['feature-infrastructure', { featureName: '${from.featureName}' }],
                                 ['feature-presentation', { featureName: '${from.featureName}' }]
-                            ],
-                            message: 'Feature presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.'
+                            ]
                         }
                     ]
                 }
@@ -1791,30 +1813,26 @@ export default [
                 {
                     default: 'disallow',
                     rules: [
-                        // Config allows all internal imports
-                        {
-                            target: 'config',
-                            allow: '**'
-                        },
+
                         // Shell can access internal pages
                         {
                             target: 'shell',
                             allow: '**'
                         },
-                        // DI tokens must export through their index.ts (but can be imported directly within same context)
+                        // API layers must export through their index.ts
                         {
-                            target: 'di-injection-tokens',
-                            allow: '**/index.ts'
+                            target: ['api-domain', 'api-application', 'api-infrastructure'],
+                            allow: 'index.ts'
                         },
-                        // DI injections must export through their index.ts (but can import tokens directly)
+                        // Config layers must export through their index.ts
                         {
-                            target: 'di-inject-functions',
-                            allow: '**/index.ts'
+                            target: ['config-domain', 'config-infrastructure'],
+                            allow: 'index.ts'
                         },
-                        // DI providers must export through their index.ts (but can import injections/tokens directly)
+                        // app-providers must export through their index.ts
                         {
-                            target: 'di-providers',
-                            allow: '**/index.ts'
+                            target: 'app-providers',
+                            allow: 'index.ts'
                         },
                         // Feature layers must export through their index.ts
                         {
@@ -1825,11 +1843,6 @@ export default [
                         {
                             target: ['lib-domain', 'lib-application', 'lib-infrastructure', 'lib-presentation'],
                             allow: 'index.ts'
-                        },
-                        // Shell can access internal files
-                        {
-                            target: 'shell',
-                            allow: '**'
                         },
                         // Testing utilities must be imported through index.ts
                         {
@@ -1879,6 +1892,36 @@ export default [
                             from: 'feature-infrastructure',
                             disallow: ['@angular/**'],
                             message: 'Feature infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
+                        },
+                        // API domain cannot import Angular
+                        {
+                            from: 'api-domain',
+                            disallow: ['@angular/**'],
+                            message: 'API domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // API application cannot import Angular
+                        {
+                            from: 'api-application',
+                            disallow: ['@angular/**'],
+                            message: 'API application layer cannot import Angular. Keep application logic framework-agnostic.'
+                        },
+                        // API infrastructure cannot import Angular
+                        {
+                            from: 'api-infrastructure',
+                            disallow: ['@angular/**'],
+                            message: 'API infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
+                        },
+                        // Config domain cannot import Angular
+                        {
+                            from: 'config-domain',
+                            disallow: ['@angular/**'],
+                            message: 'Config domain layer cannot import Angular. Keep domain logic framework-agnostic.'
+                        },
+                        // Config infrastructure cannot import Angular
+                        {
+                            from: 'config-infrastructure',
+                            disallow: ['@angular/**'],
+                            message: 'Config infrastructure layer cannot import Angular. Keep infrastructure framework-agnostic.'
                         }
                     ]
                 }

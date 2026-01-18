@@ -4,9 +4,10 @@ import { page } from 'vitest/browser';
 
 import { setupComponent } from '@testing/unit';
 
+import { config as appConfigClient } from '../../app.config.client';
+import { config as appConfigServer } from '../../app.config.server';
+
 import { AppComponent } from './app.component';
-import { config as appConfigClient } from './app.config.client';
-import { config as appConfigServer } from './app.config.server';
 
 describe(AppComponent, () => {
     test('should display dashboard page by default', async () => {

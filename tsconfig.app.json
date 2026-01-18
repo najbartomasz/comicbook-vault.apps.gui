@@ -6,20 +6,17 @@
             "node"
         ],
         "paths": {
-            "@di/*/inject-functions": [
-                "src/app/di/*/inject-functions/index.ts"
-            ],
-            "@di/*/injection-tokens": [
-                "src/app/di/*/injection-tokens/index.ts"
-            ],
-            "@di/*/providers": [
-                "src/app/di/*/providers/index.ts"
-            ],
             "@shell": [
                 "src/app/shell/index.ts"
             ],
-            "@config/user": [
-                "src/config/user/index.ts"
+            "@api/*/infrastructure": [
+                "src/app/api/*/infrastructure/index.ts"
+            ],
+            "@config/*/domain": [
+                "src/app/config/*/domain/index.ts"
+            ],
+            "@config/*/infrastructure": [
+                "src/app/config/*/infrastructure/index.ts"
             ],
             "@lib/*/core": [
                 "src/app/lib/*/core/index.ts"
@@ -58,6 +55,6 @@
     ],
     "exclude": [
         "src/**/*.spec.ts",
-        "vitest*.ts",
+        "vitest*.ts"
     ]
 }

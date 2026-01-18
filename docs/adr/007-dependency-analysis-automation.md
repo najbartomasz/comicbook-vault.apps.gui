@@ -58,14 +58,14 @@ module.exports = {
       },
       comment: 'Infrastructure implements Domain interfaces only'
     },
-    // DI layer can depend on Domain + Infrastructure
+    // Application providers can depend on all layers (for DI setup)
     {
-      name: 'di-depends-domain-infrastructure',
-      from: { path: '**/di/**' },
+      name: 'providers-can-depend-on-all',
+      from: { path: '**/app-providers/**' },
       to: {
-        pathNot: ['**/di/**', '**/domain/**', '**/infrastructure/**']
+        pathNot: ['**/app-providers/**', '**/domain/**', '**/infrastructure/**', '**/application/**']
       },
-      comment: 'DI layer wires Domain and Infrastructure'
+      comment: 'Providers wire framework-agnostic code to Angular DI'
     },
     // No circular dependencies
     {
@@ -203,7 +203,9 @@ Automated metrics (updated in pre-commit):
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines the layers being enforced
 - [ADR-002: Layer Placement Decision Tree](./002-layer-placement-decision-tree.md) - How to determine correct layer
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - What belongs in each layer
+- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Deprecated, replaced by app-providers
+- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

@@ -22,19 +22,21 @@ Organize `lib/` using feature-first (bounded context) structure with explicit DD
 lib/
 ├── date-time/              # Bounded context: Date-time operations
 │   ├── domain/
-│   ├── infrastructure/
-│   └── [no application layer - simple feature]
+│   └── infrastructure/
 │
 ├── performance/            # Bounded context: Performance monitoring
 │   ├── domain/
-│   ├── infrastructure/
-│   └── [no application layer - simple feature]
+│   └── infrastructure/
 │
-└── http/                   # Bounded context: HTTP communication
+└── http-client/            # Bounded context: HTTP communication
     ├── domain/
     ├── application/
-    ├── infrastructure/
-    └── di/                 # Angular DI setup
+    └── infrastructure/
+
+app-providers/              # Application-level DI configuration (root level)
+├── app-config/
+├── assets-api-client/
+└── vault-api-client/
 ```
 
 **When to Create a New Bounded Context (Feature)**:
@@ -187,48 +189,7 @@ export class NetworkError extends Error {
 
 ---
 
-## 4. DI Layer (`di/`)
-**What belongs here:**
-- ✅ **Angular DI tokens** (`InjectionToken`)
-- ✅ **Provider functions** (`provideHttpClient()`)
-- ✅ **Inject helpers** (`injectVaultHttpClient()`)
-- ✅ **Factory functions** creating instances with dependencies
-- ✅ **Angular-specific configuration** for dependency injection
-
-**What does NOT belong here:**
-- ❌ Business logic (goes in domain/application)
-- ❌ Implementations (goes in infrastructure)
-- ❌ Interfaces (goes in domain)
-
-**Example:**
-```typescript
-// ✅ di/http-client/injection-tokens/vault-http-client.injection-token.ts
-export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
-
-// ✅ di/http-client/providers/vault-http-client.provider.ts
-export function provideVaultHttpClient(): Provider {
-  return { provide: VAULT_HTTP_CLIENT, useClass: FetchHttpClient };
-}
-
-// ✅ di/http-client/inject-functions/vault-http-client.inject-function.ts
-export function injectVaultHttpClient(): HttpClient {
-  return inject(VAULT_HTTP_CLIENT);
-}
-
-export function injectVaultHttpClient(): HttpClient {
-  return inject(VAULT_HTTP_CLIENT);
-}
-```
-
-**Characteristics:**
-- 🔴 Angular-specific (couples to framework)
-- 🟠 Depends on infrastructure and domain layers
-- 🔵 DI configuration only
-
-**When to create DI layer:**
-- ✅ Feature needs Angular dependency injection
-- ✅ Multiple configurations of same interface (VaultHttpClient, AssetsHttpClient)
-- ❌ Skip for features with no Angular integration
+**Note on DI Configuration**: Previously, a separate DI layer existed within features. As of January 2026, this has been replaced with a simpler `app-providers/` directory at root level for application-level dependency injection configuration. See [ADR-005](./005-separate-di-layer.md) and [ADR-006](./006-composition-root-pattern.md) for details.
 
 ---
 
@@ -241,7 +202,7 @@ Application  ←  (can import) ←  Domain, Application
     ↑
 Infrastructure ← (can import) ← Domain, Application, Infrastructure
     ↑
-DI           ← (can import) ← All layers (for DI setup)
+Providers    ← (can import) ← All layers (for DI setup, root-level app-providers/)
 ```
 
 **Barrel Files Strategy**:
@@ -290,9 +251,9 @@ This allows ESLint to enforce that only appropriate layers can import from infra
 **Related ADRs**:
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Overall architecture vision
 - [ADR-002: Layer Placement Decision Tree](./002-layer-placement-decision-tree.md) - Practical guide for deciding which layer
-- [ADR-005: Separate DI Layer for Dependency Injection](./005-separate-di-layer.md) - DI layer organization
-- [ADR-006: Composition Root Pattern for Dependency Injection](./006-composition-root-pattern.md) - DI composition strategy
+- [ADR-005: Separate DI Layer for Dependency Injection](./005-separate-di-layer.md) - Deprecated, replaced by app-providers
+- [ADR-006: Composition Root Pattern for Dependency Injection](./006-composition-root-pattern.md) - Updated for app-providers pattern
 
 ---
 
-Last Updated: January 11, 2026
+Last Updated: January 18, 2026

@@ -1,92 +1,92 @@
 # ADR-005: Separate DI Layer for Dependency Injection
 
-**Status**: ✅ Accepted
+**Status**: 📦 Deprecated
 
-**Context**:
+**Superseded by**: The `app-providers/` pattern at root level - simpler composition root without nested directory structure
+
+**Historical Context**:
 In the layered architecture (see ADR-001), we separate framework-agnostic code from Angular-specific code. Initially, Angular DI tokens and provider configurations were placed in the `lib/presentation` layer alongside UI components. This created several problems:
 - Importing HTTP client tokens from "presentation" felt semantically wrong - DI configuration is not a UI concern
 - Mixed responsibilities made the presentation layer harder to understand
 - Testing components required understanding DI setup mixed with UI code
 - No clear place to look for dependency configuration
 
-**Decision**:
-Create a dedicated `lib/di` directory for Angular Dependency Injection tokens, provider configurations, and inject helper functions. Keep `lib/presentation` exclusively for UI components, directives, and pipes.
+**Original Decision** (Now Deprecated):
+Create a dedicated `lib/di` and `app/di` directories for Angular Dependency Injection tokens, provider configurations, and inject helper functions with a three-tier structure (injection-tokens, providers, inject-functions).
 
-**Rationale**:
-- 🎯 **Clear separation**: DI configuration ≠ UI components - each layer has single responsibility
-- 📦 **Semantic imports**: `@app/di/http-client` clearly indicates dependency injection concern
-- 🧩 **Better organization**: All DI tokens in one predictable location, not scattered
-- 🔍 **Easier discovery**: Developers know where to find/add tokens without searching
-- 🧪 **Testability**: Can provide mock configurations without touching presentation layer
-- 🏗️ **Scalable**: Consistent pattern for adding new DI configuration across features
-- 🔒 **Enforceable**: ESLint boundaries prevent accidental mixing of concerns
+**Why Deprecated**:
+The three-tier DI layer structure (`injection-tokens/`, `providers/`, `inject-functions/`) proved to be **over-engineered** for this project's needs:
+- ⚠️ Too much ceremony: Creating three files (token, provider, inject-function) for simple providers
+- ⚠️ Unnecessary indirection: Most providers don't need custom injection tokens
+- ⚠️ Harder to navigate: Files spread across three subdirectories
+- ⚠️ Framework overhead: Fighting Angular's natural DI patterns instead of embracing them
 
-**Implementation**:
-
-DI configuration exists at two levels:
+**New Approach** (as of January 2026):
+Use Angular's built-in class-based DI with simple `provide*()` functions at root level:
 
 ```
-src/app/
-├── di/                     # ✅ Application-level DI (composition root)
-│   └── http-client/
-│       ├── inject-functions/
-│       │   ├── assets-http-client.inject-function.ts
-│       │   └── vault-http-client.inject-function.ts
-│
-├── lib/
-│   ├── infrastructure/      # Framework-agnostic implementations
-│   │
-│   ├── di/                 # ✅ Feature-level DI (reusable tokens)
-│   │   └── http-client/
-│   │       └── http-client.inject-function.ts  # Shared/base tokens
-│   │
-│   └── presentation/       # Angular UI components only
-│
-└── shell/
-    └── app.config.ts       # Imports from app/di/
+src/app-providers/              # Root-level composition root
+├── index.ts                    # Barrel exports
+├── app-config/
+│   └── app-config.provider.ts
+├── assets-api-client/
+│   └── assets-api-client.provider.ts
+└── vault-api-client/
+    └── vault-api-client.provider.ts
 ```
 
-**Note**: DI layer uses a three-tier structure with `inject-functions/*.inject-function.ts` files containing inject helper functions, `injection-tokens/*.token.ts` for DI tokens, and `providers/*.provider.ts` for provider configurations (see ADR-006).
+**Example of New Pattern**:
+```typescript
+// app-providers/vault-api-client/vault-api-client.provider.ts
+import { type Provider } from '@angular/core';
+import { createVaultApiClient, VaultApiClient } from '@api/vault/infrastructure';
+import { AppConfig } from '@config/app/domain';
 
-**ESLint Boundary Rules**:
+export const provideVaultApiClient = (): Provider => ({
+    provide: VaultApiClient,
+    useFactory: (appConfig: AppConfig) => createVaultApiClient(appConfig.vaultApiUrl.toString()),
+    deps: [AppConfig]
+});
 
-**What `lib-di` and `app-di` can import**:
-- ✅ `lib-domain` - Interface definitions
-- ✅ `lib-infrastructure` - Concrete implementations to wire up
-- ✅ `config` - Configuration values
+// app.config.ts
+import { provideVaultApiClient } from './app-providers';
 
-**What can import from DI layers**:
-- ✅ `app-di` - Application composition root
-- ✅ `lib-presentation` - UI components needing dependencies
-- ✅ `feature-presentation` - Feature-specific UI
-- ✅ `shell` - App shell and routing
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideVaultApiClient(),
+    // ...other providers
+  ]
+};
+```
 
-**What CANNOT import from DI layers**:
-- ❌ `lib-domain` - Must remain framework-agnostic
-- ❌ `lib-application` - Must remain framework-agnostic
-- ❌ `lib-infrastructure` - Must remain framework-agnostic
+**Benefits of New Approach**:
+- ✅ **Simpler**: One provider function file instead of three (token, provider, inject-function)
+- ✅ **Standard Angular**: Uses class-based tokens and `useFactory`
+- ✅ **Type-safe**: TypeScript ensures correct types without custom tokens
+- ✅ **Less boilerplate**: Reduced file count and complexity
+- ✅ **Clearer organization**: All providers at root level, not nested in `app/di`
+- ✅ **Easier testing**: Can still provide mock implementations via `TestBed.overrideProvider`
 
-**Why this matters**: Keeping framework-agnostic layers free from DI imports ensures they remain portable and testable without Angular.
-
-**Consequences**:
-- ✅ Clearer separation of concerns
-- ✅ More intuitive imports
-- ✅ Enforced by ESLint boundaries
-- ✅ Easier to locate DI configuration
-- ✅ Presentation layer focused on UI only
-- ⚠️ Additional directory to navigate
-- ⚠️ Team needs to learn new convention
-
-**Alternatives Considered**:
-- **Keep in `lib/presentation`**: Rejected - semantically confusing
-- **Put in `lib/infrastructure`**: Rejected - violates framework-agnostic principle
-- **Create `lib/providers`**: Rejected - "di" is more concise and clear
+**Migration Notes**:
+- Old `di/` directories removed
+- Injection tokens removed in favor of class-based tokens
+- Inject functions no longer needed - use Angular's `inject()` directly with class token
+- Provider functions now live in `app-providers/` at root level
 
 **Related ADRs**:
-- [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines the DI layer
-- [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Detailed responsibilities for DI layer
-- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - How DI configuration is composed
+- [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines architectural layers
+- [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Layer responsibilities
+- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026
+
+**Related ADRs**:
+- [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines architectural layers
+- [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Layer responsibilities
+- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
+
+---
+
+**Last Updated**: January 18, 2026
