@@ -10,6 +10,7 @@ import importPlugin from 'eslint-plugin-import';
 import promisePlugin from 'eslint-plugin-promise';
 import securityPlugin from 'eslint-plugin-security';
 import sonarjsPlugin from 'eslint-plugin-sonarjs';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 import { angularRules } from '../rules/angular.mjs';
@@ -54,16 +55,8 @@ export const typescriptConfig = [
                 sourceType: 'module'
             },
             globals: {
-                console: 'readonly',
-                process: 'readonly',
-                fetch: 'readonly',
-                structuredClone: 'readonly',
-                setTimeout: 'readonly',
-                clearTimeout: 'readonly',
-                setInterval: 'readonly',
-                clearInterval: 'readonly',
-                performance: 'readonly',
-                window: 'readonly'
+                ...globals.browser,
+                ...globals.node
             }
         },
         settings: {

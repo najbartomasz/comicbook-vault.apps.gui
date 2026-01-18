@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 const { execSync } = require('node:child_process');
 const { readdirSync, readFileSync, statSync, writeFileSync } = require('node:fs');
 const { extname, join, relative } = require('node:path');
@@ -66,8 +68,9 @@ const checkCircularDependencies = () => {
     }
 };
 
-const calculatePercentage = (part, total) =>
-    total > 0 ? ((part / total) * 100).toFixed(0) : 0;
+const calculatePercentage = (part, total) => (
+    total > 0 ? ((part / total) * 100).toFixed(0) : 0
+);
 
 const generateMetrics = () => {
     const allFiles = getAllFiles(SRC_DIR, ['.ts'], ['node_modules', 'dist']);

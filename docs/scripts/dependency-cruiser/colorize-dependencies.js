@@ -71,7 +71,7 @@ function createNodeStyle(layer) {
 
 const colorizeCluster = (line) =>
     CLUSTER_PATTERNS.reduce((result, { path, layer }) => (
-        result.replace(/subgraph "([^"]+)"\s*\{label=/g, (match, clusterName) => (
+        result.replaceAll(/subgraph "([^"]+)"\s*\{label=/g, (match, clusterName) => (
             path.test(clusterName)
                 ? `subgraph "${clusterName}" {${createClusterStyle(layer)}`
                 : match
@@ -83,13 +83,13 @@ const colorizeNode = (line) => {
     return layer
         ? line
             .split(/(\[[^\]]+\])/)
-            .map((part) =>
+            .map((part) => (
                 part.startsWith('[') && part.endsWith(']')
                     ? part
                         .replaceAll(/\s+(fillcolor|color|penwidth)="[^"]*"/g, '')
                         .replace('[label=', `[${createNodeStyle(layer)}`)
                     : part
-            )
+            ))
             .join('')
         : line;
 };
@@ -100,7 +100,7 @@ const main = () => {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
-        terminal: false,
+        terminal: false
     });
     const lines = [];
     rl.on('line', (line) => {

@@ -17,9 +17,9 @@ module.exports = {
             comment:
                 "This is an orphan module - it's likely not used (anymore?). Either use it or " +
                 "remove it. If it's logical this module is an orphan (i.e. it's a config file), " +
-                "add an exception for it in your dependency-cruiser configuration. By default " +
-                "this rule does not scrutinize dot-files (e.g. .eslintrc.js), TypeScript declaration " +
-                "files (.d.ts), tsconfig.json and some of the babel and webpack configs.",
+                'add an exception for it in your dependency-cruiser configuration. By default ' +
+                'this rule does not scrutinize dot-files (e.g. .eslintrc.js), TypeScript declaration ' +
+                'files (.d.ts), tsconfig.json and some of the babel and webpack configs.',
             severity: 'warn',
             from: {
                 orphan: true,
@@ -33,7 +33,7 @@ module.exports = {
                     '^src/server[.]ts$'                                                 // SSR server entry point
                 ]
             },
-            to: {},
+            to: {}
         },
 
         {
@@ -42,8 +42,8 @@ module.exports = {
             comment:
                 "This module depends on an npm package that isn't in the 'dependencies' section of your package.json. " +
                 "That's problematic as the package either (1) won't be available on live (2 - worse) will be " +
-                "available on live with an non-guaranteed version. Fix it by adding the package to the dependencies " +
-                "in your package.json.",
+                'available on live with an non-guaranteed version. Fix it by adding the package to the dependencies ' +
+                'in your package.json.',
             from: {},
             to: {
                 dependencyTypes: [
@@ -67,8 +67,8 @@ module.exports = {
             name: 'no-duplicate-dep-types',
             comment:
                 "Likely this module depends on an external ('npm') package that occurs more than once " +
-                "in your package.json i.e. bot as a devDependencies and in dependencies. This will cause " +
-                "maintenance problems later on.",
+                'in your package.json i.e. bot as a devDependencies and in dependencies. This will cause ' +
+                'maintenance problems later on.',
             severity: 'warn',
             from: {},
             to: {
@@ -76,7 +76,7 @@ module.exports = {
                 // as it's pretty common to have a type import be a type only import
                 // _and_ (e.g.) a devDependency - don't consider type-only dependency
                 // types for this rule
-                dependencyTypesNot: ["type-only"]
+                dependencyTypesNot: ['type-only']
             }
         },
 
@@ -109,7 +109,7 @@ module.exports = {
             },
             to: {
                 dependencyTypes: [
-                    'npm-dev',
+                    'npm-dev'
                 ],
                 // type only dependencies are not a problem as they don't end up in the
                 // production code or are ignored by the runtime.
@@ -140,12 +140,13 @@ module.exports = {
         {
             name: 'lib-domain-pure',
             severity: 'error',
-            comment: 'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.',
+            comment:
+                'Domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.',
             from: {
                 path: '^src/app/lib/[^/]+/domain/'
             },
             to: {
-                path: '^src/app/(lib/[^/]+/(application|infrastructure|presentation)|features/|shell/|config/)'
+                path: String.raw`^src/app/(lib/[^/]+/(application|infrastructure|presentation)|features/|shell/|config/)`
             }
         },
         {
@@ -162,14 +163,16 @@ module.exports = {
         {
             name: 'feature-domain-pure',
             severity: 'error',
-            comment: 'Feature domain layer cannot import from infrastructure or presentation layers. Keep domain logic pure and framework-agnostic.',
+            comment:
+                'Feature domain layer cannot import from infrastructure or presentation layers. ' +
+                'Keep domain logic pure and framework-agnostic.',
             from: {
-                path: '^src/app/features/([^/]+)/domain/'
+                path: String.raw`^src/app/features/([^/]+)/domain/`
             },
             to: {
                 pathNot: [
-                    '^src/app/lib/[^/]+/domain/',
-                    '^src/app/features/\\1/domain/'
+                    String.raw`^src/app/lib/[^/]+/domain/`,
+                    String.raw`^src/app/features/\1/domain/`
                 ]
             }
         },
@@ -189,12 +192,13 @@ module.exports = {
         {
             name: 'lib-application-framework-agnostic',
             severity: 'error',
-            comment: 'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.',
+            comment:
+                'Application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.',
             from: {
                 path: '^src/app/lib/[^/]+/application/'
             },
             to: {
-                path: '^src/app/(lib/[^/]+/(infrastructure|presentation)|features/[^/]+/(application|infrastructure|presentation)|shell/|config/)'
+                path: String.raw`^src/app/(lib/[^/]+/(infrastructure|presentation)|features/[^/]+/(application|infrastructure|presentation)|shell/|config/)`
             }
         },
         {
@@ -211,12 +215,14 @@ module.exports = {
         {
             name: 'feature-application-framework-agnostic',
             severity: 'error',
-            comment: 'Feature application layer cannot import from infrastructure or presentation layers. Keep application logic framework-agnostic.',
+            comment:
+                'Feature application layer cannot import from infrastructure or presentation layers. ' +
+                'Keep application logic framework-agnostic.',
             from: {
-                path: '^src/app/features/([^/]+)/application/'
+                path: String.raw`^src/app/features/([^/]+)/application/`
             },
             to: {
-                path: '^src/app/(lib/[^/]+/(infrastructure|presentation)|features/(?!\\1/)[^/]+/|features/\\1/(infrastructure|presentation)|shell/|config/)'
+                path: String.raw`^src/app/(lib/[^/]+/(infrastructure|presentation)|features/(?!\1/)[^/]+/|features/\1/(infrastructure|presentation)|shell/|config/)`
             }
         },
 
@@ -240,7 +246,7 @@ module.exports = {
                 path: '^src/app/lib/[^/]+/infrastructure/'
             },
             to: {
-                path: '^src/app/(lib/[^/]+/presentation|features/[^/]+/(infrastructure|presentation)|shell/|config/)'
+                path: String.raw`^src/app/(lib/[^/]+/presentation|features/[^/]+/(infrastructure|presentation)|shell/|config/)`
             }
         },
         {
@@ -259,10 +265,10 @@ module.exports = {
             severity: 'error',
             comment: 'Feature infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.',
             from: {
-                path: '^src/app/features/([^/]+)/infrastructure/'
+                path: String.raw`^src/app/features/([^/]+)/infrastructure/`
             },
             to: {
-                path: '^src/app/(lib/[^/]+/presentation|features/(?!\\1/)[^/]+/|features/\\1/presentation|shell/|config/)'
+                path: String.raw`^src/app/(lib/[^/]+/presentation|features/(?!\1/)[^/]+/|features/\1/presentation|shell/|config/)`
             }
         },
 
@@ -279,6 +285,17 @@ module.exports = {
             }
         },
         {
+            name: 'lib-presentation-no-di-providers',
+            severity: 'error',
+            comment: 'Lib presentation cannot import DI providers. Providers are for configuration only.',
+            from: {
+                path: '^src/app/lib/[^/]+/presentation/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/providers/'
+            }
+        },
+        {
             name: 'feature-presentation-no-di-tokens',
             severity: 'error',
             comment: 'Feature presentation cannot import DI tokens directly. Use injection functions from di-inject-functions instead.',
@@ -290,14 +307,25 @@ module.exports = {
             }
         },
         {
+            name: 'feature-presentation-no-di-providers',
+            severity: 'error',
+            comment: 'Feature presentation cannot import DI providers. Providers are for configuration only.',
+            from: {
+                path: '^src/app/features/[^/]+/presentation/'
+            },
+            to: {
+                path: '^src/app/di/[^/]+/providers/'
+            }
+        },
+        {
             name: 'feature-presentation-same-feature-only',
             severity: 'error',
             comment: 'Feature presentation can only import from its own feature or shared lib modules.',
             from: {
-                path: '^src/app/features/([^/]+)/presentation/'
+                path: String.raw`^src/app/features/([^/]+)/presentation/`
             },
             to: {
-                path: '^src/app/features/(?!\\1/)[^/]+/'
+                path: String.raw`^src/app/features/(?!\1/)[^/]+/`
             }
         },
 
@@ -325,6 +353,17 @@ module.exports = {
             }
         },
         {
+            name: 'di-no-presentation',
+            severity: 'error',
+            comment: 'DI layer cannot import from presentation layer.',
+            from: {
+                path: '^src/app/di/'
+            },
+            to: {
+                path: '^src/app/(lib/[^/]+/presentation|features/[^/]+/presentation|shell/)'
+            }
+        },
+        {
             name: 'shell-no-di-tokens',
             severity: 'error',
             comment: 'Shell cannot import DI tokens directly. Use injection functions from di-inject-functions instead.',
@@ -345,7 +384,7 @@ module.exports = {
                 pathNot: '^src/app/di/([^/]+)/injection-tokens/'
             },
             to: {
-                path: '^src/app/di/([^/]+)/injection-tokens/(?!index\\.ts$)',
+                path: String.raw`^src/app/di/([^/]+)/injection-tokens/(?!index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         },
@@ -357,7 +396,7 @@ module.exports = {
                 pathNot: '^src/app/di/([^/]+)/inject-functions/'
             },
             to: {
-                path: '^src/app/di/([^/]+)/inject-functions/(?!index\\.ts$)',
+                path: String.raw`^src/app/di/([^/]+)/inject-functions/(?!index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         },
@@ -369,19 +408,20 @@ module.exports = {
                 pathNot: '^src/app/di/([^/]+)/providers/'
             },
             to: {
-                path: '^src/app/di/([^/]+)/providers/(?!index\\.ts$)',
+                path: String.raw`^src/app/di/([^/]+)/providers/(?!index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         },
         {
             name: 'lib-layer-entry-point',
             severity: 'error',
-            comment: 'Lib layers must export through their index.ts (barrel files only). Import from the index.ts barrel file.',
+            comment:
+                'Lib layers must export through their index.ts (barrel files only). Import from the index.ts barrel file.',
             from: {
                 pathNot: '^src/app/lib/([^/]+)/(domain|application|infrastructure|presentation)/'
             },
             to: {
-                path: '^src/app/lib/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\\.ts$)',
+                path: String.raw`^src/app/lib/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         },
@@ -393,7 +433,7 @@ module.exports = {
                 pathNot: '^src/app/features/([^/]+)/(domain|application|infrastructure|presentation)/'
             },
             to: {
-                path: '^src/app/features/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\\.ts$)',
+                path: String.raw`^src/app/features/([^/]+)/(domain|application|infrastructure|presentation)/(?!index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         },
@@ -405,7 +445,7 @@ module.exports = {
                 pathNot: '^src/testing/'
             },
             to: {
-                path: '^src/testing/(?!.*/index\\.ts$)',
+                path: String.raw`^src/testing/(?!.*/index\.ts$)`,
                 pathNot: '[.]spec[.]ts$'
             }
         }
@@ -424,9 +464,9 @@ module.exports = {
             fileName: 'tsconfig.app.json'
         },
         enhancedResolveOptions: {
-            exportsFields: ["exports"],
-            conditionNames: ["import", "require", "node", "default", "types"],
-            mainFields: ["main", "types", "typings"]
+            exportsFields: ['exports'],
+            conditionNames: ['import', 'require', 'node', 'default', 'types'],
+            mainFields: ['main', 'types', 'typings']
         },
         skipAnalysisNotInRules: true,
         reporterOptions: {
@@ -434,8 +474,8 @@ module.exports = {
                 collapsePattern: 'node_modules/(?:@[^/]+/[^/]+|[^/]+)',
                 theme: {
                     graph: {
-                        splines: "polyline",
-                        rankdir: "LR"
+                        splines: 'polyline',
+                        rankdir: 'LR'
                     }
                 }
             },
