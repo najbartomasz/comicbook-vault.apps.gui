@@ -37,6 +37,12 @@ npm run build
 
 Build artifacts are stored in the `dist/` directory.
 
+To preview the production build (SSR):
+
+```bash
+npm run serve:ssr:comicbook-vault.apps.gui
+```
+
 ---
 
 ## 🧪 Testing
@@ -46,16 +52,19 @@ Build artifacts are stored in the `dist/` directory.
 ```bash
 npm test                   # Run all tests
 npm run test:unit          # Run unit tests only
-npm run test:unit:visual   # Run visual regression tests
+npm run test:integration   # Run integration tests
+npm run test:visual        # Run visual regression tests
 ```
 
 ### Linting
 
 ```bash
-npm run lint               # Check code and styles
+npm run lint               # Check code, styles and dependencies
 npm run lint:fix           # Auto-fix issues
+npm run lint:code          # Check code only
 npm run lint:styles        # Check styles only
 npm run lint:styles:fix    # Auto-fix style issues
+npm run lint:deps          # Check dependency rules
 ```
 
 ---
@@ -120,6 +129,7 @@ When pushing commits that modify `package.json`:
 Always runs on push:
 - Checks for circular dependencies (fails if found)
 - Checks for orphaned files (fails if found)
+- Checks for unexpected module resolution warnings (fails if found)
 ## 🛠️ Tech Stack
 
 - **Framework**: Angular 21 (Zoneless) + Angular Material
