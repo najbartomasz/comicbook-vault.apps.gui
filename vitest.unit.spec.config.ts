@@ -4,7 +4,6 @@ import vitestConfig from './vitest.config';
 
 export default mergeConfig(vitestConfig, defineConfig({
     test: {
-        exclude: ['**/*.visual.spec.ts'],
         coverage: {
             reportsDirectory: './coverage/unit',
             thresholds: {
@@ -20,9 +19,6 @@ export default mergeConfig(vitestConfig, defineConfig({
                 functions: [100, 100],
                 lines: [100, 100]
             }
-        },
-        browser: {
-            headless: process.env['CI'] === 'true'
         }
     }
 }));

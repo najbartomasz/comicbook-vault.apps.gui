@@ -83,13 +83,26 @@
                     },
                     "configurations": {
                         "unit": {
-                            "runnerConfig": "vitest.unit.spec.config.ts"
+                            "runnerConfig": "vitest.unit.spec.config.ts",
+                            "include": [
+                                "**/*.spec.ts"
+                            ],
+                            "exclude": [
+                                "**/*.integration.spec.ts",
+                                "**/*.visual.spec.ts"
+                            ]
                         },
                         "integration": {
-                            "runnerConfig": "vitest.integration.spec.config.ts"
+                            "runnerConfig": "vitest.integration.spec.config.ts",
+                            "include": [
+                                "**/*.integration.spec.ts"
+                            ]
                         },
                         "visual": {
-                            "runnerConfig": "vitest.visual.spec.config.ts"
+                            "runnerConfig": "vitest.visual.spec.config.ts",
+                            "include": [
+                                "**/*.visual.spec.ts"
+                            ]
                         }
                     }
                 },
