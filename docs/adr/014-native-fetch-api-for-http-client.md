@@ -13,16 +13,14 @@ The application needs an HTTP client for API communication that works in both br
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-@Injectable()  // Angular-specific decorator
+@Injectable()
 export class UserApiService {
-  constructor(private http: HttpClient) {}  // Angular dependency
+  public constructor(private readonly http: HttpClient) {}
 
-  getUsers() {
-    return this.http.get('/api/users');  // RxJS Observable
+  public getUsers() {
+    return this.http.get('/api/users');
   }
 }
-// Violates framework-agnostic architecture
-// Cannot reuse in Node.js, Deno, or other frameworks
 ```
 
 2. **RxJS dependency**:
@@ -54,7 +52,6 @@ describe('UserApiService', () => {
     service = TestBed.inject(UserApiService);
     httpMock = TestBed.inject(HttpTestingController);
   });
-  // Complex setup just to mock HTTP
 });
 ```
 
@@ -118,28 +115,28 @@ import { HttpClient, HttpResponse, RequestOptions, HttpMethod } from '../domain/
 import { NetworkError, TimeoutError, HttpError } from '../domain/errors';
 
 export class FetchHttpClient implements HttpClient {
-  constructor(
-    private baseUrl: string = '',
-    private defaultHeaders: Record<string, string> = {}
+  public constructor(
+    private readonly baseUrl: string = '',
+    private readonly defaultHeaders: Record<string, string> = {}
   ) {}
 
-  async get<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async get<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('GET', url, undefined, options);
   }
 
-  async post<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async post<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('POST', url, body, options);
   }
 
-  async put<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async put<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('PUT', url, body, options);
   }
 
-  async patch<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async patch<T>(url: string, body: unknown, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('PATCH', url, body, options);
   }
 
-  async delete<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async delete<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
     return this.request<T>('DELETE', url, undefined, options);
   }
 
@@ -245,7 +242,7 @@ export class FetchHttpClient implements HttpClient {
 ```typescript
 // lib/http/domain/errors.ts
 export class HttpError extends Error {
-  constructor(
+  public constructor(
     public status: number,
     public statusText: string,
     public data?: unknown
@@ -256,14 +253,14 @@ export class HttpError extends Error {
 }
 
 export class NetworkError extends Error {
-  constructor(message: string) {
+  public constructor(message: string) {
     super(message);
     this.name = 'NetworkError';
   }
 }
 
 export class TimeoutError extends Error {
-  constructor(message: string) {
+  public constructor(message: string) {
     super(message);
     this.name = 'TimeoutError';
   }
@@ -290,7 +287,7 @@ export interface HttpHandler {
 
 // Example: Logging Interceptor
 export class LoggingHttpInterceptor implements HttpInterceptor {
-  async intercept(request: HttpRequest, next: HttpHandler): Promise<HttpResponse<unknown>> {
+  public async intercept(request: HttpRequest, next: HttpHandler): Promise<HttpResponse<unknown>> {
     console.log(`[HTTP] ${request.method} ${request.url}`);
     const startTime = Date.now();
 
@@ -309,9 +306,9 @@ export class LoggingHttpInterceptor implements HttpInterceptor {
 
 // Example: Auth Interceptor
 export class AuthHttpInterceptor implements HttpInterceptor {
-  constructor(private getToken: () => string | null) {}
+  public constructor(private readonly getToken: () => string | null) {}
 
-  async intercept(request: HttpRequest, next: HttpHandler): Promise<HttpResponse<unknown>> {
+  public async intercept(request: HttpRequest, next: HttpHandler): Promise<HttpResponse<unknown>> {
     const token = this.getToken();
 
     if (token) {
@@ -326,7 +323,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
 }
 ```
 
-### 5. DI Configuration
+### 5. Provider Configuration
 ```typescript
 // app-providers/http-client/http-client.provider.ts
 import { type Provider } from '@angular/core';
@@ -350,9 +347,9 @@ import { HttpClient } from '@/lib/http/domain/http-client';
 import { Comic } from '../domain/comic';
 
 export class GetComicsUseCase {
-  constructor(private httpClient: HttpClient) {}
+  public constructor(private readonly httpClient: HttpClient) {}
 
-  async execute(): Promise<Comic[]> {
+  public async execute(): Promise<Comic[]> {
     try {
       const response = await this.httpClient.get<Comic[]>('/comics');
       return response.data;
@@ -381,12 +378,12 @@ import { GetComicsUseCase } from '../application/get-comics.use-case';
   `
 })
 export class ComicListComponent {
-  comics = signal<Comic[]>([]);
-  loading = signal(false);
+  public comics = signal<Comic[]>([]);
+  public loading = signal(false);
 
-  private getComicsUseCase = inject(GetComicsUseCase);
+  private readonly getComicsUseCase = inject(GetComicsUseCase);
 
-  async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     this.loading.set(true);
     try {
       const comics = await this.getComicsUseCase.execute();
@@ -481,7 +478,7 @@ export interface HttpClient {
 // ✅ Infrastructure layer - platform adapter
 // lib/http/infrastructure/fetch-http-client.ts
 export class FetchHttpClient implements HttpClient {
-  async get<T>(url: string) {
+  public async get<T>(url: string) {
     const response = await fetch(url);  // Platform API
     return { data: await response.json(), status: response.status };
   }
@@ -491,9 +488,9 @@ export class FetchHttpClient implements HttpClient {
 // ✅ Application layer - business logic
 // app/users/application/get-users.use-case.ts
 export class GetUsersUseCase {
-  constructor(private http: HttpClient) {}  // Depends on interface
+  public constructor(private readonly http: HttpClient) {}  // Depends on interface
 
-  async execute() {
+  public async execute() {
     const response = await this.http.get<User[]>('/users');
     return response.data.filter(u => u.active);
   }
@@ -546,12 +543,12 @@ setTimeout(() => controller.abort(), 5000);
 ```typescript
 // application/retry-http-client.ts
 export class RetryHttpClient implements HttpClient {
-  constructor(
-    private client: HttpClient,
-    private maxRetries: number = 3
+  public constructor(
+    private readonly client: HttpClient,
+    private readonly maxRetries: number = 3
   ) {}
 
-  async get<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
+  public async get<T>(url: string, options?: RequestOptions): Promise<HttpResponse<T>> {
     let lastError: Error;
 
     for (let attempt = 0; attempt < this.maxRetries; attempt++) {

@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Definitions for arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="white" />
+
+  <!-- === Row 1 Area === -->
+
+  <!-- Shell (Centered over Features) -->
+  <!-- Features span x=50 to x=450. Center x=250. Shell width=300. Pos x=100. -->
+  <g transform="translate(100, 20)">
+    <rect x="0" y="0" width="300" height="100" rx="5" fill="#e3f2fd" stroke="#03A9F4" stroke-width="2"/>
+    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🔵 Shell</text>
+
+    <!-- Shell Internals -->
+    <g transform="translate(20, 40)">
+        <rect x="0" y="0" width="120" height="40" rx="3" fill="#81D4FA" stroke="#03A9F4" stroke-width="1"/>
+        <text x="60" y="25" text-anchor="middle" font-family="Arial" font-size="12">Layout</text>
+    </g>
+    <g transform="translate(160, 40)">
+        <rect x="0" y="0" width="120" height="40" rx="3" fill="#81D4FA" stroke="#03A9F4" stroke-width="1"/>
+        <text x="60" y="25" text-anchor="middle" font-family="Arial" font-size="12">Feature Pages</text>
+    </g>
+  </g>
+
+  <!-- Providers (Next to Shell) -->
+  <!-- Shell ends at x=400. Gap 50. Providers start x=450. -->
+  <g transform="translate(450, 30)">
+    <rect x="0" y="0" width="300" height="80" rx="5" fill="#f5f5f5" stroke="#9E9E9E" stroke-width="2"/>
+    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">⚪ Application Providers</text>
+
+    <!-- Composition Root Node -->
+    <rect x="50" y="35" width="200" height="35" rx="3" fill="#E0E0E0" stroke="#9E9E9E" stroke-width="1"/>
+    <text x="150" y="58" text-anchor="middle" font-family="Arial" font-size="12">Composition Root (DI)</text>
+  </g>
+
+
+  <!-- === Row 2: Features & API === -->
+
+  <!-- Features (Vertical Slices) -->
+  <g transform="translate(50, 180)">
+    <rect x="0" y="0" width="400" height="185" rx="5" fill="#FCE4EC" stroke="#C2185B" stroke-width="2"/>
+    <text x="200" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟥 Features (Vertical Slices)</text>
+
+    <!-- Feature A -->
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="140" height="135" rx="3" fill="#f9f9f9" stroke="#C2185B" stroke-width="1"/>
+      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Feature A</text>
+      <!-- Layers -->
+      <rect x="10" y="30" width="120" height="20" rx="2" fill="#81D4FA" stroke="#03A9F4" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Presentation</text>
+      <rect x="10" y="55" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
+      <rect x="10" y="80" width="120" height="20" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="70" y="94" text-anchor="middle" font-family="Arial" font-size="9">Application</text>
+      <rect x="10" y="105" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="70" y="119" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+    </g>
+
+    <!-- Feature B -->
+    <g transform="translate(240, 40)">
+      <rect x="0" y="0" width="140" height="110" rx="3" fill="#f9f9f9" stroke="#C2185B" stroke-width="1"/>
+      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Feature B</text>
+      <!-- Layers -->
+      <rect x="10" y="30" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
+      <rect x="10" y="55" width="120" height="20" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Application</text>
+      <rect x="10" y="80" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="70" y="94" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+    </g>
+  </g>
+
+  <!-- API (Right side of Features, Under Providers) -->
+  <g transform="translate(500, 215)">
+    <rect x="0" y="0" width="250" height="120" rx="5" fill="#f3e5f5" stroke="#9C27B0" stroke-width="2"/>
+    <text x="125" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟣 API</text>
+
+    <rect x="25" y="40" width="200" height="30" rx="3" fill="#ffffff" stroke="#9C27B0" stroke-width="1"/>
+    <text x="125" y="60" text-anchor="middle" font-family="Arial" font-size="12">External API A</text>
+
+    <rect x="25" y="80" width="200" height="30" rx="3" fill="#ffffff" stroke="#9C27B0" stroke-width="1"/>
+    <text x="125" y="100" text-anchor="middle" font-family="Arial" font-size="12">External API B</text>
+  </g>
+
+  <!-- === Row 3: Libs (Dependencied of Features) === -->
+  <g transform="translate(50, 420)">
+    <rect x="0" y="0" width="400" height="160" rx="5" fill="#E0F2F1" stroke="#00897B" stroke-width="2"/>
+    <text x="200" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟩 Libs (Horizontal Slices)</text>
+
+    <!-- Context A -->
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="140" height="110" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
+      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Shared Context A</text>
+      <!-- Layers -->
+      <rect x="10" y="30" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
+      <rect x="10" y="55" width="120" height="20" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Application</text>
+      <rect x="10" y="80" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="70" y="94" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+    </g>
+
+    <!-- Context B -->
+    <g transform="translate(240, 40)">
+      <rect x="0" y="0" width="140" height="85" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
+      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Shared Context B</text>
+      <!-- Layers -->
+      <rect x="10" y="30" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
+      <rect x="10" y="55" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+    </g>
+  </g>
+
+  <!-- === CONNECTIONS === -->
+
+  <!-- Shell -> Features (Presentation Layer uses Feature Pages) -->
+  <!-- Shell center 100+150=250. Features center 50+200=250. -->
+  <line x1="250" y1="120" x2="250" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Features -> API (Lateral Dependency) -->
+  <!-- Features Right 450. API Left 500. -->
+  <line x1="450" y1="275" x2="500" y2="275" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Features -> Libs (Downward Dependency) -->
+  <!-- Features center 250. Libs center 250. -->
+  <line x1="250" y1="365" x2="250" y2="420" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Feature B (Left) -> Feature A (Right) -->
+  <!-- Feature B is at x=240 inside Features group. Feature A is at x=20. -->
+  <!-- Abs Coords: B-Left 50+240=290. A-Right 50+20+140=210. -->
+  <!-- Feature B App layer y=55-75 (center 65). Feature A Infra layer y=55-75 (center 65). -->
+  <line x1="290" y1="285" x2="210" y2="285" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+  <!-- Context A -> Context B (Updated to Match Features: B -> A direction) -->
+  <!-- Abs Coords: B-Left 290. A-Right 210. -->
+  <line x1="290" y1="500" x2="210" y2="500" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+  <!-- Providers -> Shell -->
+  <!-- Providers Left 450. Shell Right 400. Y approx 190. -->
+  <line x1="450" y1="70" x2="400" y2="70" stroke="#666" stroke-width="1" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+  <!-- Providers -> API -->
+  <!-- Providers Bottom y=150+80=230. Center x=450+150=600. -->
+  <!-- API Top y=335. Center x=500+125=625. -->
+  <line x1="600" y1="110" x2="625" y2="215" stroke="#666" stroke-width="1" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+</svg>

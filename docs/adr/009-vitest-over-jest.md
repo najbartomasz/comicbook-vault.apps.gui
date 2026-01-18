@@ -61,7 +61,7 @@ $ npm run test:watch
 
 ### 3. Jest-Compatible API
 ```typescript
-// Same API as Jest - easy migration
+// ✅ Same API as Jest - easy migration
 import { describe, it, expect, vi } from 'vitest';
 
 describe('UserValidator', () => {
@@ -79,7 +79,7 @@ describe('UserValidator', () => {
 
 ### 4. Browser Mode for Component Tests
 ```typescript
-// Test Angular components in real browser (Playwright)
+// ✅ Test Angular components in real browser (Playwright)
 import { test, expect } from 'vitest';
 
 test('LoginComponent renders form', async () => {
@@ -191,8 +191,7 @@ npm run test:coverage
 Vitest excels at testing our layered architecture:
 
 ```typescript
-// ✅ Domain layer: Pure TypeScript, instant tests
-// domain/user-validator.spec.ts
+// ✅ domain/user-validator.spec.ts (Domain layer: Pure TypeScript, instant tests)
 describe('UserValidator', () => {
   it('validates email', () => {
     expect(validator.isValidEmail('test@example.com')).toBe(true);
@@ -200,8 +199,7 @@ describe('UserValidator', () => {
   // ⚡ Runs in < 1ms, no framework needed
 });
 
-// ✅ Application layer: Mock domain interfaces
-// application/authenticate-user.use-case.spec.ts
+// ✅ application/authenticate-user.use-case.spec.ts (Application layer: Mock domain interfaces)
 describe('AuthenticateUserUseCase', () => {
   it('calls authenticator', async () => {
     const mockAuthenticator = vi.fn();
@@ -212,8 +210,7 @@ describe('AuthenticateUserUseCase', () => {
   // ⚡ Mocks are fast, no Angular needed
 });
 
-// ✅ Infrastructure layer: Test platform integrations
-// infrastructure/fetch-http-client.spec.ts
+// ✅ infrastructure/fetch-http-client.spec.ts (Infrastructure layer: Test platform integrations)
 describe('FetchHttpClient', () => {
   it('makes GET request', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
@@ -226,8 +223,7 @@ describe('FetchHttpClient', () => {
   // ✅ Can test fetch without Angular
 });
 
-// ✅ Presentation layer: Visual tests in browser
-// presentation/login.component.visual.spec.ts
+// ✅ presentation/login.component.visual.spec.ts (Presentation layer: Visual tests in browser)
 test('LoginComponent', async () => {
   const component = mount(LoginComponent);
   await expect(component.getByRole('button')).toBeVisible();
@@ -299,4 +295,4 @@ const mock = vi.fn();
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

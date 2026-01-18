@@ -15,7 +15,7 @@ The framework-agnostic infrastructure layer contains pure TypeScript implementat
 Adopt the **Composition Root Pattern** by creating `app-providers/` directory at root level as the single place where all application-level dependency injection configuration happens. All provider factories live in this directory.
 
 **Evolution Note**:
-Originally (ADR-005), we used a three-tier DI structure with `injection-tokens/`, `providers/`, and `inject-functions/` subdirectories nested in `app/di`. This proved over-engineered. The current approach uses simple provider functions with Angular's built-in class-based tokens.
+Originally (ADR-005 - now deprecated), we used a three-tier DI structure nested in `app/di`. This proved over-engineered. The current approach uses simple provider functions with Angular's built-in class-based tokens.
 
 **Rationale**:
 - 🎯 **Single Responsibility**: Providers directory has one job - wire dependencies together
@@ -35,62 +35,62 @@ src/app-providers/              # Composition Root (root-level, not in app/)
 ├── index.ts                    # Barrel exports
 ├── app-config/
 │   └── app-config.provider.ts
-├── assets-api-client/
-│   └── assets-api-client.provider.ts
-└── vault-api-client/
-    └── vault-api-client.provider.ts
+├── auth-provider/
+│   └── auth.provider.ts
+└── logger-provider/
+    └── logger.provider.ts
 
 src/app/
 ├── lib/                        # Framework-agnostic implementations
-│   └── http-client/
+│   └── auth/
 │       ├── domain/             # Interfaces (what)
 │       ├── application/        # Use cases (how)
 │       └── infrastructure/     # Implementations (concrete)
 │
 └── shell/
-    └── app.config.ts           # Imports providers from root-level app-providers/
+    └── app.config.client.ts    # Imports providers from root-level app-providers/
 ```
 
 **File Naming Convention**:
 - `*.provider.ts` - Contains `provide*()` function that returns Angular `Provider`
-- Name should match the context (e.g., `vault-api-client.provider.ts`)
+- Name should match the context (e.g., `auth.provider.ts`)
 - Use kebab-case for file names, camelCase for function names
 
 **Pattern Example**:
 ```typescript
-// app-providers/vault-api-client/vault-api-client.provider.ts
+// ✅ app-providers/auth-provider/auth.provider.ts
 import { type Provider } from '@angular/core';
-import { createVaultApiClient, VaultApiClient } from '@api/vault/infrastructure';
-import { AppConfig } from '@config/app/domain';
+import { AuthService } from '@lib/auth/domain';
+import { HttpAuthService } from '@lib/auth/infrastructure';
+import { AppConfig } from '@app-providers/app-config';
 
-export const provideVaultApiClient = (): Provider => ({
-    provide: VaultApiClient,  // Class-based token (no custom InjectionToken needed)
+export const provideAuthService = (): Provider => ({
+    provide: AuthService,  // Class-based token (no custom InjectionToken needed)
     useFactory: (appConfig: AppConfig) =>
-        createVaultApiClient(appConfig.vaultApiUrl.toString()),
+        new HttpAuthService(appConfig.apiUrl),
     deps: [AppConfig]
 });
 
-// app-providers/index.ts
+// ✅ app-providers/index.ts
 export { provideAppConfig } from './app-config/app-config.provider';
-export { provideAssetsApiClient } from './assets-api-client/assets-api-client.provider';
-export { provideVaultApiClient } from './vault-api-client/vault-api-client.provider';
+export { provideAuthService } from './auth-provider/auth.provider';
 
-// app.config.ts
-import { provideVaultApiClient, provideAppConfig } from '../app-providers';
+// ✅ app.config.client.ts
+import { provideAuthService, provideAppConfig } from './app-providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppConfig(),
-    provideVaultApiClient(),  // All composition happens here
+    provideAuthService(),  // All composition happens here
     // ...other providers
   ]
 };
 
-// In component - use Angular's inject() with class token
+// ✅ In component - use Angular's inject() with class token
 import { inject } from '@angular/core';
-import { VaultApiClient } from '@api/vault/infrastructure';
+import { AuthService } from '@lib/auth/domain';
 
-const client = inject(VaultApiClient); // Type-safe, no custom token needed
+const client = inject(AuthService); // Type-safe, no custom token needed
 ```
 
 **Usage Guidelines**:
@@ -103,7 +103,7 @@ const client = inject(VaultApiClient); // Type-safe, no custom token needed
 
 2. **When to create provider configuration**:
    - ✅ Application-level dependencies that need configuration
-   - ✅ Multiple instances of same type (VaultApiClient, AssetsApiClient)
+   - ✅ Multiple instances of same type (AuthService, LoggerService)
    - ✅ Dependencies requiring other dependencies (factory pattern)
    - ✅ Need to swap implementations (production vs testing)
    - ❌ Simple classes with no dependencies - use `providedIn: 'root'` directly
@@ -142,7 +142,6 @@ const client = inject(VaultApiClient); // Type-safe, no custom token needed
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines architectural layers
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Defines what belongs in each layer
 - [ADR-004: Framework-Agnostic Core](./004-framework-agnostic-core.md) - Providers bridge framework-agnostic code to Angular
-- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Deprecated in favor of simpler app-providers pattern
 
 ---
 

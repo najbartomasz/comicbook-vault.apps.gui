@@ -255,6 +255,7 @@ bootstrapApplication(AppComponent, appConfig)
 
 // app.config.ts - Application configuration
 import { ApplicationConfig } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
@@ -471,11 +472,11 @@ Standalone components fit perfectly with our layered architecture:
 })
 export class ComicListComponent {
   // Injects use case from Application layer
-  private getComicsUseCase = inject(GetComicsUseCase);
+  private readonly getComicsUseCase = inject(GetComicsUseCase);
 
-  comics = signal<Comic[]>([]);
+  protected readonly comics = signal<Comic[]>([]);
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getComicsUseCase.execute().then(result => {
       this.comics.set(result);
     });
@@ -543,4 +544,4 @@ export class ComicListComponent {
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

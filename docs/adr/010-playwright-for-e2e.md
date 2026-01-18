@@ -48,7 +48,7 @@ test('user can login', async ({ page }) => {
 
 ### 2. Multi-Browser Support
 ```typescript
-// Test in Chromium, Firefox, and WebKit (Safari)
+// ✅ Test in Chromium, Firefox, and WebKit (Safari)
 import { test } from '@playwright/test';
 
 test('works in all browsers', async ({ page, browserName }) => {
@@ -113,7 +113,7 @@ test('mock API response', async ({ page }) => {
 
 ### 5. Mobile Testing
 ```typescript
-// Test on mobile devices
+// ✅ Test on mobile devices
 import { devices } from '@playwright/test';
 
 test.use(devices['iPhone 13']);
@@ -133,9 +133,9 @@ e2e/
   auth/
     login.spec.ts           ← Login flow
     signup.spec.ts          ← Signup flow
-  comics/
-    browse-comics.spec.ts   ← Browse comics catalog
-    comic-details.spec.ts   ← View comic details
+  products/
+    browse-products.spec.ts ← Browse products catalog
+    product-details.spec.ts ← View product details
   fixtures/
     auth.ts                 ← Reusable auth helpers
     test-data.ts            ← Test data generators
@@ -210,21 +210,22 @@ export default defineConfig({
 Organize E2E tests using Page Object Model for maintainability:
 
 ```typescript
+// ✅ Page Object Model implementation
 // e2e/pages/login.page.ts
 export class LoginPage {
-  constructor(private page: Page) {}
+  public constructor(private page: Page) {}
 
-  async goto() {
+  public async goto() {
     await this.page.goto('/login');
   }
 
-  async login(username: string, password: string) {
+  public async login(username: string, password: string) {
     await this.page.fill('input[name="username"]', username);
     await this.page.fill('input[name="password"]', password);
     await this.page.click('button[type="submit"]');
   }
 
-  async expectLoginError(message: string) {
+  public async expectLoginError(message: string) {
     await expect(this.page.getByText(message)).toBeVisible();
   }
 }
@@ -257,6 +258,7 @@ test.describe('Login', () => {
 **Fixtures for Reusable Setup**:
 
 ```typescript
+// ✅ Reusable setup fixtures
 // e2e/fixtures/auth.ts
 import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
@@ -273,13 +275,13 @@ export const test = base.extend({
   },
 });
 
-// e2e/comics/browse-comics.spec.ts
+// e2e/products/browse-products.spec.ts
 import { test } from '../fixtures/auth';
 
-test('browse comics as authenticated user', async ({ authenticatedPage }) => {
+test('browse products as authenticated user', async ({ authenticatedPage }) => {
   // Already logged in!
-  await authenticatedPage.goto('/comics');
-  await expect(authenticatedPage.getByRole('heading', { name: 'Comics' })).toBeVisible();
+  await authenticatedPage.goto('/products');
+  await expect(authenticatedPage.getByRole('heading', { name: 'Products' })).toBeVisible();
 });
 ```
 
@@ -348,23 +350,23 @@ jobs:
 
 1. **Use data-testid for selectors**:
 ```typescript
-// ✅ Good - stable selector
+// ✅ stable selector
 await page.click('[data-testid="login-button"]');
 
-// ❌ Bad - fragile selector (breaks if text changes)
+// ❌ fragile selector (breaks if text changes)
 await page.click('button:text("Log In")');
 ```
 
 2. **Test user flows, not implementation**:
 ```typescript
-// ✅ Good - tests user flow
-test('user can add comic to collection', async ({ page }) => {
-  await page.goto('/comics/1');
-  await page.click('[data-testid="add-to-collection"]');
-  await expect(page.getByText('Added to collection')).toBeVisible();
+// ✅ tests user flow
+test('user can add product to cart', async ({ page }) => {
+  await page.goto('/products/1');
+  await page.click('[data-testid="add-to-cart"]');
+  await expect(page.getByText('Added to cart')).toBeVisible();
 });
 
-// ❌ Bad - tests implementation details
+// ❌ tests implementation details
 test('add button calls API', async ({ page }) => {
   const apiCalled = false;
   // Don't test API calls in E2E - test behavior
@@ -373,11 +375,11 @@ test('add button calls API', async ({ page }) => {
 
 3. **Avoid hard-coded waits**:
 ```typescript
-// ❌ Bad - brittle timing
+// ❌ brittle timing
 await page.click('button');
 await page.waitForTimeout(3000); // What if it takes 4 seconds?
 
-// ✅ Good - wait for specific condition
+// ✅ wait for specific condition
 await page.click('button');
 await expect(page.getByText('Success')).toBeVisible();
 ```
@@ -456,9 +458,9 @@ test('test 2', async ({ page }) => {
    - ❌ Smaller community and ecosystem
 
 **Related ADRs**:
-- [ADR-009: Vitest over Jest](./009-vitest-over-jest.md) - Unit and integration testing strategy
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Framework-agnostic architecture enables better E2E testing
+- [ADR-009: Vitest over Jest](./009-vitest-over-jest.md) - Unit and integration testing strategy
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

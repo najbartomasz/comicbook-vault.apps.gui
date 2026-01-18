@@ -12,17 +12,17 @@ Angular's reactivity evolved from Zone.js-based change detection to a signals-ba
 // ❌ RxJS for simple component state - overkill
 export class UserProfileComponent {
   private userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
+  public user$ = this.userSubject.asObservable();
 
   // Just to show/hide loading spinner!
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$ = this.loadingSubject.asObservable();
+  public loading$ = this.loadingSubject.asObservable();
 
-  setUser(user: User) {
+  public setUser(user: User): void {
     this.userSubject.next(user);
   }
 
-  setLoading(loading: boolean) {
+  public setLoading(loading: boolean): void {
     this.loadingSubject.next(loading);
   }
 }
@@ -38,7 +38,7 @@ export class UserProfileComponent {
 export class ComicListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.comicsService.comics$
       .pipe(takeUntil(this.destroy$))
       .subscribe(comics => this.comics = comics);
@@ -46,7 +46,7 @@ export class ComicListComponent implements OnInit, OnDestroy {
     // If you forget destroy$ or takeUntil → memory leak
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -94,19 +94,19 @@ import { Component, signal, computed, effect } from '@angular/core';
 })
 export class CounterComponent {
   // Writable signal
-  count = signal(0);
+  public count = signal(0);
 
   // Computed signal (derived state)
-  doubled = computed(() => this.count() * 2);
+  public doubled = computed(() => this.count() * 2);
 
   // Effect (side effect when signal changes)
-  constructor() {
+  public constructor() {
     effect(() => {
       console.log('Count changed:', this.count());
     });
   }
 
-  increment() {
+  public increment(): void {
     this.count.update(value => value + 1);
   }
 }
@@ -129,11 +129,11 @@ export class CounterComponent {
   `
 })
 export class UserProfileComponent {
-  loading = signal(false);
-  user = signal<User | null>(null);
-  theme = signal<'light' | 'dark'>('light');
+  public loading = signal(false);
+  public user = signal<User | null>(null);
+  public theme = signal<'light' | 'dark'>('light');
 
-  toggleTheme() {
+  public toggleTheme(): void {
     this.theme.update(current => current === 'light' ? 'dark' : 'light');
   }
 }
@@ -150,20 +150,20 @@ export class UserProfileComponent {
   `
 })
 export class CartComponent {
-  items = signal<CartItem[]>([]);
-  taxRate = signal(0.1);
+  public items = signal<CartItem[]>([]);
+  public taxRate = signal(0.1);
 
   // Computed signals automatically update
-  total = computed(() =>
+  public total = computed(() =>
     this.items().reduce((sum, item) => sum + item.price * item.quantity, 0)
   );
 
-  tax = computed(() => this.total() * this.taxRate());
+  public tax = computed(() => this.total() * this.taxRate());
 
-  grandTotal = computed(() => this.total() + this.tax());
+  public grandTotal = computed(() => this.total() + this.tax());
 
   // Update items → all computed values automatically recalculate
-  addItem(item: CartItem) {
+  public addItem(item: CartItem): void {
     this.items.update(items => [...items, item]);
   }
 }
@@ -184,18 +184,18 @@ export class CartComponent {
   `
 })
 export class SignupFormComponent {
-  username = signal('');
-  email = signal('');
+  public username = signal('');
+  public email = signal('');
 
-  isValid = computed(() =>
+  public isValid = computed(() =>
     this.username().length >= 3 && this.email().includes('@')
   );
 
-  updateUsername(event: Event) {
+  public updateUsername(event: Event): void {
     this.username.set((event.target as HTMLInputElement).value);
   }
 
-  updateEmail(event: Event) {
+  public updateEmail(event: Event): void {
     this.email.set((event.target as HTMLInputElement).value);
   }
 }
@@ -213,12 +213,12 @@ export class SignupFormComponent {
   `
 })
 export class ComicListComponent {
-  comics = signal<Comic[]>([]);
-  loading = signal(false);
+  public comics = signal<Comic[]>([]);
+  public loading = signal(false);
 
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loading.set(true);
 
     // RxJS for HTTP request
@@ -244,13 +244,13 @@ export class ComicListComponent {
   `
 })
 export class DashboardComponent {
-  userName = signal('');
-  comicCount = signal(0);
+  public userName = signal('');
+  public comicCount = signal(0);
 
-  private user$ = this.userService.currentUser$;
-  private comics$ = this.comicsService.comics$;
+  private readonly user$ = this.userService.currentUser$;
+  private readonly comics$ = this.comicsService.comics$;
 
-  ngOnInit() {
+  public ngOnInit(): void {
     // Combine multiple observables
     combineLatest([this.user$, this.comics$])
       .subscribe(([user, comics]) => {
@@ -271,12 +271,12 @@ export class DashboardComponent {
   `
 })
 export class SearchComponent {
-  searchTerm = signal('');
-  searchResults = signal<string[]>([]);
+  public searchTerm = signal('');
+  public searchResults = signal<string[]>([]);
 
   private searchSubject = new Subject<string>();
 
-  ngOnInit() {
+  public ngOnInit(): void {
     // RxJS for debouncing
     this.searchSubject.pipe(
       debounceTime(300),
@@ -287,7 +287,7 @@ export class SearchComponent {
     });
   }
 
-  onSearch(event: Event) {
+  public onSearch(event: Event): void {
     const term = (event.target as HTMLInputElement).value;
     this.searchTerm.set(term);
     this.searchSubject.next(term);  // Emit to RxJS stream
@@ -363,11 +363,11 @@ effect((onCleanup) => {
   `
 })
 export class ComicListComponent {
-  state = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
-  comics = signal<Comic[]>([]);
-  error = signal<string | null>(null);
+  public state = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+  public comics = signal<Comic[]>([]);
+  public error = signal<string | null>(null);
 
-  async loadComics() {
+  public async loadComics(): Promise<void> {
     this.state.set('loading');
 
     try {
@@ -398,29 +398,29 @@ export class ComicListComponent {
   `
 })
 export class PaginatedListComponent {
-  allItems = signal<Item[]>([]);
-  currentPage = signal(0);
-  pageSize = signal(10);
+  public allItems = signal<Item[]>([]);
+  public currentPage = signal(0);
+  public pageSize = signal(10);
 
   // Computed signals for pagination
-  totalPages = computed(() =>
+  public totalPages = computed(() =>
     Math.ceil(this.allItems().length / this.pageSize())
   );
 
-  paginatedItems = computed(() => {
+  public paginatedItems = computed(() => {
     const start = this.currentPage() * this.pageSize();
     const end = start + this.pageSize();
     return this.allItems().slice(start, end);
   });
 
-  hasPrevious = computed(() => this.currentPage() > 0);
-  hasNext = computed(() => this.currentPage() < this.totalPages() - 1);
+  public hasPrevious = computed(() => this.currentPage() > 0);
+  public hasNext = computed(() => this.currentPage() < this.totalPages() - 1);
 
-  nextPage() {
+  public nextPage(): void {
     this.currentPage.update(page => page + 1);
   }
 
-  previousPage() {
+  public previousPage(): void {
     this.currentPage.update(page => page - 1);
   }
 }
@@ -445,20 +445,20 @@ export class PaginatedListComponent {
   `
 })
 export class SelectableListComponent {
-  items = signal<Item[]>([]);
-  selectedIds = signal<Set<string>>(new Set());
+  public items = signal<Item[]>([]);
+  public selectedIds = signal<Set<string>>(new Set());
 
-  selectedCount = computed(() => this.selectedIds().size);
+  public selectedCount = computed(() => this.selectedIds().size);
 
-  allSelected = computed(() =>
+  public allSelected = computed(() =>
     this.selectedIds().size === this.items().length
   );
 
-  isSelected(id: string): boolean {
+  public isSelected(id: string): boolean {
     return this.selectedIds().has(id);
   }
 
-  toggleSelection(id: string) {
+  public toggleSelection(id: string): void {
     this.selectedIds.update(ids => {
       const newIds = new Set(ids);
       if (newIds.has(id)) {
@@ -470,11 +470,11 @@ export class SelectableListComponent {
     });
   }
 
-  selectAll() {
+  public selectAll(): void {
     this.selectedIds.set(new Set(this.items().map(item => item.id)));
   }
 
-  clearSelection() {
+  public clearSelection(): void {
     this.selectedIds.set(new Set());
   }
 }
@@ -487,17 +487,17 @@ import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 @Component({})
 export class InteropComponent {
   // Convert Observable to Signal
-  private user$ = this.userService.currentUser$;
-  user = toSignal(this.user$, { initialValue: null });
+  private readonly user$ = this.userService.currentUser$;
+  public user = toSignal(this.user$, { initialValue: null });
 
   // Use in template without async pipe
   // {{ user()?.name }}
 
   // Convert Signal to Observable
-  searchTerm = signal('');
-  searchTerm$ = toObservable(this.searchTerm);
+  public searchTerm = signal('');
+  public searchTerm$ = toObservable(this.searchTerm);
 
-  results$ = this.searchTerm$.pipe(
+  public results$ = this.searchTerm$.pipe(
     debounceTime(300),
     switchMap(term => this.searchService.search(term))
   );
@@ -516,10 +516,10 @@ export class InteropComponent {
   `
 })
 export class OptimizedComponent {
-  count = signal(0);
-  otherValue = 'static';
+  public count = signal(0);
+  public otherValue = 'static';
 
-  increment() {
+  public increment(): void {
     this.count.update(c => c + 1);
     // Only updates {{ count() }} in template, not the whole component
   }
@@ -546,13 +546,13 @@ const displayAge = computed(() => `Age: ${age()}`);
 // ❌ Before (RxJS for simple state)
 export class UserComponent {
   private userSubject = new BehaviorSubject<User | null>(null);
-  user$ = this.userSubject.asObservable();
+  public user$ = this.userSubject.asObservable();
 
-  displayName$ = this.user$.pipe(
+  public displayName$ = this.user$.pipe(
     map(user => user ? `${user.firstName} ${user.lastName}` : 'Guest')
   );
 
-  setUser(user: User) {
+  public setUser(user: User): void {
     this.userSubject.next(user);
   }
 }
@@ -562,14 +562,14 @@ export class UserComponent {
 
 // ✅ After (Signals)
 export class UserComponent {
-  user = signal<User | null>(null);
+  public user = signal<User | null>(null);
 
-  displayName = computed(() => {
+  public displayName = computed(() => {
     const user = this.user();
     return user ? `${user.firstName} ${user.lastName}` : 'Guest';
   });
 
-  setUser(user: User) {
+  public setUser(user: User): void {
     this.user.set(user);
   }
 }
@@ -582,21 +582,21 @@ export class UserComponent {
 
 1. **Use signals for synchronous state**
 ```typescript
-// ✅ Good
-loading = signal(false);
-user = signal<User | null>(null);
+// ✅
+public loading = signal(false);
+public user = signal<User | null>(null);
 
-// ❌ Avoid
-loading$ = new BehaviorSubject(false);
+// ❌
+public loading$ = new BehaviorSubject(false);
 ```
 
 2. **Use computed for derived state**
 ```typescript
-// ✅ Good
-total = computed(() => this.items().reduce(...));
+// ✅
+public total = computed(() => this.items().reduce(...));
 
-// ❌ Avoid manually updating derived state
-updateItems(items: Item[]) {
+// ❌
+public updateItems(items: Item[]): void {
   this.items.set(items);
   this.total.set(items.reduce(...));  // Don't do this!
 }
@@ -604,19 +604,19 @@ updateItems(items: Item[]) {
 
 3. **Don't overuse effects**
 ```typescript
-// ❌ Bad - effect for simple computation
+// ❌ Effect for simple computation
 effect(() => {
   this.doubled.set(this.count() * 2);
 });
 
-// ✅ Good - use computed instead
-doubled = computed(() => this.count() * 2);
+// ✅ Use computed instead
+public doubled = computed(() => this.count() * 2);
 ```
 
 4. **Combine signals and RxJS appropriately**
 ```typescript
-// ✅ Good - RxJS for HTTP, signals for state
-ngOnInit() {
+// ✅ RxJS for HTTP, signals for state
+public ngOnInit(): void {
   this.http.get<Data>('/api/data').subscribe(
     data => this.data.set(data)  // Update signal
   );
@@ -667,4 +667,4 @@ ngOnInit() {
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

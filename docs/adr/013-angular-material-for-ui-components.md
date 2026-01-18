@@ -185,10 +185,10 @@ $custom-typography: mat.define-typography-config(
 
 ### 6. Tree-Shakable (Optimized Bundle)
 ```typescript
-// ❌ Bad - imports entire library
+// ❌ imports entire library
 import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 
-// ✅ Good - imports only what you need
+// ✅ imports only what you need
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
@@ -267,14 +267,14 @@ import { MatButtonModule } from '@angular/material/button';
   `
 })
 export class LoginFormComponent {
-  loginForm = this.fb.group({
+  public loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder) {}
+  public constructor(private readonly fb: FormBuilder) {}
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.loginForm.valid) {
       // Call use case (application layer)
       const { username, password } = this.loginForm.value;
@@ -320,8 +320,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   `
 })
 export class ComicsTableComponent {
-  comics = signal<Comic[]>([]);
-  displayedColumns = ['title', 'author', 'year'];
+  public comics = signal<Comic[]>([]);
+  public displayedColumns = ['title', 'author', 'year'];
 }
 ```
 
@@ -356,9 +356,9 @@ export class DeleteConfirmationDialogComponent {}
   // ...
 })
 export class ComicListComponent {
-  dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
-  deleteComic(comic: Comic) {
+  public deleteComic(comic: Comic): void {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent);
 
     dialogRef.afterClosed().subscribe(confirmed => {
@@ -379,9 +379,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   // ...
 })
 export class ComicFormComponent {
-  snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
 
-  saveComic() {
+  public saveComic(): void {
     // Call use case
     this.saveComicUseCase.execute(comic).then(() => {
       this.snackBar.open('Comic saved successfully!', 'Close', {
@@ -428,7 +428,7 @@ import { MatCardModule } from '@angular/material/card';
 // ❌ Don't create a "MaterialModule" that imports everything
 // This prevents tree-shaking
 
-// ✅ Good - each component imports its own Material modules
+// ✅ each component imports its own Material modules
 @Component({
   imports: [MatButtonModule, MatCardModule]
 })
@@ -497,4 +497,4 @@ import { MatCardModule } from '@angular/material/card';
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

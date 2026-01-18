@@ -31,10 +31,12 @@ You are an expert documenter. You know markdown language very well. You know how
 - Update both conceptual diagrams AND detailed graphs if structure changes
 - Preserve SVG graph links and tips section
 - Ensure all paths use forward slashes and match actual project structure
+- When describing structures containing layers (e.g. Project Structure), always order them from top to bottom: Presentation -> Infrastructure -> Application -> Domain
 
 ### Layer Color Standards (ordered top to bottom)
 - 🔵 Blue = Presentation Layer
 - 🟣 Purple = Infrastructure Layer
+- 🟢 Green = Application Layer
 - 🟠 Orange = Domain Layer
 - 🟩 Teal = Lib Container
 - 🟥 Rose = Features Container
@@ -63,3 +65,9 @@ Each ADR file must follow this structure:
 - Keep ADRs immutable - mark old ones as deprecated and create new ADR if decision changes
 - Link related ADRs when they reference each other
 - Maintain consistent formatting and style across all ADRs
+
+### Code Examples
+- **Generic Content**: Keep ADRs generic. Do not use real application code; use generic domain concepts (e.g., `User`, `Auth`, `Storage`) for examples.
+- **Explicit Modifiers**: Class methods and properties in examples must have explicit access modifiers (`public`, `protected`, or `#`).
+- **Interface Naming**: When providing code examples for interfaces, always use the `.interface.ts` extension in the file path comment (e.g., `// domain/user.interface.ts`)
+- **Example Validation**: Always mark anti-patterns with `// ❌` and recommended solutions with `// ✅`.

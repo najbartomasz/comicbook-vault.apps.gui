@@ -31,7 +31,7 @@ Keep the majority of codebase framework-agnostic using pure TypeScript. Only the
 **Examples**:
 
 ```typescript
-// ❌ WRONG: Framework-coupled business logic
+// ❌ Framework-coupled business logic
 // domain/user-service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -40,13 +40,13 @@ import { HttpClient } from '@angular/common/http';
 export class UserService {
   constructor(private http: HttpClient) {} // Angular dependency!
 
-  getUser(id: string) {
+  public getUser(id: string) {
     return this.http.get(`/users/${id}`); // Framework API!
   }
 }
 
-// ✅ CORRECT: Framework-agnostic business logic
-// domain/user.repository.ts
+// ✅ Framework-agnostic business logic
+// domain/user-repository.interface.ts
 export interface UserRepository { // Pure interface
   getUser(id: string): Promise<User>;
 }
@@ -55,7 +55,7 @@ export interface UserRepository { // Pure interface
 export class HttpUserRepository implements UserRepository { // Pure class
   constructor(private httpClient: HttpClient) {} // Domain interface, not framework!
 
-  async getUser(id: string): Promise<User> {
+  public async getUser(id: string): Promise<User> {
     const response = await this.httpClient.get<User>(`/users/${id}`);
     return response.data;
   }
@@ -100,11 +100,8 @@ const userRepo = inject(UserRepository); // Simple, type-safe
 **Related ADRs**:
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines framework-agnostic layers
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - What belongs in each layer
-- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Deprecated, replaced by app-providers
 - [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
 
 ---
 
 **Last Updated**: January 18, 2026
-
-**Last Updated**: January 11, 2026

@@ -29,31 +29,32 @@ src/app-providers/              # Root-level composition root
 ├── index.ts                    # Barrel exports
 ├── app-config/
 │   └── app-config.provider.ts
-├── assets-api-client/
-│   └── assets-api-client.provider.ts
-└── vault-api-client/
-    └── vault-api-client.provider.ts
+├── auth-provider/
+│   └── auth.provider.ts
+└── logger-provider/
+    └── logger.provider.ts
 ```
 
 **Example of New Pattern**:
 ```typescript
-// app-providers/vault-api-client/vault-api-client.provider.ts
+// ✅ app-providers/auth-provider/auth.provider.ts
 import { type Provider } from '@angular/core';
-import { createVaultApiClient, VaultApiClient } from '@api/vault/infrastructure';
-import { AppConfig } from '@config/app/domain';
+import { AuthService } from '@lib/auth/domain';
+import { HttpAuthService } from '@lib/auth/infrastructure';
+import { AppConfig } from '@app-providers/app-config';
 
-export const provideVaultApiClient = (): Provider => ({
-    provide: VaultApiClient,
-    useFactory: (appConfig: AppConfig) => createVaultApiClient(appConfig.vaultApiUrl.toString()),
+export const provideAuthService = (): Provider => ({
+    provide: AuthService,
+    useFactory: (config: AppConfig) => new HttpAuthService(config.apiUrl),
     deps: [AppConfig]
 });
 
-// app.config.ts
-import { provideVaultApiClient } from './app-providers';
+// ✅ app.config.ts
+import { provideAuthService } from './app-providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideVaultApiClient(),
+    provideAuthService(),
     // ...other providers
   ]
 };
@@ -72,15 +73,6 @@ export const appConfig: ApplicationConfig = {
 - Injection tokens removed in favor of class-based tokens
 - Inject functions no longer needed - use Angular's `inject()` directly with class token
 - Provider functions now live in `app-providers/` at root level
-
-**Related ADRs**:
-- [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines architectural layers
-- [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Layer responsibilities
-- [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers pattern
-
----
-
-**Last Updated**: January 18, 2026
 
 **Related ADRs**:
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines architectural layers

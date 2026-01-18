@@ -44,9 +44,9 @@ function calculateDiscount(age: number): number {
 ```typescript
 // ❌ Without noImplicitThis
 class Counter {
-  count = 0;
+  public count = 0;
 
-  increment() {
+  public increment() {
     setTimeout(function() {
       this.count++;  // ✅ Compiles, 'this' is undefined at runtime
     }, 1000);
@@ -138,7 +138,7 @@ function process(data) {  // 'data' is implicitly 'any' - compiles
 // ✅ With noImplicitAny
 function process(data: unknown) {  // ❌ Error: must specify type
   if (typeof data === 'object' && data !== null && 'value' in data) {
-    return data.value;  // Type narrowing required
+    return (data as any).value;  // Type narrowing required
   }
 }
 ```
@@ -151,7 +151,7 @@ Requires class properties to be initialized:
 class UserService {
   private httpClient: HttpClient;  // ✅ Compiles - undefined at runtime!
 
-  setClient(client: HttpClient) {
+  public setClient(client: HttpClient) {
     this.httpClient = client;
   }
 }
@@ -164,9 +164,6 @@ class UserService {
   constructor(httpClient: HttpClient) {
     this.httpClient = httpClient;
   }
-
-  // Fix 2: Use definite assignment assertion (use with caution)
-  private httpClient!: HttpClient;  // Asserts it will be assigned
 }
 ```
 
@@ -232,9 +229,6 @@ user.name.toUpperCase();        // ✅ Compiles - crashes at runtime
 // ✅ With noUncheckedIndexedAccess
 const users: Record<string, User> = {};
 const user = users['unknown'];  // Type: User | undefined (correct!)
-user.name.toUpperCase();        // ❌ Error: user might be undefined
-
-// Must handle undefined
 if (user) {
   user.name.toUpperCase();  // ✅ Safe
 }
@@ -246,16 +240,16 @@ if (user) {
 Strict mode ensures pure business logic is type-safe:
 
 ```typescript
-// domain/user-validator.ts
+// ✅ domain/user-validator.ts
 export class UserValidator {
   // ✅ strictNullChecks ensures we handle null emails
-  isValidEmail(email: string | null): boolean {
+  public isValidEmail(email: string | null): boolean {
     if (!email) return false;  // Must check null
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   // ✅ noImplicitReturns catches missing return paths
-  validateAge(age: number): boolean {
+  public validateAge(age: number): boolean {
     if (age < 0) return false;
     if (age > 150) return false;
     return true;  // Required - can't forget this
@@ -267,7 +261,7 @@ export class UserValidator {
 Catches orchestration errors:
 
 ```typescript
-// application/authenticate-user.use-case.ts
+// ✅ application/authenticate-user.use-case.ts
 export class AuthenticateUserUseCase {
   constructor(
     private authenticator: Authenticator,  // ✅ Must be initialized (strictPropertyInitialization)
@@ -275,7 +269,7 @@ export class AuthenticateUserUseCase {
   ) {}
 
   // ✅ noImplicitReturns ensures we return AuthResult in all cases
-  async execute(username: string, password: string): Promise<AuthResult> {
+  public async execute(username: string, password: string): Promise<AuthResult> {
     if (!username || !password) {
       return { success: false, error: 'Missing credentials' };
     }
@@ -292,16 +286,14 @@ export class AuthenticateUserUseCase {
 Prevents platform API misuse:
 
 ```typescript
-// infrastructure/fetch-http-client.ts
+// ✅ infrastructure/fetch-http-client.ts
 export class FetchHttpClient implements HttpClient {
   // ✅ strictNullChecks catches potential null response
-  async get<T>(url: string): Promise<HttpResponse<T>> {
+  public async get<T>(url: string): Promise<HttpResponse<T>> {
     const response = await fetch(url);
-
     if (!response.ok) {  // Must check - might be null/error
       throw new NetworkError(response.statusText);
     }
-
     const data = await response.json();  // ✅ Type-safe
     return { data, status: response.status };
   }
@@ -443,4 +435,4 @@ const user = unsafeGetUser();
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026

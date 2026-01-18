@@ -97,7 +97,7 @@ import { FetchHttpClient } from '../infrastructure/fetch-client';
 //                                    ^
 // ESLint error: domain/ cannot import from infrastructure/
 
-// ✅ domain/user.ts (correct)
+// ✅ domain/user.ts
 import { HttpClient } from './http-client.interface';
 ```
 
@@ -203,7 +203,6 @@ Automated metrics (updated in pre-commit):
 - [ADR-001: Layered Architecture](./001-layered-architecture.md) - Defines the layers being enforced
 - [ADR-002: Layer Placement Decision Tree](./002-layer-placement-decision-tree.md) - How to determine correct layer
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - What belongs in each layer
-- [ADR-005: Separate DI Layer](./005-separate-di-layer.md) - Deprecated, replaced by app-providers
 - [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - Updated for app-providers
 
 ---

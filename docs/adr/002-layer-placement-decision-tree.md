@@ -22,7 +22,7 @@ Angular code? (@angular/* imports?)
     │
     ├─ YES ──► UI code? ──► YES ──► presentation/
     │           │
-    │           └─ NO ──► DI config? ──► YES ──► di/
+    │           └─ NO ──► DI config? ──► YES ──► app-providers/
     │                      │
     │                      └─ NO ──► ❌ ERROR
     │
@@ -78,8 +78,8 @@ Questions to confirm:
 - Does it export `provide*()` functions?
 - Does it export `inject*()` helper functions?
 
-- **YES** → **`di/`** layer
-- **NO** → ❌ **STOP** - Angular code should only be in `presentation/` or `di/`
+- **YES** → **`app-providers/`** (Application Providers)
+- **NO** → ❌ **STOP** - Angular code should only be in `presentation/` or `app-providers/`
 
 ---
 
@@ -115,7 +115,7 @@ Orchestration means **coordinating multiple steps or components** to accomplish 
 ```typescript
 // ✅ Orchestration - coordinates domain objects
 class AuthenticateUserUseCase {
-  execute(username: string, password: string) {
+  public execute(username: string, password: string) {
     // Step 1: Validate (uses domain validator)
     this.validator.validate(username, password);
 
@@ -131,7 +131,7 @@ class AuthenticateUserUseCase {
 
 // ✅ Orchestration - interceptor adding behavior
 class CachingHttpInterceptor {
-  intercept(request: HttpRequest) {
+  public intercept(request: HttpRequest) {
     // Check cache first
     if (this.cache.has(request.url)) {
       return this.cache.get(request.url);
@@ -150,7 +150,7 @@ class CachingHttpInterceptor {
 ```typescript
 // ❌ NOT orchestration - directly calls platform API
 class FetchHttpClient {
-  get(url: string) {
+  public get(url: string) {
     return fetch(url); // Direct platform API call = infrastructure
   }
 }
@@ -232,10 +232,10 @@ We prefer **multiple small bounded contexts** over a single monolithic `shared/`
 - ✅ Well-defined domain with clear responsibilities
 - ❌ NOT for "I don't know where to put this"
 
-**Current bounded contexts in our project**:
-- `lib/date-time/` - Generic subdomain for date/time operations
-- `lib/performance/` - Generic subdomain for performance monitoring
-- `lib/http/` - Generic subdomain for HTTP communication
+**Example bounded contexts**:
+- `lib/file-storage/` - Generic subdomain for file handling
+- `lib/notifications/` - Generic subdomain for user alerts
+- `lib/audit-logs/` - Generic subdomain for security auditing
 
 ---
 
@@ -254,9 +254,8 @@ We prefer **multiple small bounded contexts** over a single monolithic `shared/`
 | Platform wrapper | `JsonResponseBodyParser` (wraps `.json()`) | `infrastructure/` |
 | Adapter | `AxiosAdapter`, `LocalStorageAdapter` | `infrastructure/` |
 | Technical error | `NetworkError`, `DatabaseError` | `infrastructure/` |
-| DI token | `VAULT_HTTP_CLIENT` | `di/` |
-| Provider function | `provideHttpClient()` | `di/` |
-| Inject helper | `injectVaultHttpClient()` | `di/` |
+| DI token | `API_CONFIG` | `app-providers/` |
+| Provider function | `provideApiConfig()` | `app-providers/` |
 | UI component | `HeaderComponent` | `presentation/` |
 | Directive | `HighlightDirective` | `presentation/` |
 | Pipe | `DateFormatPipe` | `presentation/` |
@@ -278,9 +277,9 @@ Learn from these examples to avoid architectural violations.
 ### ❌ Pitfall 1: Platform API wrappers in domain
 
 ```typescript
-// ❌ WRONG - domain/date-time-provider.ts
+// ❌ domain/date-time-provider.ts
 export class DateTimeProvider {
-  now(): number {
+  public now(): number {
     return Date.now(); // Platform API!
   }
 }
@@ -290,14 +289,14 @@ export class DateTimeProvider {
 
 **✅ Solution:**
 ```typescript
-// ✅ domain/current-date-time.provider.ts (interface only)
+// ✅ domain/current-date-time.interface.ts (interface only)
 export interface CurrentDateTimeProvider {
   now(): number;
 }
 
 // ✅ infrastructure/date-time.provider.ts (implementation)
 export class DateTimeProvider implements CurrentDateTimeProvider {
-  now(): number {
+  public now(): number {
     return Date.now(); // Platform API allowed here
   }
 }
@@ -305,66 +304,44 @@ export class DateTimeProvider implements CurrentDateTimeProvider {
 
 ---
 
-### ❌ Pitfall 2: Response body parsers in application layer
+### ❌ Pitfall 2: LocalStorage access in application layer
 
 ```typescript
-// ❌ WRONG - application/parsers/json.response-body-parser.ts
-export class JsonResponseBodyParser {
-  parse(response: Response): Promise<unknown> {
-    return response.json(); // Platform API!
+// ❌ application/settings/user-settings.service.ts
+export class UserSettingsService {
+  public saveSettings(settings: Settings) {
+     localStorage.setItem('settings', JSON.stringify(settings)); // Platform API!
   }
 }
 ```
 
-**Why wrong?** It's wrapping a platform API (`.json()`), not orchestrating business logic.
+**Why wrong?** It's directly changing state in a platform API (`localStorage`), which makes it hard to test and tied to the browser.
 
 **✅ Solution:**
 ```typescript
-// ✅ domain/response-body-parser.ts (interface)
-export interface ResponseBodyParser {
-  parse<T>(response: Response): Promise<T>;
+// ✅ domain/settings-repository.interface.ts
+export interface SettingsRepository {
+  save(settings: Settings): void;
 }
 
-// ✅ infrastructure/body-parsers/json.response-body-parser.ts
-export class JsonResponseBodyParser implements ResponseBodyParser {
-  parse<T>(response: Response): Promise<T> {
-    return response.json(); // Platform API allowed in infrastructure
+// ✅ infrastructure/browser-settings.repository.ts
+export class BrowserSettingsRepository implements SettingsRepository {
+  public save(settings: Settings): void {
+    localStorage.setItem('settings', JSON.stringify(settings));
   }
 }
 ```
 
 ---
 
-### ❌ Pitfall 3: DI tokens in infrastructure
+### ❌ Pitfall 3: Interceptors in infrastructure
 
 ```typescript
-// ❌ WRONG - infrastructure/http-client.injection-token.ts
-export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
-```
-
-**Why wrong?** Infrastructure should be framework-agnostic. `InjectionToken` is Angular-specific.
-
-**✅ Solution:**
-```typescript
-// ✅ di/http-client/injection-tokens/vault-http-client.injection-token.ts
-export const VAULT_HTTP_CLIENT = new InjectionToken<HttpClient>('VaultHttpClient');
-
-// ✅ di/http-client/inject-functions/vault-http-client.inject-function.ts
-export function injectVaultHttpClient(): HttpClient {
-  return inject(VAULT_HTTP_CLIENT);
-}
-```
-
----
-
-### ❌ Pitfall 4: Interceptors in infrastructure
-
-```typescript
-// ❌ WRONG - infrastructure/interceptors/logger.http-interceptor.ts
+// ❌ infrastructure/interceptors/logger.http-interceptor.ts
 export class LoggerHttpInterceptor implements HttpInterceptor {
-  intercept(request: HttpRequest): Promise<HttpResponse> {
+  public intercept(request: HttpRequest): Promise<HttpResponse> {
     console.log('Request:', request);
-    return next(request);
+    return this.next.handle(request);
   }
 }
 ```
@@ -375,9 +352,9 @@ export class LoggerHttpInterceptor implements HttpInterceptor {
 ```typescript
 // ✅ application/interceptors/logger.http-interceptor.ts
 export class LoggerHttpInterceptor implements HttpInterceptor {
-  intercept(request: HttpRequest): Promise<HttpResponse> {
+  public intercept(request: HttpRequest): Promise<HttpResponse> {
     console.log('Request:', request);
-    return next(request);
+    return this.next.handle(request);
   }
 }
 ```
@@ -411,18 +388,18 @@ Test files should be **co-located** with the code they test:
 
 ```
 app/
-  domain/
-    user.ts
-    user.spec.ts          ← Unit test next to source
-  application/
-    authenticate.use-case.ts
-    authenticate.use-case.spec.ts
-  infrastructure/
-    fetch-http-client.ts
-    fetch-http-client.spec.ts
   presentation/
     login.component.ts
     login.component.spec.ts
+  infrastructure/
+    fetch-http-client.ts
+    fetch-http-client.spec.ts
+  application/
+    authenticate.use-case.ts
+    authenticate.use-case.spec.ts
+  domain/
+    user.ts
+    user.spec.ts          ← Unit test next to source
 ```
 
 **Test types and placement:**
@@ -441,9 +418,8 @@ app/
 - [ADR-001: Layered Architecture](./001-layered-architecture.md)
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md)
 - [ADR-004: Framework-Agnostic Core](./004-framework-agnostic-core.md)
-- [ADR-005: Separate DI Layer](./005-separate-di-layer.md)
 - [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md)
 
 ---
 
-**Last Updated**: January 11, 2026
+**Last Updated**: January 18, 2026
