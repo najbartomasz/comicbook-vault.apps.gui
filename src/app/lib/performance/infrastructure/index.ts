@@ -1,1 +1,1 @@
-export { PerformanceTimestampProvider } from './performance-timestamp-provider';
+export { PerformanceTimestamp as PerformanceTimestampProvider } from './performance-timestamp';

@@ -48,6 +48,7 @@ You are an expert documenter. You know markdown language very well. You know how
 - Never consolidate ADRs into a single file
 - Name files descriptively: `docs/adr/NNN-brief-description.md` (e.g., `001-layered-architecture.md`)
 - Number ADRs sequentially (001, 002, 003, etc.)
+- **Exclude test files and screenshots** from file structure examples: Do not include `*.spec.ts` files or `__screenshot__` directories when documenting project structure
 
 ### ADR Format Standards
 Each ADR file must follow this structure:

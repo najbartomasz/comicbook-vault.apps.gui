@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-75%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-25%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-76%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-24%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -61,11 +61,11 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 97
-- **Production Files**: 61
-- **Test Files**: 36
-- **Framework-Agnostic Files**: 46 (75%)
-- **Angular-Specific Files**: 15 (25%)
+- **Total TypeScript Files**: 99
+- **Production Files**: 62
+- **Test Files**: 37
+- **Framework-Agnostic Files**: 47 (76%)
+- **Angular-Specific Files**: 15 (24%)
 - **Circular Dependencies**: 0 ✅
 
 *Last generated: 2026-01-21*
@@ -161,9 +161,10 @@ src/app/
 │   └── performance/            # 🟢 Performance monitoring context
 │       ├── infrastructure/     # Platform API adapters
 │       │   ├── index.ts
-│       │   └── performance-timestamp-provider.ts
+│       │   └── performance-timestamp.ts
 │       └── domain/             # Interfaces & contracts
 │           ├── high-resolution-timestamp-provider.interface.ts
+│           ├── high-resolution-timestamp.ts
 │           └── index.ts
 │
 └── shell/                      # 🔵 Application shell (Angular-specific)

@@ -1,16 +1,19 @@
-import { PerformanceTimestampProvider } from './performance-timestamp-provider';
+import { HighResolutionTimestamp } from '../domain';
 
-describe(PerformanceTimestampProvider, () => {
+import { PerformanceTimestamp } from './performance-timestamp';
+
+describe(PerformanceTimestamp, () => {
     test('should return timestamp from performance.now()', () => {
         // Given
         const performanceNowSpy = vi.spyOn(performance, 'now').mockReturnValueOnce(78343.570643);
-        const performanceTimestampProvider = new PerformanceTimestampProvider();
+        const performanceTimestampProvider = new PerformanceTimestamp();
 
         // When
         const now = performanceTimestampProvider.now();
 
         // Then
-        expect(now).toBe(78343.570643);
+        expect(now).toBeInstanceOf(HighResolutionTimestamp);
+        expect(now.value).toBe(78343.570643);
         expect(performanceNowSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -19,15 +22,15 @@ describe(PerformanceTimestampProvider, () => {
         const performanceNowSpy = vi.spyOn(performance, 'now')
             .mockReturnValueOnce(78343.570643)
             .mockReturnValueOnce(78344.123456);
-        const performanceTimestampProvider = new PerformanceTimestampProvider();
+        const performanceTimestampProvider = new PerformanceTimestamp();
 
         // When
         const firstCall = performanceTimestampProvider.now();
         const secondCall = performanceTimestampProvider.now();
 
         // Then
-        expect(firstCall).toBe(78343.570643);
-        expect(secondCall).toBe(78344.123456);
+        expect(firstCall.value).toBe(78343.570643);
+        expect(secondCall.value).toBe(78344.123456);
         expect(performanceNowSpy).toHaveBeenCalledTimes(2);
     });
 });

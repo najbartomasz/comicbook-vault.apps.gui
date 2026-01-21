@@ -1,4 +1,4 @@
-import { type HighResolutionTimestampProvider } from '@lib/performance/domain';
+import { HighResolutionTimestamp, type HighResolutionTimestampProvider } from '@lib/performance/domain';
 
 import { HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
 import { type HttpInterceptorNext } from '../http-interceptor-next.type';
@@ -19,10 +19,13 @@ describe(ResponseTimeHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        vi.spyOn(performance, 'now')
+            .mockReturnValueOnce(1000)
+            .mockReturnValueOnce(1100.25);
         const highResolutionTimestampProviderStub = {
             now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100.25)
+                .mockReturnValueOnce(HighResolutionTimestamp.now())
+                .mockReturnValueOnce(HighResolutionTimestamp.now())
         };
         const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 
@@ -57,10 +60,13 @@ describe(ResponseTimeHttpInterceptor, () => {
             }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
+        vi.spyOn(performance, 'now')
+            .mockReturnValueOnce(1000)
+            .mockReturnValueOnce(1100.25);
         const highResolutionTimestampProviderStub = {
             now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100.25)
+                .mockReturnValueOnce(HighResolutionTimestamp.now())
+                .mockReturnValueOnce(HighResolutionTimestamp.now())
         };
         const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 
