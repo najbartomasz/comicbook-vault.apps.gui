@@ -1,1 +1,3 @@
-export type { CurrentDateTimeProvider } from './current-date-time-provider.interface';
+export { DateTime } from './date-time';
+export type { DateTimeProvider } from './date-time-provider.interface';
+

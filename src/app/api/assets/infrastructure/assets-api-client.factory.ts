@@ -1,4 +1,4 @@
-import { DateTimeProvider } from '@lib/date-time/infrastructure';
+import { SystemDateTime } from '@lib/date-time/infrastructure';
 import {
     RequestLoggerHttpInterceptor,
     ResponseLoggerHttpInterceptor,
@@ -18,7 +18,7 @@ export const createAssetsApiClient = (baseUrl: string): AssetsApiClient => {
     const httpInterceptors: HttpInterceptor[] = [
         new ResponseLoggerHttpInterceptor(),
         new SequenceNumberHttpInterceptor(),
-        new TimestampHttpInterceptor(new DateTimeProvider()),
+        new TimestampHttpInterceptor(new SystemDateTime()),
         new RequestLoggerHttpInterceptor(),
         new ResponseTimeHttpInterceptor(new PerformanceTimestampProvider())
     ];

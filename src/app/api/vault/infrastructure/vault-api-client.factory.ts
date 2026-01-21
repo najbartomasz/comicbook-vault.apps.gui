@@ -1,4 +1,4 @@
-import { DateTimeProvider } from '@lib/date-time/infrastructure';
+import { SystemDateTime } from '@lib/date-time/infrastructure';
 import {
     type HttpInterceptor,
     RequestLoggerHttpInterceptor,
@@ -18,7 +18,7 @@ export const createVaultApiClient = (baseUrl: string): VaultApiClient => {
     const httpInterceptors: HttpInterceptor[] = [
         new ResponseLoggerHttpInterceptor(),
         new SequenceNumberHttpInterceptor(),
-        new TimestampHttpInterceptor(new DateTimeProvider()),
+        new TimestampHttpInterceptor(new SystemDateTime()),
         new RequestLoggerHttpInterceptor(),
         new ResponseTimeHttpInterceptor(new PerformanceTimestampProvider())
     ];

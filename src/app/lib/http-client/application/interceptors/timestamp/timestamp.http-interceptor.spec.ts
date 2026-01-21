@@ -1,4 +1,4 @@
-import { type CurrentDateTimeProvider } from '@lib/date-time/domain';
+import { DateTime, type DateTimeProvider } from '@lib/date-time/domain';
 
 import { HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
 import { type HttpInterceptorNext } from '../http-interceptor-next.type';
@@ -19,10 +19,13 @@ describe(TimestampHttpInterceptor, () => {
             body: { data: 'test' }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: vi.fn<CurrentDateTimeProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100)
+        vi.spyOn(Date, 'now')
+            .mockReturnValueOnce(1000)
+            .mockReturnValueOnce(1100);
+        const dateTimeProviderStub: DateTimeProvider = {
+            now: vi.fn<DateTimeProvider['now']>()
+                .mockReturnValueOnce(DateTime.now())
+                .mockReturnValueOnce(DateTime.now())
         };
         const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 
@@ -66,10 +69,13 @@ describe(TimestampHttpInterceptor, () => {
             }
         };
         const nextMock = vi.fn<HttpInterceptorNext>().mockResolvedValueOnce(responseStub);
-        const dateTimeProviderStub: CurrentDateTimeProvider = {
-            now: vi.fn<CurrentDateTimeProvider['now']>()
-                .mockReturnValueOnce(1000)
-                .mockReturnValueOnce(1100)
+        vi.spyOn(Date, 'now')
+            .mockReturnValueOnce(1000)
+            .mockReturnValueOnce(1100);
+        const dateTimeProviderStub: DateTimeProvider = {
+            now: vi.fn<DateTimeProvider['now']>()
+                .mockReturnValueOnce(DateTime.now())
+                .mockReturnValueOnce(DateTime.now())
         };
         const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 

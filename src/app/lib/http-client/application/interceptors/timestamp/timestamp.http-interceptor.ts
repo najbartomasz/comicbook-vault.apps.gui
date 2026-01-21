@@ -1,13 +1,13 @@
-import { type CurrentDateTimeProvider } from '@lib/date-time/domain';
+import { type DateTimeProvider } from '@lib/date-time/domain';
 
 import { type HttpRequest, type HttpResponse } from '../../../domain';
 import { type HttpInterceptorNext } from '../http-interceptor-next.type';
 import { type HttpInterceptor } from '../http-interceptor.interface';
 
 export class TimestampHttpInterceptor implements HttpInterceptor {
-    readonly #dateTimeProvider: CurrentDateTimeProvider;
+    readonly #dateTimeProvider: DateTimeProvider;
 
-    public constructor(dateTimeProvider: CurrentDateTimeProvider) {
+    public constructor(dateTimeProvider: DateTimeProvider) {
         this.#dateTimeProvider = dateTimeProvider;
     }
 
@@ -22,7 +22,7 @@ export class TimestampHttpInterceptor implements HttpInterceptor {
             ...request,
             metadata: {
                 ...request.metadata,
-                timestamp: this.#dateTimeProvider.now()
+                timestamp: this.#dateTimeProvider.now().timestamp
             }
         };
     }
@@ -32,7 +32,7 @@ export class TimestampHttpInterceptor implements HttpInterceptor {
             ...response,
             metadata: {
                 ...response.metadata,
-                timestamp: this.#dateTimeProvider.now()
+                timestamp: this.#dateTimeProvider.now().timestamp
             }
         };
     }

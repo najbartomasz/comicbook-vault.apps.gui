@@ -61,14 +61,14 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 95
-- **Production Files**: 60
-- **Test Files**: 35
-- **Framework-Agnostic Files**: 45 (75%)
+- **Total TypeScript Files**: 97
+- **Production Files**: 61
+- **Test Files**: 36
+- **Framework-Agnostic Files**: 46 (75%)
 - **Angular-Specific Files**: 15 (25%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-18*
+*Last generated: 2026-01-21*
 
 ---
 
@@ -104,10 +104,11 @@ src/app/
 ├── lib/                        # Shared/reusable code (DDD bounded contexts)
 │   ├── date-time/              # 🟢 Date-time bounded context
 │   │   ├── infrastructure/     # Platform API adapters
-│   │   │   ├── date-time-provider.ts
-│   │   │   └── index.ts
+│   │   │   ├── index.ts
+│   │   │   └── system-date-time.ts
 │   │   └── domain/             # Interfaces & contracts
-│   │       ├── current-date-time-provider.interface.ts
+│   │       ├── date-time-provider.interface.ts
+│   │       ├── date-time.ts
 │   │       └── index.ts
 │   │
 │   ├── http-client/            # 🔵 HTTP communication context
@@ -374,4 +375,4 @@ src/app-providers/              # ⚪ Application-level providers
 
 ---
 
-**Last Updated**: January 18, 2026
+**Last Updated**: January 21, 2026
