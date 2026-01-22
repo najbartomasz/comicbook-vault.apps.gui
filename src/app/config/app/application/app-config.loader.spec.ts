@@ -1,12 +1,11 @@
 import { type HttpClient } from '@lib/http-client/domain';
 import { HttpAssetsRepository } from 'src/app/api/assets/infrastructure/http-assets-repository';
-import { HttpUrl } from 'src/app/lib/http-client/domain/http-url';
 
 import { AppConfig } from '../domain';
 
-import { AppConfigProvider } from './app-config.provider';
+import { AppConfigLoader } from './app-config.loader';
 
-describe(AppConfigProvider, () => {
+describe(AppConfigLoader, () => {
     test('should load valid app config', async () => {
         // Given
         const httpClientMock: HttpClient = {
@@ -21,15 +20,15 @@ describe(AppConfigProvider, () => {
         };
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
         const assetsRepositoryGetSpy = vi.spyOn(assetsRepository, 'get');
-        const provider = new AppConfigProvider(assetsRepository);
+        const loader = new AppConfigLoader(assetsRepository);
 
         // When
-        const config = await provider.getConfig();
+        const config = await loader.load();
 
         // Then
         expect(assetsRepositoryGetSpy).toHaveBeenCalledExactlyOnceWith('/app-config.json');
         expect(config).toStrictEqual(AppConfig.create({
-            vaultApiUrl: HttpUrl.create('https://api.example.com/vault')
+            vaultApiUrl: 'https://api.example.com/vault'
         }));
         expect(config.vaultApiUrl.toString()).toBe('https://api.example.com/vault');
     });
@@ -45,10 +44,10 @@ describe(AppConfigProvider, () => {
             })
         };
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
-        const loader = new AppConfigProvider(assetsRepository);
+        const loader = new AppConfigLoader(assetsRepository);
 
         // When, Then
-        await expect(loader.getConfig()).rejects.toThrowError('Invalid app config format');
+        await expect(loader.load()).rejects.toThrowError('Invalid app config format');
     });
 
     test('should throw error when app config is empty', async () => {
@@ -62,10 +61,10 @@ describe(AppConfigProvider, () => {
             })
         };
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
-        const provider = new AppConfigProvider(assetsRepository);
+        const loader = new AppConfigLoader(assetsRepository);
 
         // When, Then
-        await expect(provider.getConfig()).rejects.toThrowError('Invalid app config format');
+        await expect(loader.load()).rejects.toThrowError('Invalid app config format');
     });
 
     test('should throw error if vaultApiUrl is missing', async () => {
@@ -79,10 +78,10 @@ describe(AppConfigProvider, () => {
             })
         };
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
-        const provider = new AppConfigProvider(assetsRepository);
+        const loader = new AppConfigLoader(assetsRepository);
 
         // When, Then
-        await expect(provider.getConfig()).rejects.toThrowError('Invalid app config format');
+        await expect(loader.load()).rejects.toThrowError('Invalid app config format');
     });
 
     test('should throw error if vaultApiUrl is not a string', async () => {
@@ -96,9 +95,9 @@ describe(AppConfigProvider, () => {
             })
         };
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
-        const provider = new AppConfigProvider(assetsRepository);
+        const loader = new AppConfigLoader(assetsRepository);
 
         // When, Then
-        await expect(provider.getConfig()).rejects.toThrowError('Invalid app config format');
+        await expect(loader.load()).rejects.toThrowError('Invalid app config format');
     });
 });

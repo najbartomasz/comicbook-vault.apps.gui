@@ -1,7 +1,7 @@
-import { type HttpUrl } from '@lib/http-client/domain';
+import { HttpUrl } from '@lib/http-client/domain';
 
 interface AppConfigData {
-    vaultApiUrl: HttpUrl;
+    vaultApiUrl: string;
 }
 
 export class AppConfig {
@@ -12,7 +12,7 @@ export class AppConfig {
     readonly #vaultApiUrl: HttpUrl;
 
     private constructor(config: AppConfigData) {
-        this.#vaultApiUrl = config.vaultApiUrl;
+        this.#vaultApiUrl = HttpUrl.create(config.vaultApiUrl);
     }
 
     public static create(config: AppConfigData): AppConfig {

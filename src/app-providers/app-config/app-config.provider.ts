@@ -1,34 +1,19 @@
 import { type EnvironmentProviders, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
 
 import { AssetsRepository } from '@api/assets/domain';
+import { AppConfigLoader } from '@config/app/application';
 import { AppConfig } from '@config/app/domain';
-import { AppConfigProvider } from '@config/app/infrastructure';
 
-class AppConfigStore {
-    #config?: AppConfig;
-
-    public setConfig(appConfig: AppConfig): void {
-        this.#config = appConfig;
-    }
-
-    public getConfig(): AppConfig | undefined {
-        return this.#config;
-    }
-}
-
-export const provideAppConfig = (): EnvironmentProviders => (
-    makeEnvironmentProviders([
-        AppConfigStore,
+export const provideAppConfig = (): EnvironmentProviders => {
+    let appConfig: AppConfig | undefined;
+    return makeEnvironmentProviders([
         provideAppInitializer(async () => {
-            const appConfigProvider = new AppConfigProvider(inject(AssetsRepository));
-            const appConfigStore = inject(AppConfigStore);
-            const appConfig = await appConfigProvider.getConfig();
-            appConfigStore.setConfig(appConfig);
+            const appConfigLoader = new AppConfigLoader(inject(AssetsRepository));
+            appConfig = await appConfigLoader.load();
         }),
         {
             provide: AppConfig,
             useFactory: () => {
-                const appConfig = inject(AppConfigStore).getConfig();
                 if (!appConfig) {
                     throw new Error(
                         'AppConfig is not initialized. Ensure the app initializer has completed before injecting AppConfig.'
@@ -37,5 +22,5 @@ export const provideAppConfig = (): EnvironmentProviders => (
                 return appConfig;
             }
         }
-    ])
-);
+    ]);
+};

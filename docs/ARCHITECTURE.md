@@ -81,29 +81,29 @@ This project follows a **layered architecture** with strict separation between f
 src/app/
 ├── api/                        # 🟣 External APIs integration
 │   ├── assets/                 # Assets API integration
-│   │   ├── domain/             # Repository contracts
-│   │   │   ├── assets-repository.ts
+│   │   ├── infrastructure/     # API implementation
+│   │   │   ├── assets-repository.factory.ts
+│   │   │   ├── http-assets-repository.ts
 │   │   │   └── index.ts
-│   │   └── infrastructure/     # API implementation
-│   │       ├── assets-repository.factory.ts
-│   │       ├── http-assets-repository.ts
+│   │   └── domain/             # Repository contracts
+│   │       ├── assets-repository.ts
 │   │       └── index.ts
 │   └── vault/                  # Vault API integration
-│       ├── domain/             # Repository contracts
+│       ├── infrastructure/     # API implementation
+│       │   ├── http-vault-repository.ts
 │       │   ├── index.ts
-│       │   └── vault-repository.ts
-│       └── infrastructure/     # API implementation
-│           ├── http-vault-repository.ts
+│       │   └── vault-repository.factory.ts
+│       └── domain/             # Repository contracts
 │           ├── index.ts
-│           └── vault-repository.factory.ts
+│           └── vault-repository.ts
 │
 ├── config/                     # Configuration
 │   └── app/                    # App configuration context
-│       ├── infrastructure/     # Infrastructure implementations
+│       ├── application/        # Use cases & orchestration
 │       │   ├── app-config.dto.ts
-│       │   ├── app-config.provider.ts
+│       │   ├── app-config.loader.ts
 │       │   └── index.ts
-│       └── domain/             # Interfaces & contracts
+│       └── domain/             # Business logic & contracts
 │           ├── app-config.ts
 │           └── index.ts
 │

@@ -5,8 +5,8 @@ const readline = require('node:readline');
 const LAYER_COLORS = {
     PRESENTATION: { fillcolor: '#81D4FA', color: '#03A9F4', clusterFillcolor: '#e3f2fd' },
     APP_PROVIDERS: { fillcolor: '#E0E0E0', color: '#9E9E9E', clusterFillcolor: '#F5F5F5' },
-    APPLICATION: { fillcolor: '#81C784', color: '#388E3C', clusterFillcolor: '#e8f5e9' },
     INFRASTRUCTURE: { fillcolor: '#B39DDB', color: '#673AB7', clusterFillcolor: '#ede7f6' },
+    APPLICATION: { fillcolor: '#81C784', color: '#388E3C', clusterFillcolor: '#e8f5e9' },
     DOMAIN: { fillcolor: '#FFCC80', color: '#FF9800', clusterFillcolor: '#fff3e0' },
     LIB: { fillcolor: '#80CBC4', color: '#00897B', clusterFillcolor: '#E0F2F1' },
     FEATURES: { fillcolor: '#F8BBD0', color: '#C2185B', clusterFillcolor: '#FCE4EC' }
@@ -15,41 +15,21 @@ const LAYER_COLORS = {
 const LAYER_PATHS = [
     { pattern: /\/shell[/"]/, layer: LAYER_COLORS.PRESENTATION },
     { pattern: /\/app-providers[/"]/, layer: LAYER_COLORS.APP_PROVIDERS },
-    { pattern: /\/lib\/[^/]+\/presentation[/"]/, layer: LAYER_COLORS.PRESENTATION },
-    { pattern: /\/lib\/[^/]+\/application[/"]/, layer: LAYER_COLORS.APPLICATION },
-    { pattern: /\/lib\/[^/]+\/infrastructure[/"]/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { pattern: /\/lib\/[^/]+\/domain[/"]/, layer: LAYER_COLORS.DOMAIN },
-    { pattern: /\/config\/[^/]+\/infrastructure[/"]/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { pattern: /\/config\/[^/]+\/domain[/"]/, layer: LAYER_COLORS.DOMAIN },
-    { pattern: /\/api\/[^/]+\/application[/"]/, layer: LAYER_COLORS.APPLICATION },
-    { pattern: /\/api\/[^/]+\/infrastructure[/"]/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { pattern: /\/api\/[^/]+\/domain[/"]/, layer: LAYER_COLORS.DOMAIN },
-    { pattern: /\/features\/[^/]+\/presentation[/"]/, layer: LAYER_COLORS.PRESENTATION },
-    { pattern: /\/features\/[^/]+\/application[/"]/, layer: LAYER_COLORS.APPLICATION },
-    { pattern: /\/features\/[^/]+\/infrastructure[/"]/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { pattern: /\/features\/[^/]+\/domain[/"]/, layer: LAYER_COLORS.DOMAIN }
+    { pattern: /\/app\/[^/]+\/[^/]+\/presentation[/"]/, layer: LAYER_COLORS.PRESENTATION },
+    { pattern: /\/app\/[^/]+\/[^/]+\/infrastructure[/"]/, layer: LAYER_COLORS.INFRASTRUCTURE },
+    { pattern: /\/app\/[^/]+\/[^/]+\/application[/"]/, layer: LAYER_COLORS.APPLICATION },
+    { pattern: /\/app\/[^/]+\/[^/]+\/domain[/"]/, layer: LAYER_COLORS.DOMAIN }
 ];
 
 const CLUSTER_PATTERNS = [
     { path: /cluster_src\/app\/shell/, layer: LAYER_COLORS.PRESENTATION },
     { path: /cluster_src\/app-providers/, layer: LAYER_COLORS.APP_PROVIDERS },
-    { path: /cluster_src\/app\/lib\/[^/]+$/, layer: LAYER_COLORS.LIB },
-    { path: /cluster_src\/app\/lib\/[^/]+\/presentation/, layer: LAYER_COLORS.PRESENTATION },
-    { path: /cluster_src\/app\/lib\/[^/]+\/application/, layer: LAYER_COLORS.APPLICATION },
-    { path: /cluster_src\/app\/lib\/[^/]+\/infrastructure/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { path: /cluster_src\/app\/lib\/[^/]+\/domain/, layer: LAYER_COLORS.DOMAIN },
-    { path: /cluster_src\/app\/config\/[^/]+$/, layer: LAYER_COLORS.LIB },
-    { path: /cluster_src\/app\/config\/[^/]+\/infrastructure/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { path: /cluster_src\/app\/config\/[^/]+\/domain/, layer: LAYER_COLORS.DOMAIN },
-    { path: /cluster_src\/app\/api\/[^/]+$/, layer: LAYER_COLORS.LIB },
-    { path: /cluster_src\/app\/api\/[^/]+\/application/, layer: LAYER_COLORS.APPLICATION },
-    { path: /cluster_src\/app\/api\/[^/]+\/infrastructure/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { path: /cluster_src\/app\/api\/[^/]+\/domain/, layer: LAYER_COLORS.DOMAIN },
+    { path: /cluster_src\/app\/(lib|config|api)\/[^/]+$/, layer: LAYER_COLORS.LIB },
     { path: /cluster_src\/app\/features\/[^/]+$/, layer: LAYER_COLORS.FEATURES },
-    { path: /cluster_src\/app\/features\/[^/]+\/presentation/, layer: LAYER_COLORS.PRESENTATION },
-    { path: /cluster_src\/app\/features\/[^/]+\/application/, layer: LAYER_COLORS.APPLICATION },
-    { path: /cluster_src\/app\/features\/[^/]+\/infrastructure/, layer: LAYER_COLORS.INFRASTRUCTURE },
-    { path: /cluster_src\/app\/features\/[^/]+\/domain/, layer: LAYER_COLORS.DOMAIN }
+    { path: /cluster_src\/app\/[^/]+\/[^/]+\/presentation/, layer: LAYER_COLORS.PRESENTATION },
+    { path: /cluster_src\/app\/[^/]+\/[^/]+\/infrastructure/, layer: LAYER_COLORS.INFRASTRUCTURE },
+    { path: /cluster_src\/app\/[^/]+\/[^/]+\/application/, layer: LAYER_COLORS.APPLICATION },
+    { path: /cluster_src\/app\/[^/]+\/[^/]+\/domain/, layer: LAYER_COLORS.DOMAIN }
 ];
 
 function createClusterStyle(layer) {

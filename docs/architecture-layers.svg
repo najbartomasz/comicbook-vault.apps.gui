@@ -85,14 +85,14 @@
 <text text-anchor="middle" x="886" y="-1499.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">app</text>
 </g>
 <g id="clust16" class="cluster">
+<title>cluster_src/app/config/app/application</title>
+<path fill="#e8f5e9" stroke="#388e3c" stroke-width="2" d="M592,-1369C592,-1369 990.5,-1369 990.5,-1369 996.5,-1369 1002.5,-1375 1002.5,-1381 1002.5,-1381 1002.5,-1411 1002.5,-1411 1002.5,-1417 996.5,-1423 990.5,-1423 990.5,-1423 592,-1423 592,-1423 586,-1423 580,-1417 580,-1411 580,-1411 580,-1381 580,-1381 580,-1375 586,-1369 592,-1369"/>
+<text text-anchor="middle" x="791.25" y="-1411.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">application</text>
+</g>
+<g id="clust17" class="cluster">
 <title>cluster_src/app/config/app/domain</title>
 <path fill="#fff3e0" stroke="#ff9800" stroke-width="2" d="M927,-1431C927,-1431 1180,-1431 1180,-1431 1186,-1431 1192,-1437 1192,-1443 1192,-1443 1192,-1473 1192,-1473 1192,-1479 1186,-1485 1180,-1485 1180,-1485 927,-1485 927,-1485 921,-1485 915,-1479 915,-1473 915,-1473 915,-1443 915,-1443 915,-1437 921,-1431 927,-1431"/>
 <text text-anchor="middle" x="1053.5" y="-1473.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">domain</text>
-</g>
-<g id="clust17" class="cluster">
-<title>cluster_src/app/config/app/infrastructure</title>
-<path fill="#ede7f6" stroke="#673ab7" stroke-width="2" d="M592,-1369C592,-1369 990.5,-1369 990.5,-1369 996.5,-1369 1002.5,-1375 1002.5,-1381 1002.5,-1381 1002.5,-1411 1002.5,-1411 1002.5,-1417 996.5,-1423 990.5,-1423 990.5,-1423 592,-1423 592,-1423 586,-1423 580,-1417 580,-1411 580,-1411 580,-1381 580,-1381 580,-1375 586,-1369 592,-1369"/>
-<text text-anchor="middle" x="791.25" y="-1411.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="9.00">infrastructure</text>
 </g>
 <g id="clust18" class="cluster">
 <title>cluster_src/app/lib</title>
@@ -538,74 +538,74 @@
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M843.08,-1579C856.83,-1579 871.43,-1579 885.24,-1579"/>
 <polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="885.28,-1581.8 893.28,-1579 885.28,-1576.2 885.28,-1581.8"/>
 </g>
-<!-- src/app/config/app/domain/app&#45;config.ts -->
+<!-- src/app/config/app/application/app&#45;config.dto.ts -->
 <g id="node21" class="node">
-<title>src/app/config/app/domain/app&#45;config.ts</title>
-<g id="a_node21"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/domain/app-config.ts" xlink:title="app&#45;config.ts">
-<path fill="#ffcc80" stroke="#ff9800" d="M1177.67,-1458.5C1177.67,-1458.5 1117.33,-1458.5 1117.33,-1458.5 1114.17,-1458.5 1111,-1455.33 1111,-1452.17 1111,-1452.17 1111,-1445.83 1111,-1445.83 1111,-1442.67 1114.17,-1439.5 1117.33,-1439.5 1117.33,-1439.5 1177.67,-1439.5 1177.67,-1439.5 1180.83,-1439.5 1184,-1442.67 1184,-1445.83 1184,-1445.83 1184,-1452.17 1184,-1452.17 1184,-1455.33 1180.83,-1458.5 1177.67,-1458.5"/>
-<text text-anchor="start" x="1119" y="-1446.5" font-family="Arial" font-size="10.00">app&#45;config.ts</text>
+<title>src/app/config/app/application/app&#45;config.dto.ts</title>
+<g id="a_node21"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/application/app-config.dto.ts" xlink:title="app&#45;config.dto.ts">
+<path fill="#81c784" stroke="#388e3c" d="M988.17,-1396.5C988.17,-1396.5 911.83,-1396.5 911.83,-1396.5 908.67,-1396.5 905.5,-1393.33 905.5,-1390.17 905.5,-1390.17 905.5,-1383.83 905.5,-1383.83 905.5,-1380.67 908.67,-1377.5 911.83,-1377.5 911.83,-1377.5 988.17,-1377.5 988.17,-1377.5 991.33,-1377.5 994.5,-1380.67 994.5,-1383.83 994.5,-1383.83 994.5,-1390.17 994.5,-1390.17 994.5,-1393.33 991.33,-1396.5 988.17,-1396.5"/>
+<text text-anchor="start" x="913.5" y="-1384.5" font-family="Arial" font-size="10.00">app&#45;config.dto.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/config/app/domain/index.ts -->
+<!-- src/app/config/app/application/app&#45;config.loader.ts -->
 <g id="node22" class="node">
+<title>src/app/config/app/application/app&#45;config.loader.ts</title>
+<g id="a_node22"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/application/app-config.loader.ts" xlink:title="app&#45;config.loader.ts">
+<path fill="#81c784" stroke="#388e3c" d="M824.67,-1396.5C824.67,-1396.5 735.33,-1396.5 735.33,-1396.5 732.17,-1396.5 729,-1393.33 729,-1390.17 729,-1390.17 729,-1383.83 729,-1383.83 729,-1380.67 732.17,-1377.5 735.33,-1377.5 735.33,-1377.5 824.67,-1377.5 824.67,-1377.5 827.83,-1377.5 831,-1380.67 831,-1383.83 831,-1383.83 831,-1390.17 831,-1390.17 831,-1393.33 827.83,-1396.5 824.67,-1396.5"/>
+<text text-anchor="start" x="737" y="-1384.5" font-family="Arial" font-size="10.00">app&#45;config.loader.ts</text>
+</a>
+</g>
+</g>
+<!-- src/app/config/app/application/app&#45;config.loader.ts&#45;&gt;src/app/config/app/application/app&#45;config.dto.ts -->
+<g id="edge21" class="edge">
+<title>src/app/config/app/application/app&#45;config.loader.ts&#45;&gt;src/app/config/app/application/app&#45;config.dto.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M831.41,-1387C852.22,-1387 876.34,-1387 897.29,-1387"/>
+<polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="897.46,-1389.8 905.46,-1387 897.46,-1384.2 897.46,-1389.8"/>
+</g>
+<!-- src/app/config/app/domain/index.ts -->
+<g id="node23" class="node">
 <title>src/app/config/app/domain/index.ts</title>
-<g id="a_node22"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/domain/index.ts" xlink:title="index.ts">
+<g id="a_node23"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/domain/index.ts" xlink:title="index.ts">
 <path fill="#ffcc80" stroke="#ff9800" d="M970.67,-1458.5C970.67,-1458.5 929.33,-1458.5 929.33,-1458.5 926.17,-1458.5 923,-1455.33 923,-1452.17 923,-1452.17 923,-1445.83 923,-1445.83 923,-1442.67 926.17,-1439.5 929.33,-1439.5 929.33,-1439.5 970.67,-1439.5 970.67,-1439.5 973.83,-1439.5 977,-1442.67 977,-1445.83 977,-1445.83 977,-1452.17 977,-1452.17 977,-1455.33 973.83,-1458.5 970.67,-1458.5"/>
 <text text-anchor="start" x="932.5" y="-1446.5" font-family="Arial" font-size="10.00">index.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/config/app/domain/index.ts&#45;&gt;src/app/config/app/domain/app&#45;config.ts -->
+<!-- src/app/config/app/application/app&#45;config.loader.ts&#45;&gt;src/app/config/app/domain/index.ts -->
 <g id="edge20" class="edge">
+<title>src/app/config/app/application/app&#45;config.loader.ts&#45;&gt;src/app/config/app/domain/index.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M800.9,-1396.64C824.74,-1408.19 861.5,-1426 861.5,-1426 861.5,-1426 890.38,-1433.59 914.96,-1440.05"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="914.3,-1442.77 922.75,-1442.1 915.72,-1437.36 914.3,-1442.77"/>
+</g>
+<!-- src/app/config/app/domain/app&#45;config.ts -->
+<g id="node25" class="node">
+<title>src/app/config/app/domain/app&#45;config.ts</title>
+<g id="a_node25"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/domain/app-config.ts" xlink:title="app&#45;config.ts">
+<path fill="#ffcc80" stroke="#ff9800" d="M1177.67,-1458.5C1177.67,-1458.5 1117.33,-1458.5 1117.33,-1458.5 1114.17,-1458.5 1111,-1455.33 1111,-1452.17 1111,-1452.17 1111,-1445.83 1111,-1445.83 1111,-1442.67 1114.17,-1439.5 1117.33,-1439.5 1117.33,-1439.5 1177.67,-1439.5 1177.67,-1439.5 1180.83,-1439.5 1184,-1442.67 1184,-1445.83 1184,-1445.83 1184,-1452.17 1184,-1452.17 1184,-1455.33 1180.83,-1458.5 1177.67,-1458.5"/>
+<text text-anchor="start" x="1119" y="-1446.5" font-family="Arial" font-size="10.00">app&#45;config.ts</text>
+</a>
+</g>
+</g>
+<!-- src/app/config/app/domain/index.ts&#45;&gt;src/app/config/app/domain/app&#45;config.ts -->
+<g id="edge23" class="edge">
 <title>src/app/config/app/domain/index.ts&#45;&gt;src/app/config/app/domain/app&#45;config.ts</title>
 <path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M977.37,-1449C1009.44,-1449 1064.06,-1449 1102.53,-1449"/>
 <polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="1110.97,-1451.8 1102.97,-1449 1110.97,-1446.2 1110.97,-1451.8"/>
 </g>
-<!-- src/app/config/app/infrastructure/app&#45;config.dto.ts -->
-<g id="node23" class="node">
-<title>src/app/config/app/infrastructure/app&#45;config.dto.ts</title>
-<g id="a_node23"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/infrastructure/app-config.dto.ts" xlink:title="app&#45;config.dto.ts">
-<path fill="#b39ddb" stroke="#673ab7" d="M988.17,-1396.5C988.17,-1396.5 911.83,-1396.5 911.83,-1396.5 908.67,-1396.5 905.5,-1393.33 905.5,-1390.17 905.5,-1390.17 905.5,-1383.83 905.5,-1383.83 905.5,-1380.67 908.67,-1377.5 911.83,-1377.5 911.83,-1377.5 988.17,-1377.5 988.17,-1377.5 991.33,-1377.5 994.5,-1380.67 994.5,-1383.83 994.5,-1383.83 994.5,-1390.17 994.5,-1390.17 994.5,-1393.33 991.33,-1396.5 988.17,-1396.5"/>
-<text text-anchor="start" x="913.5" y="-1384.5" font-family="Arial" font-size="10.00">app&#45;config.dto.ts</text>
-</a>
-</g>
-</g>
-<!-- src/app/config/app/infrastructure/app&#45;config.provider.ts -->
+<!-- src/app/config/app/application/index.ts -->
 <g id="node24" class="node">
-<title>src/app/config/app/infrastructure/app&#45;config.provider.ts</title>
-<g id="a_node24"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/infrastructure/app-config.provider.ts" xlink:title="app&#45;config.provider.ts">
-<path fill="#b39ddb" stroke="#673ab7" d="M828.67,-1396.5C828.67,-1396.5 731.33,-1396.5 731.33,-1396.5 728.17,-1396.5 725,-1393.33 725,-1390.17 725,-1390.17 725,-1383.83 725,-1383.83 725,-1380.67 728.17,-1377.5 731.33,-1377.5 731.33,-1377.5 828.67,-1377.5 828.67,-1377.5 831.83,-1377.5 835,-1380.67 835,-1383.83 835,-1383.83 835,-1390.17 835,-1390.17 835,-1393.33 831.83,-1396.5 828.67,-1396.5"/>
-<text text-anchor="start" x="733" y="-1384.5" font-family="Arial" font-size="10.00">app&#45;config.provider.ts</text>
-</a>
-</g>
-</g>
-<!-- src/app/config/app/infrastructure/app&#45;config.provider.ts&#45;&gt;src/app/config/app/domain/index.ts -->
-<g id="edge21" class="edge">
-<title>src/app/config/app/infrastructure/app&#45;config.provider.ts&#45;&gt;src/app/config/app/domain/index.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M800.9,-1396.64C824.74,-1408.19 861.5,-1426 861.5,-1426 861.5,-1426 890.38,-1433.59 914.96,-1440.05"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="914.3,-1442.77 922.75,-1442.1 915.72,-1437.36 914.3,-1442.77"/>
-</g>
-<!-- src/app/config/app/infrastructure/app&#45;config.provider.ts&#45;&gt;src/app/config/app/infrastructure/app&#45;config.dto.ts -->
-<g id="edge22" class="edge">
-<title>src/app/config/app/infrastructure/app&#45;config.provider.ts&#45;&gt;src/app/config/app/infrastructure/app&#45;config.dto.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M835.08,-1387C854.97,-1387 877.44,-1387 897.13,-1387"/>
-<polygon fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="897.39,-1389.8 905.39,-1387 897.39,-1384.2 897.39,-1389.8"/>
-</g>
-<!-- src/app/config/app/infrastructure/index.ts -->
-<g id="node25" class="node">
-<title>src/app/config/app/infrastructure/index.ts</title>
-<g id="a_node25"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/infrastructure/index.ts" xlink:title="index.ts">
-<path fill="#b39ddb" stroke="#673ab7" d="M635.67,-1396.5C635.67,-1396.5 594.33,-1396.5 594.33,-1396.5 591.17,-1396.5 588,-1393.33 588,-1390.17 588,-1390.17 588,-1383.83 588,-1383.83 588,-1380.67 591.17,-1377.5 594.33,-1377.5 594.33,-1377.5 635.67,-1377.5 635.67,-1377.5 638.83,-1377.5 642,-1380.67 642,-1383.83 642,-1383.83 642,-1390.17 642,-1390.17 642,-1393.33 638.83,-1396.5 635.67,-1396.5"/>
+<title>src/app/config/app/application/index.ts</title>
+<g id="a_node24"><a xlink:href="https://github.com/najbartomasz/comicbook-vault.apps.gui/blob/main/src/app/config/app/application/index.ts" xlink:title="index.ts">
+<path fill="#81c784" stroke="#388e3c" d="M635.67,-1396.5C635.67,-1396.5 594.33,-1396.5 594.33,-1396.5 591.17,-1396.5 588,-1393.33 588,-1390.17 588,-1390.17 588,-1383.83 588,-1383.83 588,-1380.67 591.17,-1377.5 594.33,-1377.5 594.33,-1377.5 635.67,-1377.5 635.67,-1377.5 638.83,-1377.5 642,-1380.67 642,-1383.83 642,-1383.83 642,-1390.17 642,-1390.17 642,-1393.33 638.83,-1396.5 635.67,-1396.5"/>
 <text text-anchor="start" x="597.5" y="-1384.5" font-family="Arial" font-size="10.00">index.ts</text>
 </a>
 </g>
 </g>
-<!-- src/app/config/app/infrastructure/index.ts&#45;&gt;src/app/config/app/infrastructure/app&#45;config.provider.ts -->
-<g id="edge23" class="edge">
-<title>src/app/config/app/infrastructure/index.ts&#45;&gt;src/app/config/app/infrastructure/app&#45;config.provider.ts</title>
-<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M642.19,-1387C662.25,-1387 690.77,-1387 716.58,-1387"/>
-<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="724.85,-1389.8 716.85,-1387 724.85,-1384.2 724.85,-1389.8"/>
+<!-- src/app/config/app/application/index.ts&#45;&gt;src/app/config/app/application/app&#45;config.loader.ts -->
+<g id="edge22" class="edge">
+<title>src/app/config/app/application/index.ts&#45;&gt;src/app/config/app/application/app&#45;config.loader.ts</title>
+<path fill="none" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" d="M642.19,-1387C663.31,-1387 693.82,-1387 720.67,-1387"/>
+<polygon fill="#000000" fill-opacity="0.333333" stroke="#000000" stroke-width="1.5" stroke-opacity="0.333333" points="728.87,-1389.8 720.87,-1387 728.87,-1384.2 728.87,-1389.8"/>
 </g>
 <!-- src/app/lib/date&#45;time/domain/date&#45;time&#45;provider.interface.ts -->
 <g id="node26" class="node">

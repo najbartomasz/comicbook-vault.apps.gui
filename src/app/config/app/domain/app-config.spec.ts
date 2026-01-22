@@ -1,18 +1,13 @@
-import { HttpUrl } from '@lib/http-client/domain';
-
 import { AppConfig } from './app-config';
 
 describe(AppConfig, () => {
     test('should create AppConfig instance', () => {
-        // Given
-        const vaultApiUrl = 'https://api.example.com/vault';
-
-        // When
+        // Given, When
         const config = AppConfig.create({
-            vaultApiUrl: HttpUrl.create(vaultApiUrl)
+            vaultApiUrl: 'https://api.example.com/vault'
         });
 
         // Then
-        expect(config.vaultApiUrl.toString()).toBe(vaultApiUrl);
+        expect(config.vaultApiUrl.toString()).toBe('https://api.example.com/vault');
     });
 });
