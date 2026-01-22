@@ -1,3 +1,4 @@
+import { HttpPath } from '@lib/http-client/domain';
 import { stubResponse } from '@testing/unit/http';
 
 import { HttpVaultRepository } from './http-vault-repository';
@@ -19,7 +20,7 @@ describe(HttpVaultRepository, () => {
         const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const response = await vaultApiClient.get<{ id: number; title: string }>('/comics/42');
+        const response = await vaultApiClient.get<{ id: number; title: string }>(HttpPath.create('/comics/42'));
 
         // Then
         expect(response).toStrictEqual({ id: 42, title: 'Test Comic' });
@@ -58,7 +59,7 @@ describe(HttpVaultRepository, () => {
         const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const response = await vaultApiClient.get('/comics/999');
+        const response = await vaultApiClient.get(HttpPath.create('/comics/999'));
 
         // Then
         expect(response).toBe('Not Found');
@@ -107,8 +108,8 @@ describe(HttpVaultRepository, () => {
         const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        await vaultApiClient.get('/comics/1');
-        await vaultApiClient.get('/comics/2');
+        await vaultApiClient.get(HttpPath.create('/comics/1'));
+        await vaultApiClient.get(HttpPath.create('/comics/2'));
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
@@ -168,8 +169,8 @@ describe(HttpVaultRepository, () => {
         const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const firstPromise = vaultApiClient.get<string>('/comics/1');
-        const secondResponse = await vaultApiClient.get<string>('/comics/2');
+        const firstPromise = vaultApiClient.get<string>(HttpPath.create('/comics/1'));
+        const secondResponse = await vaultApiClient.get<string>(HttpPath.create('/comics/2'));
         firstRequest.resolve(
             stubResponse({
                 url: 'https://localhost:3000/vault/comics/1',

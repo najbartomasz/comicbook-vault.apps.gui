@@ -1,4 +1,4 @@
-import { type HttpClient } from '@lib/http-client/domain';
+import { type HttpClient, HttpPath } from '@lib/http-client/domain';
 
 import { HttpVaultRepository } from './http-vault-repository';
 
@@ -17,7 +17,7 @@ describe(HttpVaultRepository, () => {
         const vaultRepository = new HttpVaultRepository(httpClientMock);
 
         // When
-        const result = await vaultRepository.get<{ id: number; name: string }>('/items/1');
+        const result = await vaultRepository.get<{ id: number; name: string }>(HttpPath.create('/items/1'));
 
         // Then
         expect(getMock).toHaveBeenCalledExactlyOnceWith('/items/1', undefined);
@@ -39,7 +39,7 @@ describe(HttpVaultRepository, () => {
         const vaultRepository = new HttpVaultRepository(httpClientMock);
 
         // When
-        const result = await vaultRepository.get<{ id: number; name: string }>('/items/2', {
+        const result = await vaultRepository.get<{ id: number; name: string }>(HttpPath.create('/items/2'), {
             abortSignal: abortController.signal
         });
 

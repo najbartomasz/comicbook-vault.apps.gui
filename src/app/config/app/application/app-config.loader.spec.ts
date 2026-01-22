@@ -8,25 +8,24 @@ import { AppConfigLoader } from './app-config.loader';
 describe(AppConfigLoader, () => {
     test('should load valid app config', async () => {
         // Given
+        const httpClientGetMock = vi.fn<HttpClient['get']>().mockResolvedValueOnce({
+            url: 'https://example.com/app-config.json',
+            status: 200,
+            statusText: 'OK',
+            body: {
+                vaultApiUrl: 'https://api.example.com/vault'
+            }
+        });
         const httpClientMock: HttpClient = {
-            get: vi.fn<HttpClient['get']>().mockResolvedValueOnce({
-                url: 'https://example.com/app-config.json',
-                status: 200,
-                statusText: 'OK',
-                body: {
-                    vaultApiUrl: 'https://api.example.com/vault'
-                }
-            })
+            get: httpClientGetMock
         };
-        const assetsRepository = new HttpAssetsRepository(httpClientMock);
-        const assetsRepositoryGetSpy = vi.spyOn(assetsRepository, 'get');
-        const loader = new AppConfigLoader(assetsRepository);
+        const loader = new AppConfigLoader(new HttpAssetsRepository(httpClientMock));
 
         // When
         const config = await loader.load();
 
         // Then
-        expect(assetsRepositoryGetSpy).toHaveBeenCalledExactlyOnceWith('/app-config.json');
+        expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith('/app-config.json', undefined);
         expect(config).toStrictEqual(AppConfig.create({
             vaultApiUrl: 'https://api.example.com/vault'
         }));

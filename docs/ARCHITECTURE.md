@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-77%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-23%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-78%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-22%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -61,11 +61,11 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 103
-- **Production Files**: 66
-- **Test Files**: 37
-- **Framework-Agnostic Files**: 51 (77%)
-- **Angular-Specific Files**: 15 (23%)
+- **Total TypeScript Files**: 105
+- **Production Files**: 67
+- **Test Files**: 38
+- **Framework-Agnostic Files**: 52 (78%)
+- **Angular-Specific Files**: 15 (22%)
 - **Circular Dependencies**: 0 ✅
 
 *Last generated: 2026-01-22*
@@ -159,6 +159,7 @@ src/app/
 │   │   │   ├── status/
 │   │   │   │   └── http-status.ts
 │   │   │   ├── http-client.interface.ts
+│   │   │   ├── http-path.ts
 │   │   │   ├── http-request.interface.ts
 │   │   │   ├── http-response.interface.ts
 │   │   │   ├── http-url.ts

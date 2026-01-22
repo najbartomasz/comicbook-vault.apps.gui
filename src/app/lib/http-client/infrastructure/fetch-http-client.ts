@@ -21,11 +21,11 @@ export class FetchHttpClient implements HttpClient {
         this.#requestExecutor = requestExecutor;
     }
 
-    public async get(path: `/${string}`, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
+    public async get(path: string, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
         return this.#request(HttpMethod.Get, path, { abortSignal: options?.abortSignal });
     }
 
-    async #request(method: HttpMethod, path: `/${string}`, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
+    async #request(method: HttpMethod, path: string, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
         const url = `${this.#url.toString()}${path}`;
         const request: HttpRequest = { url, method, signal: options?.abortSignal };
         const intercept = this.#interceptors.reduceRight(

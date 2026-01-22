@@ -1,3 +1,4 @@
+import { HttpPath } from '@lib/http-client/domain';
 import { stubResponse } from '@testing/unit/http';
 
 import { createAssetsRepository } from './assets-repository.factory';
@@ -19,7 +20,7 @@ describe(HttpAssetsRepository, () => {
         const assetsApiClient = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const response = await assetsApiClient.get<{ message: string }>('/config.json');
+        const response = await assetsApiClient.get<{ message: string }>(HttpPath.create('/config.json'));
 
         // Then
         expect(response).toStrictEqual({ message: 'Hello, World!' });
@@ -57,7 +58,7 @@ describe(HttpAssetsRepository, () => {
         const assetsApiClient = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const response = await assetsApiClient.get('/missing.json');
+        const response = await assetsApiClient.get(HttpPath.create('/missing.json'));
 
         // Then
         expect(response).toBe('Not Found');
@@ -105,8 +106,8 @@ describe(HttpAssetsRepository, () => {
         const assetsApiClient = createAssetsRepository(globalThis.location.origin);
 
         // When
-        await assetsApiClient.get('/first.json');
-        await assetsApiClient.get('/second.json');
+        await assetsApiClient.get(HttpPath.create('/first.json'));
+        await assetsApiClient.get(HttpPath.create('/second.json'));
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
@@ -166,8 +167,8 @@ describe(HttpAssetsRepository, () => {
         const assetsApiClient = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const firstPromise = assetsApiClient.get('/comic1.txt');
-        const secondResponse = await assetsApiClient.get('/comic2.txt');
+        const firstPromise = assetsApiClient.get(HttpPath.create('/comic1.txt'));
+        const secondResponse = await assetsApiClient.get(HttpPath.create('/comic2.txt'));
         firstRequest.resolve(
             stubResponse({
                 url: `${globalThis.location.origin}/comic1.txt`,
