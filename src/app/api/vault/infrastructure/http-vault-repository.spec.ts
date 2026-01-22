@@ -1,8 +1,8 @@
 import { type HttpClient } from '@lib/http-client/domain';
 
-import { VaultApiClient } from './vault-api-client';
+import { HttpVaultRepository } from './http-vault-repository';
 
-describe(VaultApiClient, () => {
+describe(HttpVaultRepository, () => {
     test('should get data from the specified path without abort signal', async () => {
         // Given
         const getMock = vi.fn<HttpClient['get']>().mockResolvedValueOnce({
@@ -14,10 +14,10 @@ describe(VaultApiClient, () => {
         const httpClientMock: HttpClient = {
             get: getMock
         };
-        const vaultApiClient = new VaultApiClient(httpClientMock);
+        const vaultRepository = new HttpVaultRepository(httpClientMock);
 
         // When
-        const result = await vaultApiClient.get<{ id: number; name: string }>('/items/1');
+        const result = await vaultRepository.get<{ id: number; name: string }>('/items/1');
 
         // Then
         expect(getMock).toHaveBeenCalledExactlyOnceWith('/items/1', undefined);
@@ -36,10 +36,10 @@ describe(VaultApiClient, () => {
         const httpClientMock: HttpClient = {
             get: getMock
         };
-        const vaultApiClient = new VaultApiClient(httpClientMock);
+        const vaultRepository = new HttpVaultRepository(httpClientMock);
 
         // When
-        const result = await vaultApiClient.get<{ id: number; name: string }>('/items/2', {
+        const result = await vaultRepository.get<{ id: number; name: string }>('/items/2', {
             abortSignal: abortController.signal
         });
 

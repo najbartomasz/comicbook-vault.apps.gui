@@ -1,30 +1,31 @@
 import { stubResponse } from '@testing/unit/http';
 
-import { AssetsApiClient } from './assets-api-client';
-import { createAssetsApiClient } from './assets-api-client.factory';
+import { HttpVaultRepository } from './http-vault-repository';
+import { createVaultRepository } from './vault-repository.factory';
 
-describe(AssetsApiClient, () => {
+describe(HttpVaultRepository, () => {
     test('should send request, receive expected response and log to console', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
             stubResponse({
-                url: `${globalThis.location.origin}/config.json`,
-                body: { message: 'Hello, World!' },
+                url: 'https://localhost:3000/vault/comics/42',
+                body: { id: 42, title: 'Test Comic' },
                 status: 200,
                 statusText: 'OK',
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const assetsApiClient = createAssetsApiClient(globalThis.location.origin);
+        const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const response = await assetsApiClient.get<{ message: string }>('/config.json');
+        const response = await vaultApiClient.get<{ id: number; title: string }>('/comics/42');
 
         // Then
-        expect(response).toStrictEqual({ message: 'Hello, World!' });
-        expect(consoleInfoMock).toHaveBeenCalledWith(
-            `[HTTP Request] GET ${globalThis.location.origin}/config.json`,
+        expect(response).toStrictEqual({ id: 42, title: 'Test Comic' });
+        expect(consoleInfoMock).toHaveBeenNthCalledWith(
+            1,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/42',
             {
                 sequenceNumber: 1,
                 timestamp: expect.any(Number)
@@ -32,9 +33,9 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             2,
-            `[HTTP Response] GET ${globalThis.location.origin}/config.json 200`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/42 200',
             {
-                body: { message: 'Hello, World!' },
+                body: { id: 42, title: 'Test Comic' },
                 sequenceNumber: 1,
                 timestamp: expect.any(Number),
                 responseTimeMs: expect.any(Number)
@@ -42,27 +43,28 @@ describe(AssetsApiClient, () => {
         );
     });
 
-    test('should send request and handle error response', async () => {
+    test('should send request and handle HTTP error response', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
         vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockResolvedValueOnce(
             stubResponse({
-                url: `${globalThis.location.origin}/missing.json`,
+                url: 'https://localhost:3000/vault/comics/999',
                 body: 'Not Found',
                 status: 404,
                 statusText: 'Not Found',
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const assetsApiClient = createAssetsApiClient(globalThis.location.origin);
+        const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const response = await assetsApiClient.get('/missing.json');
+        const response = await vaultApiClient.get('/comics/999');
 
         // Then
         expect(response).toBe('Not Found');
-        expect(consoleInfoMock).toHaveBeenCalledWith(
-            `[HTTP Request] GET ${globalThis.location.origin}/missing.json`,
+        expect(consoleInfoMock).toHaveBeenNthCalledWith(
+            1,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/999',
             {
                 sequenceNumber: 1,
                 timestamp: expect.any(Number)
@@ -70,7 +72,7 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             2,
-            `[HTTP Response] GET ${globalThis.location.origin}/missing.json 404`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/999 404',
             {
                 body: 'Not Found',
                 sequenceNumber: 1,
@@ -86,32 +88,32 @@ describe(AssetsApiClient, () => {
         vi.stubGlobal('fetch', vi.fn<typeof fetch>()
             .mockResolvedValueOnce(
                 stubResponse({
-                    url: `${globalThis.location.origin}/first.json`,
-                    body: { data: 'first' },
+                    url: 'https://localhost:3000/vault/comics/1',
+                    body: 'Comic 1',
                     status: 200,
                     statusText: 'OK',
-                    headers: new Headers({ 'Content-Type': 'application/json' })
+                    headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             )
             .mockResolvedValueOnce(
                 stubResponse({
-                    url: `${globalThis.location.origin}/second.json`,
-                    body: { data: 'second' },
+                    url: 'https://localhost:3000/vault/comics/2',
+                    body: 'Comic 2',
                     status: 200,
                     statusText: 'OK',
-                    headers: new Headers({ 'Content-Type': 'application/json' })
+                    headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const assetsApiClient = createAssetsApiClient(globalThis.location.origin);
+        const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        await assetsApiClient.get('/first.json');
-        await assetsApiClient.get('/second.json');
+        await vaultApiClient.get('/comics/1');
+        await vaultApiClient.get('/comics/2');
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             1,
-            `[HTTP Request] GET ${globalThis.location.origin}/first.json`,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/1',
             {
                 sequenceNumber: 1,
                 timestamp: expect.any(Number)
@@ -119,9 +121,9 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             2,
-            `[HTTP Response] GET ${globalThis.location.origin}/first.json 200`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/1 200',
             {
-                body: { data: 'first' },
+                body: 'Comic 1',
                 sequenceNumber: 1,
                 timestamp: expect.any(Number),
                 responseTimeMs: expect.any(Number)
@@ -129,7 +131,7 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             3,
-            `[HTTP Request] GET ${globalThis.location.origin}/second.json`,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/2',
             {
                 sequenceNumber: 2,
                 timestamp: expect.any(Number)
@@ -137,9 +139,9 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             4,
-            `[HTTP Response] GET ${globalThis.location.origin}/second.json 200`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/2 200',
             {
-                body: { data: 'second' },
+                body: 'Comic 2',
                 sequenceNumber: 2,
                 timestamp: expect.any(Number),
                 responseTimeMs: expect.any(Number)
@@ -156,21 +158,21 @@ describe(AssetsApiClient, () => {
             .mockReturnValueOnce(firstRequest.promise)
             .mockResolvedValueOnce(
                 stubResponse({
-                    url: `${globalThis.location.origin}/comic2.txt`,
+                    url: 'https://localhost:3000/vault/comics/2',
                     body: 'Comic 2',
                     status: 200,
                     statusText: 'OK',
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const assetsApiClient = createAssetsApiClient(globalThis.location.origin);
+        const vaultApiClient = createVaultRepository('https://localhost:3000/vault');
 
         // When
-        const firstPromise = assetsApiClient.get('/comic1.txt');
-        const secondResponse = await assetsApiClient.get('/comic2.txt');
+        const firstPromise = vaultApiClient.get<string>('/comics/1');
+        const secondResponse = await vaultApiClient.get<string>('/comics/2');
         firstRequest.resolve(
             stubResponse({
-                url: `${globalThis.location.origin}/comic1.txt`,
+                url: 'https://localhost:3000/vault/comics/1',
                 body: 'Comic 1',
                 status: 200,
                 statusText: 'OK',
@@ -184,7 +186,7 @@ describe(AssetsApiClient, () => {
         expect(secondResponse).toBe('Comic 2');
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             1,
-            `[HTTP Request] GET ${globalThis.location.origin}/comic1.txt`,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/1',
             {
                 sequenceNumber: 1,
                 timestamp: expect.any(Number)
@@ -192,7 +194,7 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             2,
-            `[HTTP Request] GET ${globalThis.location.origin}/comic2.txt`,
+            '[HTTP Request] GET https://localhost:3000/vault/comics/2',
             {
                 sequenceNumber: 2,
                 timestamp: expect.any(Number)
@@ -200,7 +202,7 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             3,
-            `[HTTP Response] GET ${globalThis.location.origin}/comic2.txt 200`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/2 200',
             {
                 body: 'Comic 2',
                 sequenceNumber: 2,
@@ -210,7 +212,7 @@ describe(AssetsApiClient, () => {
         );
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
             4,
-            `[HTTP Response] GET ${globalThis.location.origin}/comic1.txt 200`,
+            '[HTTP Response] GET https://localhost:3000/vault/comics/1 200',
             {
                 body: 'Comic 1',
                 sequenceNumber: 1,

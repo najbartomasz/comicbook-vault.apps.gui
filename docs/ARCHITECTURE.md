@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-76%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-24%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-77%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-23%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -61,14 +61,14 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 99
-- **Production Files**: 62
+- **Total TypeScript Files**: 103
+- **Production Files**: 66
 - **Test Files**: 37
-- **Framework-Agnostic Files**: 47 (76%)
-- **Angular-Specific Files**: 15 (24%)
+- **Framework-Agnostic Files**: 51 (77%)
+- **Angular-Specific Files**: 15 (23%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-21*
+*Last generated: 2026-01-22*
 
 ---
 
@@ -81,15 +81,21 @@ This project follows a **layered architecture** with strict separation between f
 src/app/
 ├── api/                        # 🟣 External APIs integration
 │   ├── assets/                 # Assets API integration
+│   │   ├── domain/             # Repository contracts
+│   │   │   ├── assets-repository.ts
+│   │   │   └── index.ts
 │   │   └── infrastructure/     # API implementation
-│   │       ├── assets-api-client.factory.ts
-│   │       ├── assets-api-client.ts
+│   │       ├── assets-repository.factory.ts
+│   │       ├── http-assets-repository.ts
 │   │       └── index.ts
 │   └── vault/                  # Vault API integration
+│       ├── domain/             # Repository contracts
+│       │   ├── index.ts
+│       │   └── vault-repository.ts
 │       └── infrastructure/     # API implementation
+│           ├── http-vault-repository.ts
 │           ├── index.ts
-│           ├── vault-api-client.factory.ts
-│           └── vault-api-client.ts
+│           └── vault-repository.factory.ts
 │
 ├── config/                     # Configuration
 │   └── app/                    # App configuration context
@@ -181,10 +187,10 @@ src/app/
 src/app-providers/              # ⚪ Application-level providers (composition root)
 ├── app-config/                 # Application configuration providers
 │   └── app-config.provider.ts
-├── assets-api-client/          # Assets API client providers
-│   └── assets-api-client.provider.ts
-├── vault-api-client/           # Vault API client providers
-│   └── vault-api-client.provider.ts
+├── assets-repository/          # Assets repository providers
+│   └── assets-repository.provider.ts
+├── vault-repository/           # Vault repository providers
+│   └── vault-repository.provider.ts
 └── index.ts                    # Exported provider functions
 
 src/testing/
@@ -376,4 +382,4 @@ src/app-providers/              # ⚪ Application-level providers
 
 ---
 
-**Last Updated**: January 21, 2026
+**Last Updated**: January 22, 2026

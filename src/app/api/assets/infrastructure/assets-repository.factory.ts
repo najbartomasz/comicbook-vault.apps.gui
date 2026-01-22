@@ -1,31 +1,33 @@
 import { SystemDateTime } from '@lib/date-time/infrastructure';
 import {
-    type HttpInterceptor,
     RequestLoggerHttpInterceptor,
     ResponseLoggerHttpInterceptor,
     ResponseTimeHttpInterceptor,
     SequenceNumberHttpInterceptor,
-    TimestampHttpInterceptor
+    TimestampHttpInterceptor,
+    type HttpInterceptor
 } from '@lib/http-client/application';
 import { HttpUrl } from '@lib/http-client/domain';
 import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/http-client/infrastructure';
-import { PerformanceTimestampProvider } from '@lib/performance/infrastructure';
+import { PerformanceTimestamp } from '@lib/performance/infrastructure';
 
-import { VaultApiClient } from './vault-api-client';
+import { type AssetsRepository } from '../domain';
 
-export const createVaultApiClient = (baseUrl: string): VaultApiClient => {
+import { HttpAssetsRepository } from './http-assets-repository';
+
+export const createAssetsRepository = (baseUrl: string): AssetsRepository => {
     const url = HttpUrl.create(baseUrl);
     const httpInterceptors: HttpInterceptor[] = [
         new ResponseLoggerHttpInterceptor(),
         new SequenceNumberHttpInterceptor(),
         new TimestampHttpInterceptor(new SystemDateTime()),
         new RequestLoggerHttpInterceptor(),
-        new ResponseTimeHttpInterceptor(new PerformanceTimestampProvider())
+        new ResponseTimeHttpInterceptor(new PerformanceTimestamp())
     ];
     const httpClient = new FetchHttpClient(
         url,
         [new JsonResponseBodyParser(), new TextPlainResponseBodyParser()],
         httpInterceptors
     );
-    return new VaultApiClient(httpClient);
+    return new HttpAssetsRepository(httpClient);
 };

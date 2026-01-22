@@ -1,8 +1,8 @@
 import { type HttpClient } from '@lib/http-client/domain';
 
-import { AssetsApiClient } from './assets-api-client';
+import { HttpAssetsRepository } from './http-assets-repository';
 
-describe(AssetsApiClient, () => {
+describe(HttpAssetsRepository, () => {
     test('should get data from the specified path without abort signal', async () => {
         // Given
         const getMock = vi.fn<HttpClient['get']>().mockResolvedValueOnce({
@@ -14,10 +14,10 @@ describe(AssetsApiClient, () => {
         const httpClientMock: HttpClient = {
             get: getMock
         };
-        const assetsApiClient = new AssetsApiClient(httpClientMock);
+        const assetsRepository = new HttpAssetsRepository(httpClientMock);
 
         // When
-        const result = await assetsApiClient.get<{ id: number; name: string }>('/items/1');
+        const result = await assetsRepository.get<{ id: number; name: string }>('/items/1');
 
         // Then
         expect(getMock).toHaveBeenCalledExactlyOnceWith('/items/1', undefined);
@@ -36,10 +36,10 @@ describe(AssetsApiClient, () => {
         const httpClientMock: HttpClient = {
             get: getMock
         };
-        const assetsApiClient = new AssetsApiClient(httpClientMock);
+        const assetsRepository = new HttpAssetsRepository(httpClientMock);
 
         // When
-        const result = await assetsApiClient.get<{ id: number; name: string }>('/items/2', {
+        const result = await assetsRepository.get<{ id: number; name: string }>('/items/2', {
             abortSignal: abortController.signal
         });
 

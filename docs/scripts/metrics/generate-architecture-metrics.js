@@ -136,9 +136,25 @@ const buildUpdatedContent = (content, metricsMarkdown) => {
         : insertMetricsSection(content, metricsMarkdown);
 };
 
-const updateArchitectureDoc = (metricsMarkdown) => {
+const updateBadges = (content, metrics) => {
+    const frameworkAgnosticBadge = `![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-${metrics.frameworkAgnostic.percentage}%25-purple)`;
+    const angularSpecificBadge = `![Angular Specific](https://img.shields.io/badge/angular%20specific-${metrics.angularSpecific.percentage}%25-blue)`;
+    return content
+        .replace(
+            /!\[Framework Agnostic\]\(https:\/\/img\.shields\.io\/badge\/framework%20agnostic-\d+%25-purple\)/,
+            frameworkAgnosticBadge
+        )
+        .replace(
+            /!\[Angular Specific\]\(https:\/\/img\.shields\.io\/badge\/angular%20specific-\d+%25-blue\)/,
+            angularSpecificBadge
+        );
+};
+
+const updateArchitectureDoc = (metrics) => {
     const content = readFileSync(ARCH_DOC_PATH, 'utf8');
-    const updatedContent = buildUpdatedContent(content, metricsMarkdown);
+    const metricsMarkdown = formatMetricsMarkdown(metrics);
+    let updatedContent = buildUpdatedContent(content, metricsMarkdown);
+    updatedContent = updateBadges(updatedContent, metrics);
     writeFileSync(ARCH_DOC_PATH, updatedContent, 'utf8');
     console.log('✅ Metrics updated in ARCHITECTURE.md');
 };
@@ -159,7 +175,7 @@ const main = () => {
         const metrics = generateMetrics();
         const metricsMarkdown = formatMetricsMarkdown(metrics);
         logMetrics(metricsMarkdown);
-        updateArchitectureDoc(metricsMarkdown);
+        updateArchitectureDoc(metrics);
         if (process.argv.includes('--json')) {
             outputJson(metrics);
         }

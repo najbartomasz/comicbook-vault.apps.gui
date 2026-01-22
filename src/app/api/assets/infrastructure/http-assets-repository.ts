@@ -1,9 +1,12 @@
 import { type HttpClient } from '@lib/http-client/domain';
 
-export class VaultApiClient {
+import { AssetsRepository } from '../domain';
+
+export class HttpAssetsRepository extends AssetsRepository {
     readonly #httpClient: HttpClient;
 
     public constructor(httpClient: HttpClient) {
+        super();
         this.#httpClient = httpClient;
     }
 
