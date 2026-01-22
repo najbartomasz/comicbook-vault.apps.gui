@@ -1,4 +1,5 @@
-import { type HttpClient, type HttpPath } from '@lib/http-client/domain';
+import { type EndpointPath } from '@lib/endpoint/domain';
+import { type HttpClient, HttpPath } from '@lib/http-client/domain';
 
 import { AssetsRepository } from '../domain';
 
@@ -10,8 +11,9 @@ export class HttpAssetsRepository extends AssetsRepository {
         this.#httpClient = httpClient;
     }
 
-    public async get<T>(path: HttpPath, options?: { abortSignal?: AbortSignal }): Promise<T> {
-        const response = await this.#httpClient.get(path.toString(), options);
+    public async get<T>(path: EndpointPath, options?: { abortSignal?: AbortSignal }): Promise<T> {
+        const httpPath = HttpPath.create(path.toString());
+        const response = await this.#httpClient.get(httpPath.toString(), options);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         return response.body as T;
     }

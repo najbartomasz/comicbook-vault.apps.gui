@@ -61,10 +61,10 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 105
-- **Production Files**: 67
-- **Test Files**: 38
-- **Framework-Agnostic Files**: 52 (78%)
+- **Total TypeScript Files**: 108
+- **Production Files**: 69
+- **Test Files**: 39
+- **Framework-Agnostic Files**: 54 (78%)
 - **Angular-Specific Files**: 15 (22%)
 - **Circular Dependencies**: 0 ✅
 
@@ -164,6 +164,11 @@ src/app/
 │   │   │   ├── http-response.interface.ts
 │   │   │   ├── http-url.ts
 │   │   │   └── index.ts
+│   │
+│   ├── endpoint/               # 🟡 Protocol-agnostic endpoint context
+│   │   └── domain/             # Endpoint contracts & value objects
+│   │       ├── endpoint-path.ts
+│   │       └── index.ts
 │   │
 │   └── performance/            # 🟢 Performance monitoring context
 │       ├── infrastructure/     # Platform API adapters
@@ -351,6 +356,38 @@ This includes decisions about:
 - Technology choices (Vitest, Playwright, Angular Material)
 - Development practices and automation
 - Future considerations for complex features
+
+---
+
+## Value Object Patterns
+
+### EndpointPath: Protocol-Agnostic Endpoint Access
+
+The `EndpointPath` value object enables protocol-agnostic endpoint identification across the domain layer, allowing infrastructure implementations to adapt to different protocols (HTTP, GraphQL, WebSocket, file system) without changing domain contracts.
+
+**Pattern**:
+```typescript
+export abstract class AssetsRepository {
+    public abstract get<T>(path: EndpointPath, ...): Promise<T>;
+}
+
+export class HttpAssetsRepository {
+    public async get<T>(path: EndpointPath, ...): Promise<T> {
+        const httpPath = HttpPath.create(path.toString());
+        return this.#httpClient.get(httpPath.toString(), ...);
+    }
+}
+
+const config = await assetsRepository.get(
+    EndpointPath.create('/app-config.json')
+);
+```
+
+**Benefits**:
+- Domain layer remains independent of HTTP protocol
+- Future protocol changes (e.g., HTTP → GraphQL) only affect infrastructure
+- Domain contracts stable across protocol migrations
+- Clear separation of concerns: what vs how
 
 ---
 

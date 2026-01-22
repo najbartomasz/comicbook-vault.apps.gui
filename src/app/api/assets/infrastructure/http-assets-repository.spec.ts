@@ -1,4 +1,5 @@
-import { type HttpClient, HttpPath } from '@lib/http-client/domain';
+import { EndpointPath } from '@lib/endpoint/domain';
+import { type HttpClient } from '@lib/http-client/domain';
 
 import { HttpAssetsRepository } from './http-assets-repository';
 
@@ -17,7 +18,7 @@ describe(HttpAssetsRepository, () => {
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
 
         // When
-        const result = await assetsRepository.get<{ id: number; name: string }>(HttpPath.create('/items/1'));
+        const result = await assetsRepository.get<{ id: number; name: string }>(EndpointPath.create('/items/1'));
 
         // Then
         expect(getMock).toHaveBeenCalledExactlyOnceWith('/items/1', undefined);
@@ -39,7 +40,7 @@ describe(HttpAssetsRepository, () => {
         const assetsRepository = new HttpAssetsRepository(httpClientMock);
 
         // When
-        const result = await assetsRepository.get<{ id: number; name: string }>(HttpPath.create('/items/2'), {
+        const result = await assetsRepository.get<{ id: number; name: string }>(EndpointPath.create('/items/2'), {
             abortSignal: abortController.signal
         });
 

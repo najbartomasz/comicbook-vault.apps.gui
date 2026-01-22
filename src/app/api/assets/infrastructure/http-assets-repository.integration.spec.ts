@@ -1,4 +1,4 @@
-import { HttpPath } from '@lib/http-client/domain';
+import { EndpointPath } from '@lib/endpoint/domain';
 import { stubResponse } from '@testing/unit/http';
 
 import { createAssetsRepository } from './assets-repository.factory';
@@ -17,10 +17,10 @@ describe(HttpAssetsRepository, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const assetsApiClient = createAssetsRepository(globalThis.location.origin);
+        const assetsRepository = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const response = await assetsApiClient.get<{ message: string }>(HttpPath.create('/config.json'));
+        const response = await assetsRepository.get<{ message: string }>(EndpointPath.create('/config.json'));
 
         // Then
         expect(response).toStrictEqual({ message: 'Hello, World!' });
@@ -55,10 +55,10 @@ describe(HttpAssetsRepository, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const assetsApiClient = createAssetsRepository(globalThis.location.origin);
+        const assetsRepository = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const response = await assetsApiClient.get(HttpPath.create('/missing.json'));
+        const response = await assetsRepository.get(EndpointPath.create('/missing.json'));
 
         // Then
         expect(response).toBe('Not Found');
@@ -103,11 +103,11 @@ describe(HttpAssetsRepository, () => {
                     headers: new Headers({ 'Content-Type': 'application/json' })
                 })
             ));
-        const assetsApiClient = createAssetsRepository(globalThis.location.origin);
+        const assetsRepository = createAssetsRepository(globalThis.location.origin);
 
         // When
-        await assetsApiClient.get(HttpPath.create('/first.json'));
-        await assetsApiClient.get(HttpPath.create('/second.json'));
+        await assetsRepository.get(EndpointPath.create('/first.json'));
+        await assetsRepository.get(EndpointPath.create('/second.json'));
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
@@ -164,11 +164,11 @@ describe(HttpAssetsRepository, () => {
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const assetsApiClient = createAssetsRepository(globalThis.location.origin);
+        const assetsRepository = createAssetsRepository(globalThis.location.origin);
 
         // When
-        const firstPromise = assetsApiClient.get(HttpPath.create('/comic1.txt'));
-        const secondResponse = await assetsApiClient.get(HttpPath.create('/comic2.txt'));
+        const firstPromise = assetsRepository.get(EndpointPath.create('/comic1.txt'));
+        const secondResponse = await assetsRepository.get(EndpointPath.create('/comic2.txt'));
         firstRequest.resolve(
             stubResponse({
                 url: `${globalThis.location.origin}/comic1.txt`,

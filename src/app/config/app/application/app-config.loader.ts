@@ -1,5 +1,5 @@
 import { type AssetsRepository } from '@api/assets/domain';
-import { HttpPath } from '@lib/http-client/domain';
+import { EndpointPath } from '@lib/endpoint/domain';
 
 import { AppConfig } from '../domain';
 
@@ -20,7 +20,7 @@ export class AppConfigLoader {
     }
 
     public async load(): Promise<AppConfig> {
-        const data = await this.#assetsRepository.get<AppConfigDto>(HttpPath.create('/app-config.json'));
+        const data = await this.#assetsRepository.get<AppConfigDto>(EndpointPath.create('/app-config.json'));
         if (!isAppConfigDto(data)) {
             throw new Error('Invalid app config format');
         }
