@@ -1,3 +1,5 @@
+import { HttpUrlError } from './http-url-error';
+
 export class HttpUrl {
     readonly #value: string;
 
@@ -7,7 +9,7 @@ export class HttpUrl {
 
     public static create(url: string): HttpUrl {
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
-            throw new Error(`Invalid URL: "${url}". URL must start with 'http://' or 'https://'.`);
+            throw new HttpUrlError(`Invalid URL: "${url}". URL must start with 'http://' or 'https://'.`, url);
         }
         return new HttpUrl(url);
     }

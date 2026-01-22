@@ -1,4 +1,5 @@
 import { EndpointPath } from './endpoint-path';
+import { EndpointPathError } from './endpoint-path-error';
 
 describe('_EndpointPath', () => {
     test('should create instance from root path', () => {
@@ -21,25 +22,27 @@ describe('_EndpointPath', () => {
 
     test('should throw error for empty string', () => {
         // Given, When, Then
-        expect(() => EndpointPath.create('')).toThrowError('Endpoint path cannot be empty');
+        expect(() => EndpointPath.create('')).toThrowError(new EndpointPathError('Endpoint path cannot be empty', ''));
     });
 
     test('should throw error for whitespace-only string', () => {
         // Given, When, Then
-        expect(() => EndpointPath.create('   ')).toThrowError('Endpoint path cannot be empty');
+        expect(() => EndpointPath.create('   ')).toThrowError(new EndpointPathError('Endpoint path cannot be empty', '   '));
     });
 
     test('should throw error for path not starting with slash', () => {
         // Given, When, Then
-        expect(() => EndpointPath.create('api/users')).toThrowError(
-            "Invalid endpoint path: must start with '/' but got 'api/users'"
-        );
+        expect(() => EndpointPath.create('api/users')).toThrowError(new EndpointPathError(
+            "Invalid endpoint path: must start with '/' but got 'api/users'",
+            'api/users'
+        ));
     });
 
     test('should throw error for path starting with protocol', () => {
         // Given, When, Then
-        expect(() => EndpointPath.create('http://example.com/api')).toThrowError(
-            "Invalid endpoint path: must start with '/' but got 'http://example.com/api'"
-        );
+        expect(() => EndpointPath.create('http://example.com/api')).toThrowError(new EndpointPathError(
+            "Invalid endpoint path: must start with '/' but got 'http://example.com/api'",
+            'http://example.com/api'
+        ));
     });
 });

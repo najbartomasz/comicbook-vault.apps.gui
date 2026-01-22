@@ -1,7 +1,7 @@
 import { type AssetsRepository } from '@api/assets/domain';
 import { EndpointPath } from '@lib/endpoint/domain';
 
-import { AppConfig } from '../domain';
+import { AppConfig, AppConfigError } from '../domain';
 
 import { type AppConfigDto } from './app-config.dto';
 
@@ -22,7 +22,7 @@ export class AppConfigLoader {
     public async load(): Promise<AppConfig> {
         const data = await this.#assetsRepository.get<AppConfigDto>(EndpointPath.create('/app-config.json'));
         if (!isAppConfigDto(data)) {
-            throw new Error('Invalid app config format');
+            throw new AppConfigError('Invalid app config format', data);
         }
         return AppConfig.create({
             vaultApiUrl: data.vaultApiUrl

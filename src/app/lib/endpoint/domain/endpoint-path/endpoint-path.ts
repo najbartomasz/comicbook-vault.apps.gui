@@ -1,3 +1,5 @@
+import { EndpointPathError } from './endpoint-path-error';
+
 export class EndpointPath {
     readonly #value: string;
 
@@ -7,10 +9,10 @@ export class EndpointPath {
 
     public static create(value: string): EndpointPath {
         if (!value || value.trim().length === 0) {
-            throw new Error('Endpoint path cannot be empty');
+            throw new EndpointPathError('Endpoint path cannot be empty', value);
         }
         if (!value.startsWith('/')) {
-            throw new Error(`Invalid endpoint path: must start with '/' but got '${value}'`);
+            throw new EndpointPathError(`Invalid endpoint path: must start with '/' but got '${value}'`, value);
         }
         return new EndpointPath(value);
     }

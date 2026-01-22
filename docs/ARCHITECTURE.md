@@ -4,8 +4,8 @@
 ![Documentation Validated](https://img.shields.io/badge/docs-validated-green)
 ![Dependencies](https://img.shields.io/badge/circular%20deps-0-green)
 ![Layer Separation](https://img.shields.io/badge/layer%20separation-strict-blue)
-![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-78%25-purple)
-![Angular Specific](https://img.shields.io/badge/angular%20specific-22%25-blue)
+![Framework Agnostic](https://img.shields.io/badge/framework%20agnostic-79%25-purple)
+![Angular Specific](https://img.shields.io/badge/angular%20specific-21%25-blue)
 ![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
 ## Table of Contents
@@ -61,11 +61,11 @@ This project follows a **layered architecture** with strict separation between f
 
 ## Project Statistics
 
-- **Total TypeScript Files**: 108
-- **Production Files**: 69
-- **Test Files**: 39
-- **Framework-Agnostic Files**: 54 (78%)
-- **Angular-Specific Files**: 15 (22%)
+- **Total TypeScript Files**: 116
+- **Production Files**: 73
+- **Test Files**: 43
+- **Framework-Agnostic Files**: 58 (79%)
+- **Angular-Specific Files**: 15 (21%)
 - **Circular Dependencies**: 0 ✅
 
 *Last generated: 2026-01-22*
@@ -104,6 +104,7 @@ src/app/
 │       │   ├── app-config.loader.ts
 │       │   └── index.ts
 │       └── domain/             # Business logic & contracts
+│           ├── app-config-error.ts
 │           ├── app-config.ts
 │           └── index.ts
 │
@@ -154,20 +155,26 @@ src/app/
 │   │   │   │   └── http-interceptor.interface.ts
 │   │   │   └── index.ts
 │   │   └── domain/             # Business contracts & value objects
+│   │   │   ├── http-path/
+│   │   │   │   ├── http-path.ts
+│   │   │   │   └── http-path-error.ts
+│   │   │   ├── http-url/
+│   │   │   │   ├── http-url.ts
+│   │   │   │   └── http-url-error.ts
 │   │   │   ├── method/
 │   │   │   │   └── http-method.ts
 │   │   │   ├── status/
 │   │   │   │   └── http-status.ts
 │   │   │   ├── http-client.interface.ts
-│   │   │   ├── http-path.ts
 │   │   │   ├── http-request.interface.ts
 │   │   │   ├── http-response.interface.ts
-│   │   │   ├── http-url.ts
 │   │   │   └── index.ts
 │   │
 │   ├── endpoint/               # 🟡 Protocol-agnostic endpoint context
 │   │   └── domain/             # Endpoint contracts & value objects
-│   │       ├── endpoint-path.ts
+│   │       ├── endpoint-path/
+│   │       │   ├── endpoint-path.ts
+│   │       │   └── endpoint-path-error.ts
 │   │       └── index.ts
 │   │
 │   └── performance/            # 🟢 Performance monitoring context

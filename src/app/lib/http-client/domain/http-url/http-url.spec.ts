@@ -1,4 +1,5 @@
 import { HttpUrl } from './http-url';
+import { HttpUrlError } from './http-url-error';
 
 describe(HttpUrl, () => {
     test('should create HttpUrl for valid http URL', () => {
@@ -19,18 +20,25 @@ describe(HttpUrl, () => {
 
     test('should throw error for invalid URL', () => {
         // Given, When, Then
-        expect(() => HttpUrl.create('ftp://example.com'))
-            .toThrowError('Invalid URL: "ftp://example.com". URL must start with \'http://\' or \'https://\'.');
+        expect(() => HttpUrl.create('ftp://example.com')).toThrowError(new HttpUrlError(
+            'Invalid URL: "ftp://example.com". URL must start with \'http://\' or \'https://\'.',
+            'ftp://example.com'
+        ));
     });
 
     test('should throw error for URL without protocol', () => {
         // Given, When, Then
-        expect(() => HttpUrl.create('example.com'))
-            .toThrowError('Invalid URL: "example.com". URL must start with \'http://\' or \'https://\'.');
+        expect(() => HttpUrl.create('example.com')).toThrowError(new HttpUrlError(
+            'Invalid URL: "example.com". URL must start with \'http://\' or \'https://\'.',
+            'example.com'
+        ));
     });
 
     test('should throw error for empty URL', () => {
         // Given, When, Then
-        expect(() => HttpUrl.create('')).toThrowError('Invalid URL: "". URL must start with \'http://\' or \'https://\'.');
+        expect(() => HttpUrl.create('')).toThrowError(new HttpUrlError(
+            'Invalid URL: "". URL must start with \'http://\' or \'https://\'.',
+            ''
+        ));
     });
 });
