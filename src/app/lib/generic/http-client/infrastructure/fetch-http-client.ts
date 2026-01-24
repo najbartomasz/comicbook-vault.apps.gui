@@ -1,5 +1,5 @@
 import { type HttpInterceptor } from '../application';
-import { type HttpClient, HttpMethod, type HttpRequest, type HttpResponse, type HttpUrl } from '../domain';
+import { type HttpClient, HttpMethod, type HttpPath, type HttpRequest, type HttpResponse, type HttpUrl } from '../domain';
 
 import { type ResponseBodyParser } from './body-parsers/response-body-parser.interface';
 import { FetchHttpRequestExecutor } from './request-executor/fetch/fetch.http-request-executor';
@@ -21,12 +21,12 @@ export class FetchHttpClient implements HttpClient {
         this.#requestExecutor = requestExecutor;
     }
 
-    public async get(path: string, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
+    public async get(path: HttpPath, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
         return this.#request(HttpMethod.Get, path, { abortSignal: options?.abortSignal });
     }
 
-    async #request(method: HttpMethod, path: string, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
-        const url = `${this.#url.toString()}${path}`;
+    async #request(method: HttpMethod, path: HttpPath, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
+        const url = `${this.#url.toString()}${path.toString()}`;
         const request: HttpRequest = { url, method, signal: options?.abortSignal };
         const intercept = this.#interceptors.reduceRight(
             (next, interceptor) => async (req: HttpRequest) => interceptor.intercept(req, next),

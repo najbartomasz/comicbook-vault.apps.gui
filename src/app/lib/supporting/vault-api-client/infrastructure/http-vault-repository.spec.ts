@@ -1,5 +1,5 @@
 import { EndpointPath } from '@lib/generic/endpoint/domain';
-import { type HttpClient } from '@lib/generic/http-client/domain';
+import { type HttpClient, HttpPath } from '@lib/generic/http-client/domain';
 
 import { HttpVaultRepository } from './http-vault-repository';
 
@@ -21,7 +21,7 @@ describe(HttpVaultRepository, () => {
         const result = await vaultRepository.get<{ id: number; name: string }>(EndpointPath.create('/items/1'));
 
         // Then
-        expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith('/items/1', undefined);
+        expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith(HttpPath.create('/items/1'), undefined);
         expect(result).toStrictEqual({ id: 1, name: 'Item 1' });
     });
 
@@ -45,7 +45,7 @@ describe(HttpVaultRepository, () => {
         });
 
         // Then
-        expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith('/items/2', {
+        expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith(HttpPath.create('/items/2'), {
             abortSignal: abortController.signal
         });
         expect(result).toStrictEqual({ id: 2, name: 'Item 2' });

@@ -1,7 +1,7 @@
 import { stubResponse } from '@testing/unit/http';
 
 import { type HttpInterceptor } from '../application';
-import { HttpMethod, HttpUrl } from '../domain';
+import { HttpMethod, HttpPath, HttpUrl } from '../domain';
 
 import { JsonResponseBodyParser } from './body-parsers/json/json.response-body-parser';
 import { HttpNetworkError } from './errors/network/http-network-error';
@@ -23,7 +23,7 @@ describe(FetchHttpClient, () => {
         const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        const result = await fetchHttpClient.get('/api');
+        const result = await fetchHttpClient.get(HttpPath.create('/api'));
 
         // Then
         expect(result).toStrictEqual({
@@ -42,7 +42,7 @@ describe(FetchHttpClient, () => {
         const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When, Then
-        await expect(fetchHttpClient.get('/api')).rejects.toThrowError(
+        await expect(fetchHttpClient.get(HttpPath.create('/api'))).rejects.toThrowError(
             new HttpNetworkError({
                 url: 'https://example.com/api',
                 description: 'Network failure'
@@ -66,7 +66,7 @@ describe(FetchHttpClient, () => {
         const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        await fetchHttpClient.get('/api', { abortSignal: abortController.signal });
+        await fetchHttpClient.get(HttpPath.create('/api'), { abortSignal: abortController.signal });
 
         // Then
         expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
@@ -93,7 +93,7 @@ describe(FetchHttpClient, () => {
         const fetchHttpClient = new FetchHttpClient(HttpUrl.create('https://example.com'), [new JsonResponseBodyParser()]);
 
         // When
-        await fetchHttpClient.get('/api');
+        await fetchHttpClient.get(HttpPath.create('/api'));
 
         // Then
         expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
@@ -133,7 +133,7 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        await fetchHttpClient.get('/api');
+        await fetchHttpClient.get(HttpPath.create('/api'));
 
         // Then
         expect(intercept1Mock).toHaveBeenCalledExactlyOnceWith(
@@ -192,7 +192,7 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        const result = await fetchHttpClient.get('/api');
+        const result = await fetchHttpClient.get(HttpPath.create('/api'));
 
         // Then
         expect(intercept1Mock).toHaveBeenCalledExactlyOnceWith(
@@ -237,7 +237,7 @@ describe(FetchHttpClient, () => {
         );
 
         // When
-        const result = await fetchHttpClient.get('/api');
+        const result = await fetchHttpClient.get(HttpPath.create('/api'));
 
         // Then
         expect(customExecutorMock).toHaveBeenCalledExactlyOnceWith({

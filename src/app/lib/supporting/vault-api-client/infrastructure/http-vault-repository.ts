@@ -13,7 +13,7 @@ export class HttpVaultRepository extends VaultRepository {
 
     public async get<T>(path: EndpointPath, options?: { abortSignal?: AbortSignal }): Promise<T> {
         const httpPath = HttpPath.create(path.toString());
-        const response = await this.#httpClient.get(httpPath.toString(), options);
+        const response = await this.#httpClient.get(httpPath, options);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         return response.body as T;
     }
