@@ -39,7 +39,6 @@ This project follows a **layered architecture** with strict separation between f
 **Architectural Pattern:**
 - ⬜ **Application Providers** = Angular dependency injection configuration for features and libs (framework-coupled, composition root)
 - 🟦 **Shell** = Application shell (Layout) & Feature Pages (framework-coupled)
-- 🟪 **API** = External APIs integration (framework-agnostic)
 - 🟥 **Features** = Business domain modules (vertical slices)
 - 🟩 **Lib** = Shared bounded contexts (horizontal slices)
 - 🔵 **Presentation** = Angular components & UI (framework-coupled)
@@ -68,7 +67,7 @@ This project follows a **layered architecture** with strict separation between f
 - **Angular-Specific Files**: 15 (21%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-22*
+*Last generated: 2026-01-24*
 
 ---
 
@@ -79,112 +78,31 @@ This project follows a **layered architecture** with strict separation between f
 
 ```
 src/app/
-├── api/                        # 🟣 External APIs integration
-│   ├── assets/                 # Assets API integration
-│   │   ├── infrastructure/     # API implementation
-│   │   │   ├── assets-repository.factory.ts
-│   │   │   ├── http-assets-repository.ts
-│   │   │   └── index.ts
-│   │   └── domain/             # Repository contracts
-│   │       ├── assets-repository.ts
-│   │       └── index.ts
-│   └── vault/                  # Vault API integration
-│       ├── infrastructure/     # API implementation
-│       │   ├── http-vault-repository.ts
-│       │   ├── index.ts
-│       │   └── vault-repository.factory.ts
-│       └── domain/             # Repository contracts
-│           ├── index.ts
-│           └── vault-repository.ts
-│
-├── config/                     # Configuration
-│   └── app/                    # App configuration context
-│       ├── application/        # Use cases & orchestration
-│       │   ├── app-config.dto.ts
-│       │   ├── app-config.loader.ts
-│       │   └── index.ts
-│       └── domain/             # Business logic & contracts
-│           ├── app-config-error.ts
-│           ├── app-config.ts
-│           └── index.ts
-│
 ├── lib/                        # Shared/reusable code (DDD bounded contexts)
-│   ├── date-time/              # 🟢 Date-time bounded context
-│   │   ├── infrastructure/     # Platform API adapters
-│   │   │   ├── index.ts
-│   │   │   └── system-date-time.ts
-│   │   └── domain/             # Interfaces & contracts
-│   │       ├── date-time-provider.interface.ts
-│   │       ├── date-time.ts
-│   │       └── index.ts
+│   ├── generic/                # 🟩 Generic subdomains (Framework-agnostic & Business-agnostic)
+│   │   ├── date-time/          # Reusable date utilities
+│   │   │   ├── infrastructure/
+│   │   │   └── domain/
+│   │   ├── http-client/        # Reusable HTTP client wrapper
+│   │   │   ├── infrastructure/
+│   │   │   ├── application/
+│   │   │   └── domain/
+│   │   ├── endpoint/           # Reusable endpoint path logic
+│   │   │   └── domain/
+│   │   └── performance/        # Reusable performance monitoring
+│   │       ├── infrastructure/
+│   │       └── domain/
 │   │
-│   ├── http-client/            # 🔵 HTTP communication context
-│   │   ├── infrastructure/     # Technical implementations
-│   │   │   ├── body-parsers/
-│   │   │   │   ├── json/
-│   │   │   │   │   └── json.response-body-parser.ts
-│   │   │   │   ├── text/
-│   │   │   │   │   └── text-plain.response-body-parser.ts
-│   │   │   │   └── response-body-parser.interface.ts
-│   │   │   ├── errors/
-│   │   │   │   ├── abort/
-│   │   │   │   │   └── http-abort-error.ts
-│   │   │   │   ├── network/
-│   │   │   │   │   └── http-network-error.ts
-│   │   │   │   └── payload/
-│   │   │   │   │   └── http-payload-error.ts
-│   │   │   ├── request-executor/
-│   │   │   │   ├── fetch/
-│   │   │   │   │   └── fetch.http-request-executor.ts
-│   │   │   │   └── http-request-executor.interface.ts
-│   │   │   ├── fetch-http-client.ts
-│   │   │   └── index.ts
-│   │   ├── application/        # Use cases & orchestration
-│   │   │   ├── interceptors/
-│   │   │   │   ├── logger/
-│   │   │   │   │   ├── request-logger.http-interceptor.ts
-│   │   │   │   │   └── response-logger.http-interceptor.ts
-│   │   │   │   ├── response-time/
-│   │   │   │   │   ├── response-time.constants.ts
-│   │   │   │   │   └── response-time.http-interceptor.ts
-│   │   │   │   ├── sequence-number/
-│   │   │   │   │   └── sequence-number.http-interceptor.ts
-│   │   │   │   ├── timestamp/
-│   │   │   │   │   └── timestamp.http-interceptor.ts
-│   │   │   │   ├── http-interceptor-next.type.ts
-│   │   │   │   └── http-interceptor.interface.ts
-│   │   │   └── index.ts
-│   │   └── domain/             # Business contracts & value objects
-│   │   │   ├── http-path/
-│   │   │   │   ├── http-path.ts
-│   │   │   │   └── http-path-error.ts
-│   │   │   ├── http-url/
-│   │   │   │   ├── http-url.ts
-│   │   │   │   └── http-url-error.ts
-│   │   │   ├── method/
-│   │   │   │   └── http-method.ts
-│   │   │   ├── status/
-│   │   │   │   └── http-status.ts
-│   │   │   ├── http-client.interface.ts
-│   │   │   ├── http-request.interface.ts
-│   │   │   ├── http-response.interface.ts
-│   │   │   └── index.ts
-│   │
-│   ├── endpoint/               # 🟡 Protocol-agnostic endpoint context
-│   │   └── domain/             # Endpoint contracts & value objects
-│   │       ├── endpoint-path/
-│   │       │   ├── endpoint-path.ts
-│   │       │   └── endpoint-path-error.ts
-│   │       └── index.ts
-│   │
-│   └── performance/            # 🟢 Performance monitoring context
-│       ├── infrastructure/     # Platform API adapters
-│       │   ├── index.ts
-│       │   └── performance-timestamp.ts
-│       └── domain/             # Interfaces & contracts
-│           ├── high-resolution-timestamp-provider.interface.ts
-│           ├── high-resolution-timestamp.ts
-│           └── index.ts
+│   └── supporting/             # 🟩 Supporting subdomains (App-specific plumbing)
+│       ├── app-config/         # App configuration context
+│       │   ├── application/
+│       │   └── domain/
+│       ├── assets-api-client/  # API client for assets
+│       │   ├── infrastructure/
+│       │   └── domain/
+│       └── vault-api-client/   # API client for vault
+│           ├── infrastructure/
+│           └── domain/
 │
 └── shell/                      # 🔵 Application shell (Angular-specific)
     ├── pages/
@@ -412,11 +330,21 @@ src/app/
 │       └── domain/             # 🟠 Pure TypeScript business logic
 │
 └── lib/
-    └── {context-name}/         # Shared bounded context
-        ├── presentation/       # 🔵 Shared Angular components (future)
-        ├── infrastructure/     # 🟣 Shared implementations
-        ├── application/        # 🟢 Shared use cases (e.g., interceptors)
-        └── domain/             # 🟠 Shared domain models
+    ├── core/                   # 🟩 Core Shared Kernel
+    │   └── {context-name}/
+    │       ├── infrastructure/
+    │       └── domain/
+    │
+    ├── generic/                # 🟩 Generic subdomains
+    │   └── {context-name}/
+    │       ├── infrastructure/
+    │       └── domain/
+    │
+    └── supporting/             # 🟩 Supporting subdomains
+        └── {context-name}/
+            ├── infrastructure/
+            ├── application/
+            └── domain/
 
 src/app-providers/              # ⚪ Application-level providers
 ├── {feature-name}/             # Provider configuration for features
@@ -427,4 +355,4 @@ src/app-providers/              # ⚪ Application-level providers
 
 ---
 
-**Last Updated**: January 22, 2026
+**Last Updated**: 2026-01-24

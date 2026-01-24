@@ -201,13 +201,17 @@ All of these should be **separate bounded contexts**, not dumped in a `shared/` 
 We prefer **multiple small bounded contexts** over a single monolithic `shared/` dumping ground:
 
 - **Is it a generic subdomain?** (date-time, performance, logging, validation)
-  - **YES** → Create a **bounded context** in `lib/[feature-name]/` with proper DDD layers
-  - Example: `lib/date-time/`, `lib/performance/`, `lib/logging/`
+  - **YES** → Create a **bounded context** in `lib/generic/[feature-name]/` with proper DDD layers
+  - Example: `lib/generic/date-time/`, `lib/generic/performance/`
   - Each is a self-contained feature with domain/infrastructure/application layers
 
+- **Is it a supporting subdomain?** (app config, specific API clients)
+  - **YES** → Create a **bounded context** in `lib/supporting/[feature-name]/`
+  - Example: `lib/supporting/app-config/`, `lib/supporting/vault-api-client/`
+
 - **Is it truly a shared kernel?** (used by 3+ bounded contexts, fundamental business concept)
-  - **YES** → Create `lib/shared-kernel/` with proper DDD layers
-  - Example: `lib/shared-kernel/domain/result.ts` (Result<T> type used everywhere)
+  - **YES** → Create `lib/core/[feature-name]/` with proper DDD layers
+  - Example: `lib/core/common-types/` (e.g., Result<T> used everywhere)
   - ⚠️ **Be careful**: This should be rare and well-justified
 
 - **Is it a single utility function?** (one function, no complex logic)

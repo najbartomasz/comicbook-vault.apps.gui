@@ -1,8 +1,8 @@
 import { type EnvironmentProviders, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
 
-import { AssetsRepository } from '@api/assets/domain';
-import { AppConfigLoader } from '@config/app/application';
-import { AppConfig } from '@config/app/domain';
+import { AppConfigLoader } from '@lib/supporting/app-config/application';
+import { AppConfig } from '@lib/supporting/app-config/domain';
+import { AssetsRepository } from '@lib/supporting/assets-api-client/domain';
 
 export const provideAppConfig = (): EnvironmentProviders => {
     let appConfig: AppConfig | undefined;

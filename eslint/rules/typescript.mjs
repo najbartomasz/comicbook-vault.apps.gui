@@ -32,7 +32,14 @@ export const typescriptRules = {
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports', fixStyle: 'inline-type-imports' }],
     '@typescript-eslint/default-param-last': 'error',
     '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
-    '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true, allowTypedFunctionExpressions: true, allowHigherOrderFunctions: true }],
+    '@typescript-eslint/explicit-function-return-type': [
+        'error',
+        {
+            allowExpressions: true,
+            allowTypedFunctionExpressions: true,
+            allowHigherOrderFunctions: true
+        }
+    ],
     '@typescript-eslint/explicit-member-accessibility': ['error', { accessibility: 'explicit', overrides: { constructors: 'off' } }],
     '@typescript-eslint/explicit-module-boundary-types': ['error', { allowArgumentsExplicitlyTypedAsAny: false }],
     '@typescript-eslint/init-declarations': 'off',
@@ -169,11 +176,11 @@ export const typescriptRules = {
             patterns: [
                 {
                     regex: '@features/[^/]+$',
-                    message: 'Cannot import from top-level feature barrel (@features/feature-name). Import from specific layer instead: @features/*/domain, @features/*/application, @features/*/infrastructure, etc.'
+                    message: 'Cannot import from top-level feature barrel. Use specific layer: @features/*/domain, etc.'
                 },
                 {
                     regex: '@lib/[^/]+$',
-                    message: 'Cannot import from top-level lib barrel (@lib/feature-name). Import from specific layer instead: @lib/*/domain, @lib/*/application, @lib/*/infrastructure, etc.'
+                    message: 'Cannot import from top-level lib barrel. Use specific layer: @lib/*/domain, etc.'
                 }
             ]
         }
@@ -351,5 +358,5 @@ export const typescriptRules = {
     '@typescript-eslint/typedef': 'error',
     '@typescript-eslint/unbound-method': 'error',
     '@typescript-eslint/unified-signatures': 'error',
-    '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error',
+    '@typescript-eslint/use-unknown-in-catch-callback-variable': 'error'
 };

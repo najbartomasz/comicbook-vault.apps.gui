@@ -15,5 +15,5 @@ export const promiseRules = {
     'promise/prefer-await-to-then': 'error',
     'promise/prefer-catch': 'error',
     'promise/spec-only': 'error',
-    'promise/valid-params': 'error',
+    'promise/valid-params': 'error'
 };

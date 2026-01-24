@@ -1,8 +1,8 @@
 import { type Provider } from '@angular/core';
 
-import { VaultRepository } from '@api/vault/domain';
-import { createVaultRepository } from '@api/vault/infrastructure';
-import { AppConfig } from '@config/app/domain';
+import { AppConfig } from '@lib/supporting/app-config/domain';
+import { VaultRepository } from '@lib/supporting/vault-api-client/domain';
+import { createVaultRepository } from '@lib/supporting/vault-api-client/infrastructure';
 
 export const provideVaultApiClient = (): Provider[] => [
     {

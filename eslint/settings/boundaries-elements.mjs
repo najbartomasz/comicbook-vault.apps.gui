@@ -5,71 +5,23 @@ export const boundariesElements = [
         mode: 'file'
     },
     {
-        type: 'api-domain',
-        pattern: 'src/app/api/*/domain/**',
-        mode: 'file',
-        capture: ['contextName']
-    },
-    {
-        type: 'api-application',
-        pattern: 'src/app/api/*/application/**',
-        mode: 'file',
-        capture: ['contextName']
-    },
-    {
-        type: 'api-infrastructure',
-        pattern: 'src/app/api/*/infrastructure/**',
-        mode: 'file',
-        capture: ['contextName']
-    },
-    {
-        type: 'api-presentation',
-        pattern: 'src/app/api/*/presentation/**',
-        mode: 'file',
-        capture: ['contextName']
-    },
-    {
-        type: 'config-domain',
-        pattern: 'src/app/config/*/domain/**',
-        mode: 'file',
-        capture: ['configName']
-    },
-    {
-        type: 'config-application',
-        pattern: 'src/app/config/*/application/**',
-        mode: 'file',
-        capture: ['configName']
-    },
-    {
-        type: 'config-infrastructure',
-        pattern: 'src/app/config/*/infrastructure/**',
-        mode: 'file',
-        capture: ['configName']
-    },
-    {
-        type: 'config-presentation',
-        pattern: 'src/app/config/*/presentation/**',
-        mode: 'file',
-        capture: ['configName']
-    },
-    {
         type: 'lib-domain',
-        pattern: 'src/app/lib/*/domain/**',
+        pattern: 'src/app/lib/**/domain/**',
         mode: 'file'
     },
     {
         type: 'lib-application',
-        pattern: 'src/app/lib/*/application/**',
+        pattern: 'src/app/lib/**/application/**',
         mode: 'file'
     },
     {
         type: 'lib-infrastructure',
-        pattern: 'src/app/lib/*/infrastructure/**',
+        pattern: 'src/app/lib/**/infrastructure/**',
         mode: 'file'
     },
     {
         type: 'lib-presentation',
-        pattern: 'src/app/lib/*/presentation/**',
+        pattern: 'src/app/lib/**/presentation/**',
         mode: 'file'
     },
     {

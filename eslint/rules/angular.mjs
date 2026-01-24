@@ -55,15 +55,15 @@ export const angularRules = {
         {
             type: 'attribute',
             prefix: 'app',
-            style: 'camelCase',
-        },
+            style: 'camelCase'
+        }
     ],
     '@angular-eslint/component-selector': [
         'error',
         {
             type: 'element',
             prefix: 'app',
-            style: 'kebab-case',
-        },
-    ],
+            style: 'kebab-case'
+        }
+    ]
 };

@@ -1,7 +1,7 @@
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { AssetsRepository } from '@api/assets/domain';
+import { AssetsRepository } from '@lib/supporting/assets-api-client/domain';
 
 import { provideAssetsApiClient } from './assets-repository.provider';
 

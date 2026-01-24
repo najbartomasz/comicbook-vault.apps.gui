@@ -27,19 +27,20 @@ An Architecture Decision Record is a short text file that describes:
 | [004](./004-framework-agnostic-core.md) | Framework-Agnostic Core | ✅ Accepted | Keep majority of codebase framework-agnostic using pure TypeScript |
 | [005](./005-separate-di-layer.md) | Separate DI Layer | 📦 Deprecated | Replaced by simpler app-providers pattern at root level |
 | [006](./006-composition-root-pattern.md) | Composition Root Pattern | ✅ Accepted | Single place for all dependency injection configuration (updated for app-providers) |
-| [007](./007-dependency-analysis-automation.md) | Dependency Analysis Automation | ✅ Accepted | Automated dependency analysis enforcing layer boundaries with Dependency Cruiser |
-| [008](./008-strict-typescript-configuration.md) | Strict TypeScript Configuration | ✅ Accepted | Enable strict TypeScript mode for compile-time safety and better developer experience |
-| [009](./009-vitest-over-jest.md) | Vitest over Jest | ✅ Accepted | Use Vitest as primary test runner for faster execution and better ESM support |
-| [010](./010-playwright-for-e2e.md) | Playwright for E2E Testing | ✅ Accepted | Use Playwright for reliable, cross-browser end-to-end testing |
-| [011](./011-standalone-components.md) | Standalone Components | ✅ Accepted | Use standalone components exclusively, no NgModules |
-| [012](./012-signals-for-state-management.md) | Signals for State Management | ✅ Accepted | Use Angular signals for component state, reserve RxJS for complex async operations |
-| [013](./013-angular-material-for-ui-components.md) | Angular Material for UI Components | ✅ Accepted | Use Angular Material as primary UI component library |
-| [014](./014-native-fetch-api-for-http-client.md) | Native Fetch API for HTTP Client | ✅ Accepted | Use native Fetch API wrapped in framework-agnostic adapter |
-| [015](./015-state-management-strategy.md) | State Management Strategy | 🔄 Proposed | Evaluate state management solutions for complex features |
-| [016](./016-error-handling-patterns.md) | Error Handling Patterns | 🔄 Proposed | Define global error handling strategy |
-| [017](./017-logging-and-monitoring.md) | Logging and Monitoring | 🔄 Proposed | Evaluate logging/monitoring solutions |
-| [018](./018-authentication-authorization.md) | Authentication/Authorization | 🔄 Proposed | Define auth strategy when user features are implemented |
-| [019](./019-internationalization.md) | Internationalization (i18n) | 🔄 Proposed | Evaluate when i18n requirements are defined |
+| [007](./007-libs-organization.md) | Libs Organization (Core, Generic, Supporting) | ✅ Accepted | Organize `lib/` into `generic/` and `supporting/` to distinguish reusable code from app-specific plumbing |
+| [008](./008-dependency-analysis-automation.md) | Dependency Analysis Automation | ✅ Accepted | Automated dependency analysis enforcing layer boundaries with Dependency Cruiser |
+| [009](./009-strict-typescript-configuration.md) | Strict TypeScript Configuration | ✅ Accepted | Enable strict TypeScript mode for compile-time safety and better developer experience |
+| [010](./010-vitest-over-jest.md) | Vitest over Jest | ✅ Accepted | Use Vitest as primary test runner for faster execution and better ESM support |
+| [011](./011-playwright-for-e2e.md) | Playwright for E2E Testing | ✅ Accepted | Use Playwright for reliable, cross-browser end-to-end testing |
+| [012](./012-standalone-components.md) | Standalone Components | ✅ Accepted | Use standalone components exclusively, no NgModules |
+| [013](./013-signals-for-state-management.md) | Signals for State Management | ✅ Accepted | Use Angular signals for component state, reserve RxJS for complex async operations |
+| [014](./014-angular-material-for-ui-components.md) | Angular Material for UI Components | ✅ Accepted | Use Angular Material as primary UI component library |
+| [015](./015-native-fetch-api-for-http-client.md) | Native Fetch API for HTTP Client | ✅ Accepted | Use native Fetch API wrapped in framework-agnostic adapter |
+| [016](./016-state-management-strategy.md) | State Management Strategy | 🔄 Proposed | Evaluate state management solutions for complex features |
+| [017](./017-error-handling-patterns.md) | Error Handling Patterns | 🔄 Proposed | Define global error handling strategy |
+| [018](./018-logging-and-monitoring.md) | Logging and Monitoring | 🔄 Proposed | Evaluate logging/monitoring solutions |
+| [019](./019-authentication-authorization.md) | Authentication/Authorization | 🔄 Proposed | Define auth strategy when user features are implemented |
+| [020](./020-internationalization.md) | Internationalization (i18n) | 🔄 Proposed | Evaluate when i18n requirements are defined |
 
 ## Quick Links
 

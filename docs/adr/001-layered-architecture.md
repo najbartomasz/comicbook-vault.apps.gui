@@ -190,7 +190,7 @@ export interface User {
 2. Start with Domain layer when building new features
 3. Infrastructure adapters should be thin wrappers around platform APIs
 4. Keep Application layer focused on orchestration, not implementation
-5. Use dependency analysis tools to enforce layer boundaries (see [ADR-007](./007-dependency-analysis-automation.md))
+5. Use dependency analysis tools to enforce layer boundaries (see [ADR-008](./008-dependency-analysis-automation.md))
 
 **Enforcing Architecture Boundaries:**
 
@@ -220,7 +220,7 @@ We use automated tools to prevent architecture violations:
 - [ADR-003: DDD Layer Responsibilities](./003-ddd-layer-responsibilities.md) - Detailed implementation of layered architecture
 - [ADR-004: Framework-Agnostic Core](./004-framework-agnostic-core.md) - Why framework independence matters
 - [ADR-006: Composition Root Pattern](./006-composition-root-pattern.md) - How DI configuration is composed
-- [ADR-007: Dependency Analysis Automation](./007-dependency-analysis-automation.md) - Enforcing architecture boundaries
+- [ADR-008: Dependency Analysis Automation](./008-dependency-analysis-automation.md) - Enforcing architecture boundaries
 
 ---
 

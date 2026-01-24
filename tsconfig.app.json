@@ -9,41 +9,41 @@
             "@shell": [
                 "src/app/shell/index.ts"
             ],
-            "@api/*/domain": [
-                "src/app/api/*/domain/index.ts"
+            "@lib/core/*/domain": [
+                "src/app/lib/core/*/domain/index.ts"
             ],
-            "@api/*/application": [
-                "src/app/api/*/application/index.ts"
+            "@lib/core/*/application": [
+                "src/app/lib/core/*/application/index.ts"
             ],
-            "@api/*/infrastructure": [
-                "src/app/api/*/infrastructure/index.ts"
+            "@lib/core/*/infrastructure": [
+                "src/app/lib/core/*/infrastructure/index.ts"
             ],
-            "@api/*/presentation": [
-                "src/app/api/*/presentation/index.ts"
+            "@lib/core/*/presentation": [
+                "src/app/lib/core/*/presentation/index.ts"
             ],
-            "@config/*/domain": [
-                "src/app/config/*/domain/index.ts"
+            "@lib/generic/*/domain": [
+                "src/app/lib/generic/*/domain/index.ts"
             ],
-            "@config/*/application": [
-                "src/app/config/*/application/index.ts"
+            "@lib/generic/*/application": [
+                "src/app/lib/generic/*/application/index.ts"
             ],
-            "@config/*/infrastructure": [
-                "src/app/config/*/infrastructure/index.ts"
+            "@lib/generic/*/infrastructure": [
+                "src/app/lib/generic/*/infrastructure/index.ts"
             ],
-            "@config/*/presentation": [
-                "src/app/config/*/presentation/index.ts"
+            "@lib/generic/*/presentation": [
+                "src/app/lib/generic/*/presentation/index.ts"
             ],
-            "@lib/*/domain": [
-                "src/app/lib/*/domain/index.ts"
+            "@lib/supporting/*/domain": [
+                "src/app/lib/supporting/*/domain/index.ts"
             ],
-            "@lib/*/application": [
-                "src/app/lib/*/application/index.ts"
+            "@lib/supporting/*/application": [
+                "src/app/lib/supporting/*/application/index.ts"
             ],
-            "@lib/*/infrastructure": [
-                "src/app/lib/*/infrastructure/index.ts"
+            "@lib/supporting/*/infrastructure": [
+                "src/app/lib/supporting/*/infrastructure/index.ts"
             ],
-            "@lib/*/presentation": [
-                "src/app/lib/*/presentation/index.ts"
+            "@lib/supporting/*/presentation": [
+                "src/app/lib/supporting/*/presentation/index.ts"
             ],
             "@features/*domain": [
                 "src/app/features/*/domain/index.ts"

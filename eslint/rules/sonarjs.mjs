@@ -287,5 +287,5 @@ export const sonarjsRules = {
     'sonarjs/web-sql-database': 'error',
     'sonarjs/x-powered-by': 'error',
     'sonarjs/xml-parser-xxe': 'error',
-    'sonarjs/xpath': 'error',
+    'sonarjs/xpath': 'error'
 };

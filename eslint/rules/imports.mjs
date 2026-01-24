@@ -92,5 +92,5 @@ export const importRules = {
         }
     ],
     'import/prefer-default-export': 'off',
-    'import/unambiguous': 'error',
+    'import/unambiguous': 'error'
 };

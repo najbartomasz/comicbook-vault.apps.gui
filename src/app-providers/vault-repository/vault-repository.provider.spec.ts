@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { VaultRepository } from '@api/vault/domain';
-import { AppConfig } from '@config/app/domain';
+import { AppConfig } from '@lib/supporting/app-config/domain';
+import { VaultRepository } from '@lib/supporting/vault-api-client/domain';
 
 import { provideVaultApiClient } from './vault-repository.provider';
 

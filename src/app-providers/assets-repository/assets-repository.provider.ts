@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { type EnvironmentProviders, makeEnvironmentProviders, PLATFORM_ID } from '@angular/core';
 
-import { AssetsRepository } from '@api/assets/domain';
-import { createAssetsRepository } from '@api/assets/infrastructure';
+import { AssetsRepository } from '@lib/supporting/assets-api-client/domain';
+import { createAssetsRepository } from '@lib/supporting/assets-api-client/infrastructure';
 
 export const provideAssetsApiClient = (): EnvironmentProviders => (
     makeEnvironmentProviders([

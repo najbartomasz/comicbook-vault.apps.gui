@@ -1,7 +1,7 @@
 import { ApplicationInitStatus } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { AppConfig } from '@config/app/domain';
+import { AppConfig } from '@lib/supporting/app-config/domain';
 import { stubResponse } from '@testing/unit/http';
 
 import { provideAssetsApiClient } from '../assets-repository/assets-repository.provider';

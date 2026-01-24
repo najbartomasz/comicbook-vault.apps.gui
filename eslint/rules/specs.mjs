@@ -58,7 +58,7 @@ export const specRules = {
     'sonarjs/max-lines': 'off',
     'sonarjs/max-lines-per-function': 'off',
     'sonarjs/no-duplicate-string': 'off',
-    'sonarjs/no-nested-functions': 'off',
+    'sonarjs/no-nested-functions': 'off'
 };
 
 export const integrationSpecRules = {

@@ -66,7 +66,7 @@ export const typescriptConfig = [
                     project: path.resolve(projectRoot, 'tsconfig.app.json')
                 }
             },
-            'import/internal-regex': '^@(lib|features|shell|api|config|testing)/',
+            'import/internal-regex': '^@(lib|features|shell|testing)/',
             'boundaries/root-path': projectRoot,
             'boundaries/dependency-nodes': ['import'],
             'boundaries/elements': boundariesElements,
