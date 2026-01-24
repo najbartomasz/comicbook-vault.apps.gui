@@ -251,4 +251,33 @@ describe(FetchHttpClient, () => {
             body: { custom: 'executor response' }
         });
     });
+
+    test('should join base URL with path when base contains path segments', async () => {
+        // Given
+        const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce(
+            stubResponse({
+                url: 'https://example.com/api/v1/users',
+                body: { data: 'test' },
+                status: 200,
+                statusText: 'OK',
+                headers: new Headers({ 'Content-Type': 'application/json' })
+            })
+        );
+        vi.stubGlobal('fetch', fetchMock);
+        const fetchHttpClient = new FetchHttpClient(
+            HttpUrl.create('https://example.com/api/v1'),
+            [new JsonResponseBodyParser()]
+        );
+
+        // When
+        await fetchHttpClient.get(HttpPath.create('/users'));
+
+        // Then
+        expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+            'https://example.com/api/v1/users',
+            expect.objectContaining({
+                method: HttpMethod.Get
+            })
+        );
+    });
 });

@@ -6,7 +6,7 @@ import { FetchHttpRequestExecutor } from './request-executor/fetch/fetch.http-re
 import { type HttpRequestExecutor } from './request-executor/http-request-executor.interface';
 
 export class FetchHttpClient implements HttpClient {
-    readonly #url: HttpUrl;
+    readonly #baseUrl: string;
     readonly #requestExecutor: HttpRequestExecutor;
     readonly #interceptors: readonly HttpInterceptor[];
 
@@ -16,7 +16,8 @@ export class FetchHttpClient implements HttpClient {
         interceptors: readonly HttpInterceptor[] = [],
         requestExecutor: HttpRequestExecutor = new FetchHttpRequestExecutor(bodyParsers)
     ) {
-        this.#url = url;
+        const baseUrl = url.toString();
+        this.#baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
         this.#interceptors = interceptors;
         this.#requestExecutor = requestExecutor;
     }
@@ -26,7 +27,8 @@ export class FetchHttpClient implements HttpClient {
     }
 
     async #request(method: HttpMethod, path: HttpPath, options?: { abortSignal?: AbortSignal }): Promise<HttpResponse> {
-        const url = `${this.#url.toString()}${path.toString()}`;
+        const endpoint = path.toString().substring(1);
+        const url = new URL(endpoint, this.#baseUrl).toString();
         const request: HttpRequest = { url, method, signal: options?.abortSignal };
         const intercept = this.#interceptors.reduceRight(
             (next, interceptor) => async (req: HttpRequest) => interceptor.intercept(req, next),
