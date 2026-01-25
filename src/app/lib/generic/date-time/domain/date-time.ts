@@ -9,8 +9,8 @@ export class DateTime {
         this.#timestamp = timestamp;
     }
 
-    public static now(): DateTime {
-        return new DateTime(Date.now());
+    public static create(timestamp: number): DateTime {
+        return new DateTime(timestamp);
     }
 
     public toIsoString(): string {

@@ -23,8 +23,8 @@ describe(TimestampHttpInterceptor, () => {
             .mockReturnValueOnce(1100);
         const dateTimeProviderStub: DateTimeProvider = {
             now: vi.fn<DateTimeProvider['now']>()
-                .mockReturnValueOnce(DateTime.now())
-                .mockReturnValueOnce(DateTime.now())
+                .mockReturnValueOnce(DateTime.create(Date.now()))
+                .mockReturnValueOnce(DateTime.create(Date.now()))
         };
         const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 
@@ -73,8 +73,8 @@ describe(TimestampHttpInterceptor, () => {
             .mockReturnValueOnce(1100);
         const dateTimeProviderStub: DateTimeProvider = {
             now: vi.fn<DateTimeProvider['now']>()
-                .mockReturnValueOnce(DateTime.now())
-                .mockReturnValueOnce(DateTime.now())
+                .mockReturnValueOnce(DateTime.create(Date.now()))
+                .mockReturnValueOnce(DateTime.create(Date.now()))
         };
         const timestampInterceptor = new TimestampHttpInterceptor(dateTimeProviderStub);
 
