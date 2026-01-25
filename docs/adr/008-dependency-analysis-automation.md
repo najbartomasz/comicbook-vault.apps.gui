@@ -1,4 +1,4 @@
-# ADR-007: Dependency Analysis Automation
+# ADR-008: Dependency Analysis Automation
 
 **Status**: ✅ Accepted
 
