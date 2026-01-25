@@ -168,6 +168,12 @@ export interface User {
 - Infrastructure → Domain (implements interfaces)
 - Presentation → Any layer (presentation orchestrates everything)
 
+**Skipping Layers (Relaxed Layering)**:
+While strictly layered architectures often enforce communication only with the layer directly below (e.g., Presentation → Application → Domain), we adopt a **Relaxed Layered Architecture**.
+- ✅ **Allowed**: Presentation layer may bypass the Application layer and communicate directly with Domain/Infrastructure.
+- ✅ **When to skip**: For simple CRUD operations or when no complex orchestration logic is required (see [ADR-003](./003-ddd-layer-responsibilities.md)).
+- ✅ **When NOT to skip**: When business logic or workflow coordination starts leaking into components.
+
 **Consequences**:
 
 **Benefits:**

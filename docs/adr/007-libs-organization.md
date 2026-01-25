@@ -14,6 +14,8 @@ Organize `src/app/lib` into clear category directories based on DDD Subdomain ty
 
 ```
 src/app/
+├── shell/                  # APP SHELL (Layout, Routing, Bootstrapping)
+│
 ├── features/               # CORE DOMAINS (The "Business Value")
 │   └── (Feature Modules)   # Vertical slices (e.g., vault-browser)
 │
@@ -33,6 +35,11 @@ src/app/
 ```
 
 **Category Definitions:**
+
+### 0. Shell (`src/app/shell/`) - **APPLICATION CONTAINER**
+*   **Definition:** The entry point and main container of the application.
+*   **Characteristics:** Contains the root `AppComponent`, global layout, top-level routing configuration, and bootstrap logic. It orchestrates the high-level application structure but does not contain business feature logic.
+*   **Examples:** `AppComponent`, `AppLayout`, `main.ts` logic.
 
 ### 1. Features (`src/app/features/`) - **CORE DOMAIN**
 *   **Definition:** The unique value proposition of the application. The complexities here are the reason the software exists.

@@ -45,16 +45,16 @@
             "@lib/supporting/*/presentation": [
                 "src/app/lib/supporting/*/presentation/index.ts"
             ],
-            "@features/*domain": [
+            "@features/*/domain": [
                 "src/app/features/*/domain/index.ts"
             ],
-            "@features/*application": [
+            "@features/*/application": [
                 "src/app/features/*/application/index.ts"
             ],
-            "@features/*infrastructure": [
+            "@features/*/infrastructure": [
                 "src/app/features/*/infrastructure/index.ts"
             ],
-            "@features/*presentation": [
+            "@features/*/presentation": [
                 "src/app/features/*/presentation/index.ts"
             ]
         }
