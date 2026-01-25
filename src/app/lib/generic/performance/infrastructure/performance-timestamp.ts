@@ -2,6 +2,6 @@ import { HighResolutionTimestamp, type HighResolutionTimestampProvider } from '.
 
 export class PerformanceTimestamp implements HighResolutionTimestampProvider {
     public now(): HighResolutionTimestamp {
-        return HighResolutionTimestamp.now();
+        return HighResolutionTimestamp.create(performance.now());
     }
 }

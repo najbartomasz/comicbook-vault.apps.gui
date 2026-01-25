@@ -23,8 +23,8 @@ describe(ResponseTimeHttpInterceptor, () => {
             .mockReturnValueOnce(1100.25);
         const highResolutionTimestampProviderStub = {
             now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(HighResolutionTimestamp.now())
-                .mockReturnValueOnce(HighResolutionTimestamp.now())
+                .mockReturnValueOnce(HighResolutionTimestamp.create(1000))
+                .mockReturnValueOnce(HighResolutionTimestamp.create(1100.25))
         };
         const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 
@@ -64,8 +64,8 @@ describe(ResponseTimeHttpInterceptor, () => {
             .mockReturnValueOnce(1100.25);
         const highResolutionTimestampProviderStub = {
             now: vi.fn<HighResolutionTimestampProvider['now']>()
-                .mockReturnValueOnce(HighResolutionTimestamp.now())
-                .mockReturnValueOnce(HighResolutionTimestamp.now())
+                .mockReturnValueOnce(HighResolutionTimestamp.create(1000))
+                .mockReturnValueOnce(HighResolutionTimestamp.create(1100.25))
         };
         const responseTimeInterceptor = new ResponseTimeHttpInterceptor(highResolutionTimestampProviderStub);
 

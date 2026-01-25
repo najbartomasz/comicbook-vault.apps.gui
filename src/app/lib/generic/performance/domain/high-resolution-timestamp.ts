@@ -9,8 +9,8 @@ export class HighResolutionTimestamp {
         this.#value = value;
     }
 
-    public static now(): HighResolutionTimestamp {
-        return new HighResolutionTimestamp(performance.now());
+    public static create(value: number): HighResolutionTimestamp {
+        return new HighResolutionTimestamp(value);
     }
 
     public durationSince(other: HighResolutionTimestamp): number {
