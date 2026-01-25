@@ -49,14 +49,14 @@ module.exports = {
       },
       comment: 'Application layer can only depend on Domain'
     },
-    // Infrastructure layer can only depend on Domain
+    // Infrastructure layer can depend on Application and Domain
     {
-      name: 'infrastructure-depends-domain-only',
+      name: 'infrastructure-depends-domain-or-application-only',
       from: { path: '**/infrastructure/**' },
       to: {
-        pathNot: ['**/infrastructure/**', '**/domain/**']
+        pathNot: ['**/infrastructure/**', '**/domain/**', '**/application/**']
       },
-      comment: 'Infrastructure implements Domain interfaces only'
+      comment: 'Infrastructure implements Domain interfaces and uses Application logic'
     },
     // Application providers can depend on all layers (for DI setup)
     {

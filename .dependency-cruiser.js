@@ -146,7 +146,10 @@ module.exports = {
                 path: '^src/app/lib/[^/]+/domain/'
             },
             to: {
-                path: String.raw`^src/app/(lib/[^/]+/(application|infrastructure|presentation)|features/|shell/|config/)`
+                pathNot: [
+                    String.raw`^src/app/lib/[^/]+/domain/`,
+                    String.raw`^node_modules/`
+                ]
             }
         },
         {
@@ -198,7 +201,10 @@ module.exports = {
                 path: '^src/app/lib/[^/]+/application/'
             },
             to: {
-                path: String.raw`^src/app/(lib/[^/]+/(infrastructure|presentation)|features/[^/]+/(application|infrastructure|presentation)|shell/|config/)`
+                pathNot: [
+                    String.raw`^src/app/lib/[^/]+/(domain|application)/`,
+                    String.raw`^node_modules/`
+                ]
             }
         },
         {
@@ -222,7 +228,13 @@ module.exports = {
                 path: String.raw`^src/app/features/([^/]+)/application/`
             },
             to: {
-                path: String.raw`^src/app/(lib/[^/]+/(infrastructure|presentation)|features/(?!\1/)[^/]+/|features/\1/(infrastructure|presentation)|shell/|config/)`
+                pathNot: [
+                    String.raw`^src/app/lib/[^/]+/(domain|application)/`,
+                    String.raw`^src/app/features/\1/(domain|application)/`,
+                    // Allow other features domain? ADR says yes.
+                    String.raw`^src/app/features/(?!\1/)[^/]+/domain/`,
+                    String.raw`^node_modules/`
+                ]
             }
         },
 
@@ -241,12 +253,17 @@ module.exports = {
         {
             name: 'lib-infrastructure-no-presentation',
             severity: 'error',
-            comment: 'Infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.',
+            comment:
+                'Infrastructure layer cannot import from presentation layer, but can import from Application ' +
+                'and Domain loops. Keep infrastructure framework-agnostic.',
             from: {
                 path: '^src/app/lib/[^/]+/infrastructure/'
             },
             to: {
-                path: String.raw`^src/app/(lib/[^/]+/presentation|features/[^/]+/(infrastructure|presentation)|shell/|config/)`
+                pathNot: [
+                    String.raw`^src/app/lib/[^/]+/(domain|application|infrastructure)/`,
+                    String.raw`^node_modules/`
+                ]
             }
         },
         {
@@ -263,12 +280,20 @@ module.exports = {
         {
             name: 'feature-infrastructure-no-presentation',
             severity: 'error',
-            comment: 'Feature infrastructure layer cannot import from presentation layer. Keep infrastructure framework-agnostic.',
+            comment:
+                'Feature infrastructure layer cannot import from presentation layer, but can import from ' +
+                'Application and Domain layers. Keep infrastructure framework-agnostic.',
             from: {
                 path: String.raw`^src/app/features/([^/]+)/infrastructure/`
             },
             to: {
-                path: String.raw`^src/app/(lib/[^/]+/presentation|features/(?!\1/)[^/]+/|features/\1/presentation|shell/|config/)`
+                pathNot: [
+                    String.raw`^src/app/lib/[^/]+/(domain|application|infrastructure)/`,
+                    String.raw`^src/app/features/\1/(domain|application|infrastructure)/`,
+                    // Allow other features domain?
+                    String.raw`^src/app/features/(?!\1/)[^/]+/domain/`,
+                    String.raw`^node_modules/`
+                ]
             }
         },
 
