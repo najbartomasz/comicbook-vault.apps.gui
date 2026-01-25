@@ -4,10 +4,9 @@ import {
     ResponseLoggerHttpInterceptor,
     ResponseTimeHttpInterceptor,
     SequenceNumberHttpInterceptor,
-    TimestampHttpInterceptor,
-    type HttpInterceptor
+    TimestampHttpInterceptor
 } from '@lib/generic/http-client/application';
-import { HttpUrl } from '@lib/generic/http-client/domain';
+import { type HttpInterceptor, HttpUrl } from '@lib/generic/http-client/domain';
 import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/generic/http-client/infrastructure';
 import { PerformanceTimestamp } from '@lib/generic/performance/infrastructure';
 

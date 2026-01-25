@@ -1,5 +1,12 @@
-import { type HttpInterceptor } from '../application';
-import { type HttpClient, HttpMethod, type HttpPath, type HttpRequest, type HttpResponse, type HttpUrl } from '../domain';
+import {
+    type HttpClient,
+    type HttpInterceptor,
+    HttpMethod,
+    type HttpPath,
+    type HttpRequest,
+    type HttpResponse,
+    type HttpUrl
+} from '../domain';
 
 import { type ResponseBodyParser } from './body-parsers/response-body-parser.interface';
 import { FetchHttpRequestExecutor } from './request-executor/fetch/fetch.http-request-executor';

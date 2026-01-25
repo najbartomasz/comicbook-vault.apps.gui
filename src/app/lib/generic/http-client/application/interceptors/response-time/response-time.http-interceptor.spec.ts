@@ -1,7 +1,6 @@
 import { HighResolutionTimestamp, type HighResolutionTimestampProvider } from '@lib/generic/performance/domain';
 
-import { HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
-import { type HttpInterceptorNext } from '../http-interceptor-next.type';
+import { type HttpInterceptorNext, HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
 
 import { ResponseTimeHttpInterceptor } from './response-time.http-interceptor';
 

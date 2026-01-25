@@ -1,7 +1,6 @@
 import { stubResponse } from '@testing/unit/http';
 
-import { type HttpInterceptor } from '../application';
-import { HttpMethod, HttpPath, HttpUrl } from '../domain';
+import { HttpMethod, HttpPath, HttpUrl, type HttpInterceptor } from '../domain';
 
 import { JsonResponseBodyParser } from './body-parsers/json/json.response-body-parser';
 import { HttpNetworkError } from './errors/network/http-network-error';

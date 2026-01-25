@@ -1,5 +1,4 @@
-import { HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
-import { type HttpInterceptorNext } from '../http-interceptor-next.type';
+import { type HttpInterceptorNext, HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
 
 import { ResponseLoggerHttpInterceptor } from './response-logger.http-interceptor';
 

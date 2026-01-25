@@ -1,4 +1,3 @@
-export type { HttpInterceptor } from './interceptors/http-interceptor.interface';
 export { RequestLoggerHttpInterceptor } from './interceptors/logger/request-logger.http-interceptor';
 export { ResponseLoggerHttpInterceptor } from './interceptors/logger/response-logger.http-interceptor';
 export { ResponseTimeHttpInterceptor } from './interceptors/response-time/response-time.http-interceptor';

@@ -81,13 +81,13 @@ src/app/
 ├── lib/                        # Shared/reusable code (DDD bounded contexts)
 │   ├── generic/                # 🟩 Generic subdomains (Framework-agnostic & Business-agnostic)
 │   │   ├── date-time/          # Reusable date utilities
-│   │   │   ├── domain/
+│   │   │   ├── infrastructure/
+│   │   │   │   ├── index.ts
+│   │   │   │   └── system-date-time.ts
+│   │   │   └── domain/
 │   │   │   │   ├── date-time-provider.interface.ts
 │   │   │   │   ├── date-time.ts
 │   │   │   │   └── index.ts
-│   │   │   └── infrastructure/
-│   │   │       ├── index.ts
-│   │   │       └── system-date-time.ts
 │   │   ├── endpoint/           # Reusable endpoint path logic
 │   │   │   └── domain/
 │   │   │       ├── endpoint-path/
@@ -95,6 +95,26 @@ src/app/
 │   │   │       │   └── endpoint-path.ts
 │   │   │       └── index.ts
 │   │   ├── http-client/        # Reusable HTTP client wrapper
+│   │   │   ├── infrastructure/
+│   │   │   │   ├── body-parsers/
+│   │   │   │   │   ├── json/
+│   │   │   │   │   │   └── json.response-body-parser.ts
+│   │   │   │   │   ├── text/
+│   │   │   │   │   │   └── text-plain.response-body-parser.ts
+│   │   │   │   │   └── response-body-parser.interface.ts
+│   │   │   │   ├── errors/
+│   │   │   │   │   ├── abort/
+│   │   │   │   │   │   └── http-abort-error.ts
+│   │   │   │   │   ├── network/
+│   │   │   │   │   │   └── http-network-error.ts
+│   │   │   │   │   └── payload/
+│   │   │   │   │       └── http-payload-error.ts
+│   │   │   │   ├── request-executor/
+│   │   │   │   │   ├── fetch/
+│   │   │   │   │   │   └── fetch.http-request-executor.ts
+│   │   │   │   │   └── http-request-executor.interface.ts
+│   │   │   │   ├── fetch-http-client.ts
+│   │   │   │   └── index.ts
 │   │   │   ├── application/
 │   │   │   │   ├── interceptors/
 │   │   │   │   │   ├── logger/
@@ -108,9 +128,9 @@ src/app/
 │   │   │   │   │   ├── timestamp/
 │   │   │   │   │   │   └── timestamp.http-interceptor.ts
 │   │   │   │   │   ├── http-interceptor-next.type.ts
-│   │   │   │   │   └── http-interceptor.interface.ts
+│   │   │   │   ├── http-interceptor.interface.ts
 │   │   │   │   └── index.ts
-│   │   │   ├── domain/
+│   │   │   └── domain/
 │   │   │   │   ├── http-path/
 │   │   │   │   │   ├── http-path-error.ts
 │   │   │   │   │   └── http-path.ts
@@ -125,34 +145,14 @@ src/app/
 │   │   │   │   ├── http-request.interface.ts
 │   │   │   │   ├── http-response.interface.ts
 │   │   │   │   └── index.ts
-│   │   │   └── infrastructure/
-│   │   │       ├── body-parsers/
-│   │   │       │   ├── json/
-│   │   │       │   │   └── json.response-body-parser.ts
-│   │   │       │   ├── text/
-│   │   │       │   │   └── text-plain.response-body-parser.ts
-│   │   │       │   └── response-body-parser.interface.ts
-│   │   │       ├── errors/
-│   │   │       │   ├── abort/
-│   │   │       │   │   └── http-abort-error.ts
-│   │   │       │   ├── network/
-│   │   │       │   │   └── http-network-error.ts
-│   │   │       │   └── payload/
-│   │   │       │       └── http-payload-error.ts
-│   │   │       ├── request-executor/
-│   │   │       │   ├── fetch/
-│   │   │       │   │   └── fetch.http-request-executor.ts
-│   │   │       │   └── http-request-executor.interface.ts
-│   │   │       ├── fetch-http-client.ts
-│   │   │       └── index.ts
 │   │   └── performance/        # Reusable performance monitoring
-│   │       ├── domain/
+│   │       ├── infrastructure/
+│   │       │   ├── index.ts
+│   │       │   └── performance-timestamp.ts
+│   │       └── domain/
 │   │       │   ├── high-resolution-timestamp-provider.interface.ts
 │   │       │   ├── high-resolution-timestamp.ts
 │   │       │   └── index.ts
-│   │       └── infrastructure/
-│   │           ├── index.ts
-│   │           └── performance-timestamp.ts
 │   │
 │   └── supporting/             # 🟩 Supporting subdomains (App-specific plumbing)
 │       ├── app-config/         # App configuration context
@@ -165,21 +165,21 @@ src/app/
 │       │       ├── app-config.ts
 │       │       └── index.ts
 │       ├── assets-api-client/  # API client for assets
-│       │   ├── domain/
+│       │   ├── infrastructure/
+│       │   │   ├── assets-api-client.factory.ts
+│       │   │   ├── http-assets-api-client.ts
+│       │   │   └── index.ts
+│       │   └── domain/
 │       │   │   ├── assets-api-client.ts
 │       │   │   └── index.ts
-│       │   └── infrastructure/
-│       │       ├── assets-api-client.factory.ts
-│       │       ├── http-assets-api-client.ts
-│       │       └── index.ts
 │       └── vault-api-client/   # API client for vault
-│           ├── domain/
+│           ├── infrastructure/
+│           │   ├── http-vault-api-client.ts
 │           │   ├── index.ts
-│           │   └── vault-api-client.ts
-│           └── infrastructure/
-│               ├── http-vault-api-client.ts
+│           │   └── vault-api-client.factory.ts
+│           └── domain/
 │               ├── index.ts
-│               └── vault-api-client.factory.ts
+│               └── vault-api-client.ts
 │
 └── shell/                      # 🔵 Application shell (Angular-specific)
     ├── pages/

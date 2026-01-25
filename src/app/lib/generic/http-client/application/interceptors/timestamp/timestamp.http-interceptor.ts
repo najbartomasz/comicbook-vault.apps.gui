@@ -1,8 +1,6 @@
 import { type DateTimeProvider } from '@lib/generic/date-time/domain';
 
-import { type HttpRequest, type HttpResponse } from '../../../domain';
-import { type HttpInterceptorNext } from '../http-interceptor-next.type';
-import { type HttpInterceptor } from '../http-interceptor.interface';
+import { type HttpInterceptor, type HttpInterceptorNext, type HttpRequest, type HttpResponse } from '../../../domain';
 
 export class TimestampHttpInterceptor implements HttpInterceptor {
     readonly #dateTimeProvider: DateTimeProvider;

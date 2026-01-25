@@ -1,4 +1,6 @@
 export type { HttpClient } from './http-client.interface';
+export type { HttpInterceptorNext } from './http-interceptor-next.type';
+export type { HttpInterceptor } from './http-interceptor.interface';
 export { HttpPath } from './http-path/http-path';
 export { HttpPathError } from './http-path/http-path-error';
 export type { HttpRequest } from './http-request.interface';

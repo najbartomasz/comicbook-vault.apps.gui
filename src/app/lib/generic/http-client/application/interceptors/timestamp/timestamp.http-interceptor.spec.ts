@@ -1,7 +1,6 @@
 import { DateTime, type DateTimeProvider } from '@lib/generic/date-time/domain';
 
-import { HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
-import { type HttpInterceptorNext } from '../http-interceptor-next.type';
+import { type HttpInterceptorNext, HttpMethod, type HttpRequest, type HttpResponse } from '../../../domain';
 
 import { TimestampHttpInterceptor } from './timestamp.http-interceptor';
 
