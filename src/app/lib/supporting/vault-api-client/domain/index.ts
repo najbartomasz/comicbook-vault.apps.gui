@@ -1,1 +1,1 @@
-export { VaultRepository } from './vault-repository';
+export { VaultApiClient } from './vault-api-client';

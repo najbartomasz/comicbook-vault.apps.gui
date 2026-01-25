@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AppConfig } from '@lib/supporting/app-config/domain';
-import { VaultRepository } from '@lib/supporting/vault-api-client/domain';
+import { VaultApiClient } from '@lib/supporting/vault-api-client/domain';
 
-import { provideVaultApiClient } from './vault-repository.provider';
+import { provideVaultApiClient } from './vault-api-client.provider';
 
 describe(provideVaultApiClient, () => {
-    test('should provide VaultRepository', () => {
+    test('should provide VaultApiClient', () => {
         // Given
         const appConfigStub = AppConfig.create({
             vaultApiUrl: 'http://localhost:3000/vault'
@@ -19,6 +19,6 @@ describe(provideVaultApiClient, () => {
         });
 
         // When, Then
-        expect(TestBed.inject(VaultRepository)).toBeInstanceOf(VaultRepository);
+        expect(TestBed.inject(VaultApiClient)).toBeInstanceOf(VaultApiClient);
     });
 });

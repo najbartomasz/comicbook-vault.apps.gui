@@ -67,7 +67,7 @@ This project follows a **layered architecture** with strict separation between f
 - **Angular-Specific Files**: 15 (21%)
 - **Circular Dependencies**: 0 ✅
 
-*Last generated: 2026-01-24*
+*Last generated: 2026-01-25*
 
 ---
 
@@ -81,28 +81,105 @@ src/app/
 ├── lib/                        # Shared/reusable code (DDD bounded contexts)
 │   ├── generic/                # 🟩 Generic subdomains (Framework-agnostic & Business-agnostic)
 │   │   ├── date-time/          # Reusable date utilities
-│   │   │   ├── infrastructure/
-│   │   │   └── domain/
-│   │   ├── http-client/        # Reusable HTTP client wrapper
-│   │   │   ├── infrastructure/
-│   │   │   ├── application/
-│   │   │   └── domain/
+│   │   │   ├── domain/
+│   │   │   │   ├── date-time-provider.interface.ts
+│   │   │   │   ├── date-time.ts
+│   │   │   │   └── index.ts
+│   │   │   └── infrastructure/
+│   │   │       ├── index.ts
+│   │   │       └── system-date-time.ts
 │   │   ├── endpoint/           # Reusable endpoint path logic
 │   │   │   └── domain/
+│   │   │       ├── endpoint-path/
+│   │   │       │   ├── endpoint-path-error.ts
+│   │   │       │   └── endpoint-path.ts
+│   │   │       └── index.ts
+│   │   ├── http-client/        # Reusable HTTP client wrapper
+│   │   │   ├── application/
+│   │   │   │   ├── interceptors/
+│   │   │   │   │   ├── logger/
+│   │   │   │   │   │   ├── request-logger.http-interceptor.ts
+│   │   │   │   │   │   └── response-logger.http-interceptor.ts
+│   │   │   │   │   ├── response-time/
+│   │   │   │   │   │   ├── response-time.constants.ts
+│   │   │   │   │   │   └── response-time.http-interceptor.ts
+│   │   │   │   │   ├── sequence-number/
+│   │   │   │   │   │   └── sequence-number.http-interceptor.ts
+│   │   │   │   │   ├── timestamp/
+│   │   │   │   │   │   └── timestamp.http-interceptor.ts
+│   │   │   │   │   ├── http-interceptor-next.type.ts
+│   │   │   │   │   └── http-interceptor.interface.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── domain/
+│   │   │   │   ├── http-path/
+│   │   │   │   │   ├── http-path-error.ts
+│   │   │   │   │   └── http-path.ts
+│   │   │   │   ├── http-url/
+│   │   │   │   │   ├── http-url-error.ts
+│   │   │   │   │   └── http-url.ts
+│   │   │   │   ├── method/
+│   │   │   │   │   └── http-method.ts
+│   │   │   │   ├── status/
+│   │   │   │   │   └── http-status.ts
+│   │   │   │   ├── http-client.interface.ts
+│   │   │   │   ├── http-request.interface.ts
+│   │   │   │   ├── http-response.interface.ts
+│   │   │   │   └── index.ts
+│   │   │   └── infrastructure/
+│   │   │       ├── body-parsers/
+│   │   │       │   ├── json/
+│   │   │       │   │   └── json.response-body-parser.ts
+│   │   │       │   ├── text/
+│   │   │       │   │   └── text-plain.response-body-parser.ts
+│   │   │       │   └── response-body-parser.interface.ts
+│   │   │       ├── errors/
+│   │   │       │   ├── abort/
+│   │   │       │   │   └── http-abort-error.ts
+│   │   │       │   ├── network/
+│   │   │       │   │   └── http-network-error.ts
+│   │   │       │   └── payload/
+│   │   │       │       └── http-payload-error.ts
+│   │   │       ├── request-executor/
+│   │   │       │   ├── fetch/
+│   │   │       │   │   └── fetch.http-request-executor.ts
+│   │   │       │   └── http-request-executor.interface.ts
+│   │   │       ├── fetch-http-client.ts
+│   │   │       └── index.ts
 │   │   └── performance/        # Reusable performance monitoring
-│   │       ├── infrastructure/
-│   │       └── domain/
+│   │       ├── domain/
+│   │       │   ├── high-resolution-timestamp-provider.interface.ts
+│   │       │   ├── high-resolution-timestamp.ts
+│   │       │   └── index.ts
+│   │       └── infrastructure/
+│   │           ├── index.ts
+│   │           └── performance-timestamp.ts
 │   │
 │   └── supporting/             # 🟩 Supporting subdomains (App-specific plumbing)
 │       ├── app-config/         # App configuration context
 │       │   ├── application/
+│       │   │   ├── app-config.dto.ts
+│       │   │   ├── app-config.loader.ts
+│       │   │   └── index.ts
 │       │   └── domain/
+│       │       ├── app-config-error.ts
+│       │       ├── app-config.ts
+│       │       └── index.ts
 │       ├── assets-api-client/  # API client for assets
-│       │   ├── infrastructure/
-│       │   └── domain/
+│       │   ├── domain/
+│       │   │   ├── assets-api-client.ts
+│       │   │   └── index.ts
+│       │   └── infrastructure/
+│       │       ├── assets-api-client.factory.ts
+│       │       ├── http-assets-api-client.ts
+│       │       └── index.ts
 │       └── vault-api-client/   # API client for vault
-│           ├── infrastructure/
-│           └── domain/
+│           ├── domain/
+│           │   ├── index.ts
+│           │   └── vault-api-client.ts
+│           └── infrastructure/
+│               ├── http-vault-api-client.ts
+│               ├── index.ts
+│               └── vault-api-client.factory.ts
 │
 └── shell/                      # 🔵 Application shell (Angular-specific)
     ├── pages/
@@ -118,10 +195,10 @@ src/app/
 src/app-providers/              # ⚪ Application-level providers (composition root)
 ├── app-config/                 # Application configuration providers
 │   └── app-config.provider.ts
-├── assets-repository/          # Assets repository providers
-│   └── assets-repository.provider.ts
-├── vault-repository/           # Vault repository providers
-│   └── vault-repository.provider.ts
+├── assets-api-client/          # Assets API client providers
+│   └── assets-api-client.provider.ts
+├── vault-api-client/           # Vault API client providers
+│   └── vault-api-client.provider.ts
 └── index.ts                    # Exported provider functions
 
 src/testing/
@@ -292,18 +369,18 @@ The `EndpointPath` value object enables protocol-agnostic endpoint identificatio
 
 **Pattern**:
 ```typescript
-export abstract class AssetsRepository {
+export abstract class VaultApiClient {
     public abstract get<T>(path: EndpointPath, ...): Promise<T>;
 }
 
-export class HttpAssetsRepository {
+export class HttpVaultApiClient extends VaultApiClient {
     public async get<T>(path: EndpointPath, ...): Promise<T> {
         const httpPath = HttpPath.create(path.toString());
         return this.#httpClient.get(httpPath.toString(), ...);
     }
 }
 
-const config = await assetsRepository.get(
+const config = await vaultApiClient.get(
     EndpointPath.create('/app-config.json')
 );
 ```
@@ -355,4 +432,4 @@ src/app-providers/              # ⚪ Application-level providers
 
 ---
 
-**Last Updated**: 2026-01-24
+**Last Updated**: January 25, 2026

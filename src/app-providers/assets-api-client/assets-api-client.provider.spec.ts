@@ -1,12 +1,12 @@
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { AssetsRepository } from '@lib/supporting/assets-api-client/domain';
+import { AssetsApiClient } from '@lib/supporting/assets-api-client/domain';
 
-import { provideAssetsApiClient } from './assets-repository.provider';
+import { provideAssetsApiClient } from './assets-api-client.provider';
 
 describe(provideAssetsApiClient, () => {
-    test('should provide AssetsRepository', () => {
+    test('should provide AssetsApiClient', () => {
         // Given
         TestBed.configureTestingModule({
             providers: [
@@ -16,7 +16,7 @@ describe(provideAssetsApiClient, () => {
         });
 
         // When, Then
-        expect(TestBed.inject(AssetsRepository)).toBeInstanceOf(AssetsRepository);
+        expect(TestBed.inject(AssetsApiClient)).toBeInstanceOf(AssetsApiClient);
     });
 
     test('should throw error when not in browser platform', () => {
@@ -29,7 +29,7 @@ describe(provideAssetsApiClient, () => {
         });
 
         // When, Then
-        expect(() => TestBed.inject(AssetsRepository)).toThrowError(
+        expect(() => TestBed.inject(AssetsApiClient)).toThrowError(
             'AssetsHttpClient is not available on server. Use direct file system access instead.'
         );
     });

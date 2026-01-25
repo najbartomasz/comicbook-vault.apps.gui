@@ -1,9 +1,9 @@
 import { EndpointPath } from '@lib/generic/endpoint/domain';
 import { type HttpClient, HttpPath } from '@lib/generic/http-client/domain';
 
-import { HttpAssetsRepository } from './http-assets-repository';
+import { HttpVaultApiClient } from './http-vault-api-client';
 
-describe(HttpAssetsRepository, () => {
+describe(HttpVaultApiClient, () => {
     test('should get data from the specified path without abort signal', async () => {
         // Given
         const httpClientGetMock = vi.fn<HttpClient['get']>().mockResolvedValueOnce({
@@ -15,10 +15,10 @@ describe(HttpAssetsRepository, () => {
         const httpClientMock: HttpClient = {
             get: httpClientGetMock
         };
-        const assetsRepository = new HttpAssetsRepository(httpClientMock);
+        const vaultApiClient = new HttpVaultApiClient(httpClientMock);
 
         // When
-        const result = await assetsRepository.get<{ id: number; name: string }>(EndpointPath.create('/items/1'));
+        const result = await vaultApiClient.get<{ id: number; name: string }>(EndpointPath.create('/items/1'));
 
         // Then
         expect(httpClientGetMock).toHaveBeenCalledExactlyOnceWith(HttpPath.create('/items/1'), undefined);
@@ -37,10 +37,10 @@ describe(HttpAssetsRepository, () => {
         const httpClientMock: HttpClient = {
             get: httpClientGetMock
         };
-        const assetsRepository = new HttpAssetsRepository(httpClientMock);
+        const vaultApiClient = new HttpVaultApiClient(httpClientMock);
 
         // When
-        const result = await assetsRepository.get<{ id: number; name: string }>(EndpointPath.create('/items/2'), {
+        const result = await vaultApiClient.get<{ id: number; name: string }>(EndpointPath.create('/items/2'), {
             abortSignal: abortController.signal
         });
 

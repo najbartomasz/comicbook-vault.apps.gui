@@ -1,5 +1,5 @@
 import { EndpointPath } from '@lib/generic/endpoint/domain';
-import { type AssetsRepository } from '@lib/supporting/assets-api-client/domain';
+import { type AssetsApiClient } from '@lib/supporting/assets-api-client/domain';
 
 import { AppConfig, AppConfigError } from '../domain';
 
@@ -13,14 +13,14 @@ const isAppConfigDto = (data: unknown): data is AppConfigDto => {
 };
 
 export class AppConfigLoader {
-    readonly #assetsRepository: AssetsRepository;
+    readonly #assetsApiClient: AssetsApiClient;
 
-    public constructor(assetsRepository: AssetsRepository) {
-        this.#assetsRepository = assetsRepository;
+    public constructor(assetsApiClient: AssetsApiClient) {
+        this.#assetsApiClient = assetsApiClient;
     }
 
     public async load(): Promise<AppConfig> {
-        const data = await this.#assetsRepository.get<AppConfigDto>(EndpointPath.create('/app-config.json'));
+        const data = await this.#assetsApiClient.get<AppConfigDto>(EndpointPath.create('/app-config.json'));
         if (!isAppConfigDto(data)) {
             throw new AppConfigError('Invalid app config format', data);
         }

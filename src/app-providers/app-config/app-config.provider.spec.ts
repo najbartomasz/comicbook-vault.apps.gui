@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { AppConfig } from '@lib/supporting/app-config/domain';
 import { stubResponse } from '@testing/unit/http';
 
-import { provideAssetsApiClient } from '../assets-repository/assets-repository.provider';
+import { provideAssetsApiClient } from '../assets-api-client/assets-api-client.provider';
 
 import { provideAppConfig } from './app-config.provider';
 

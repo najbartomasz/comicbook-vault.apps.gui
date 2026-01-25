@@ -1,1 +1,1 @@
-export { AssetsRepository } from './assets-repository';
+export { AssetsApiClient } from './assets-api-client';

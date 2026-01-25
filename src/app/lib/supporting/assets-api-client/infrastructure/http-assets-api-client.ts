@@ -1,9 +1,9 @@
 import { type EndpointPath } from '@lib/generic/endpoint/domain';
 import { type HttpClient, HttpPath } from '@lib/generic/http-client/domain';
 
-import { AssetsRepository } from '../domain';
+import { AssetsApiClient } from '../domain';
 
-export class HttpAssetsRepository extends AssetsRepository {
+export class HttpAssetsApiClient extends AssetsApiClient {
     readonly #httpClient: HttpClient;
 
     public constructor(httpClient: HttpClient) {

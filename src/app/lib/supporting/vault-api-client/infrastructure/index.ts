@@ -1,2 +1,2 @@
-export { createVaultRepository } from './vault-repository.factory';
+export { createVaultApiClient } from './vault-api-client.factory';
 

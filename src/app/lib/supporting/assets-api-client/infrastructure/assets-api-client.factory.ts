@@ -11,11 +11,11 @@ import { HttpUrl } from '@lib/generic/http-client/domain';
 import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/generic/http-client/infrastructure';
 import { PerformanceTimestamp } from '@lib/generic/performance/infrastructure';
 
-import { type AssetsRepository } from '../domain';
+import { type AssetsApiClient } from '../domain';
 
-import { HttpAssetsRepository } from './http-assets-repository';
+import { HttpAssetsApiClient } from './http-assets-api-client';
 
-export const createAssetsRepository = (baseUrl: string): AssetsRepository => {
+export const createAssetsApiClient = (baseUrl: string): AssetsApiClient => {
     const url = HttpUrl.create(baseUrl);
     const httpInterceptors: HttpInterceptor[] = [
         new ResponseLoggerHttpInterceptor(),
@@ -29,5 +29,5 @@ export const createAssetsRepository = (baseUrl: string): AssetsRepository => {
         [new JsonResponseBodyParser(), new TextPlainResponseBodyParser()],
         httpInterceptors
     );
-    return new HttpAssetsRepository(httpClient);
+    return new HttpAssetsApiClient(httpClient);
 };

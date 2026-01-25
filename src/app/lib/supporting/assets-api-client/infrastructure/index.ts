@@ -1,2 +1,2 @@
-export { createAssetsRepository } from './assets-repository.factory';
+export { createAssetsApiClient } from './assets-api-client.factory';
 

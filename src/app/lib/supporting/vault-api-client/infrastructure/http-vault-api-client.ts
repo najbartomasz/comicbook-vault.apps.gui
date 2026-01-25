@@ -1,9 +1,9 @@
 import { type EndpointPath } from '@lib/generic/endpoint/domain';
 import { type HttpClient, HttpPath } from '@lib/generic/http-client/domain';
 
-import { VaultRepository } from '../domain';
+import { VaultApiClient } from '../domain';
 
-export class HttpVaultRepository extends VaultRepository {
+export class HttpVaultApiClient extends VaultApiClient {
     readonly #httpClient: HttpClient;
 
     public constructor(httpClient: HttpClient) {

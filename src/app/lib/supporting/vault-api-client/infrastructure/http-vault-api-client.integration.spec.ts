@@ -1,10 +1,10 @@
 import { EndpointPath } from '@lib/generic/endpoint/domain';
 import { stubResponse } from '@testing/unit/http';
 
-import { HttpVaultRepository } from './http-vault-repository';
-import { createVaultRepository } from './vault-repository.factory';
+import { HttpVaultApiClient } from './http-vault-api-client';
+import { createVaultApiClient } from './vault-api-client.factory';
 
-describe(HttpVaultRepository, () => {
+describe(HttpVaultApiClient, () => {
     test('should send request, receive expected response and log to console', async () => {
         // Given
         const consoleInfoMock = vi.spyOn(console, 'info').mockImplementation(vi.fn());
@@ -17,10 +17,10 @@ describe(HttpVaultRepository, () => {
                 headers: new Headers({ 'Content-Type': 'application/json' })
             })
         ));
-        const vaultRepository = createVaultRepository('https://localhost:3000/vault');
+        const vaultApiClient = createVaultApiClient('https://localhost:3000/vault');
 
         // When
-        const response = await vaultRepository.get<{ id: number; title: string }>(EndpointPath.create('/comics/42'));
+        const response = await vaultApiClient.get<{ id: number; title: string }>(EndpointPath.create('/comics/42'));
 
         // Then
         expect(response).toStrictEqual({ id: 42, title: 'Test Comic' });
@@ -56,10 +56,10 @@ describe(HttpVaultRepository, () => {
                 headers: new Headers({ 'Content-Type': 'text/plain' })
             })
         ));
-        const vaultRepository = createVaultRepository('https://localhost:3000/vault');
+        const vaultApiClient = createVaultApiClient('https://localhost:3000/vault');
 
         // When
-        const response = await vaultRepository.get(EndpointPath.create('/comics/999'));
+        const response = await vaultApiClient.get(EndpointPath.create('/comics/999'));
 
         // Then
         expect(response).toBe('Not Found');
@@ -105,11 +105,11 @@ describe(HttpVaultRepository, () => {
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const vaultRepository = createVaultRepository('https://localhost:3000/vault');
+        const vaultApiClient = createVaultApiClient('https://localhost:3000/vault');
 
         // When
-        await vaultRepository.get(EndpointPath.create('/comics/1'));
-        await vaultRepository.get(EndpointPath.create('/comics/2'));
+        await vaultApiClient.get(EndpointPath.create('/comics/1'));
+        await vaultApiClient.get(EndpointPath.create('/comics/2'));
 
         // Then
         expect(consoleInfoMock).toHaveBeenNthCalledWith(
@@ -166,11 +166,11 @@ describe(HttpVaultRepository, () => {
                     headers: new Headers({ 'Content-Type': 'text/plain' })
                 })
             ));
-        const vaultRepository = createVaultRepository('https://localhost:3000/vault');
+        const vaultApiClient = createVaultApiClient('https://localhost:3000/vault');
 
         // When
-        const firstPromise = vaultRepository.get<string>(EndpointPath.create('/comics/1'));
-        const secondResponse = await vaultRepository.get<string>(EndpointPath.create('/comics/2'));
+        const firstPromise = vaultApiClient.get<string>(EndpointPath.create('/comics/1'));
+        const secondResponse = await vaultApiClient.get<string>(EndpointPath.create('/comics/2'));
         firstRequest.resolve(
             stubResponse({
                 url: 'https://localhost:3000/vault/comics/1',

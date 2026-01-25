@@ -11,11 +11,11 @@ import { HttpUrl } from '@lib/generic/http-client/domain';
 import { FetchHttpClient, JsonResponseBodyParser, TextPlainResponseBodyParser } from '@lib/generic/http-client/infrastructure';
 import { PerformanceTimestamp } from '@lib/generic/performance/infrastructure';
 
-import { type VaultRepository } from '../domain';
+import { type VaultApiClient } from '../domain';
 
-import { HttpVaultRepository } from './http-vault-repository';
+import { HttpVaultApiClient } from './http-vault-api-client';
 
-export const createVaultRepository = (baseUrl: string): VaultRepository => {
+export const createVaultApiClient = (baseUrl: string): VaultApiClient => {
     const url = HttpUrl.create(baseUrl);
     const httpInterceptors: HttpInterceptor[] = [
         new ResponseLoggerHttpInterceptor(),
@@ -29,5 +29,5 @@ export const createVaultRepository = (baseUrl: string): VaultRepository => {
         [new JsonResponseBodyParser(), new TextPlainResponseBodyParser()],
         httpInterceptors
     );
-    return new HttpVaultRepository(httpClient);
+    return new HttpVaultApiClient(httpClient);
 };
