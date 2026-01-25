@@ -36,7 +36,7 @@ Adopt a strict layered architecture based on Hexagonal Architecture (Ports & Ada
 │  - Components, Routes, App Config       │     (depends on all layers)
 ├─────────────────────────────────────────┤
 │             Infrastructure              │  ← Adapters
-│  - Platform API Adapters (fetch, Date)  │     (depends on Domain - implements interfaces)
+│  - Platform API Adapters (fetch, Date)  │     (depends on Application, Domain)
 │  - External Service Implementations     │
 ├─────────────────────────────────────────┤
 │              Application                │  ← Use Cases
@@ -54,14 +54,14 @@ Adopt a strict layered architecture based on Hexagonal Architecture (Ports & Ada
 
 **Allowed Dependencies:**
 - ✅ Presentation → Infrastructure, Application, Domain
-- ✅ Infrastructure → Domain (implements interfaces)
+- ✅ Infrastructure → Application, Domain
 - ✅ Application → Domain
 - ✅ Domain → Nothing
 
 **Forbidden Dependencies:**
 - ❌ Domain → Application, Infrastructure, Presentation
 - ❌ Application → Infrastructure, Presentation
-- ❌ Infrastructure → Application, Presentation
+- ❌ Infrastructure → Presentation
 
 **Layer Descriptions**:
 

@@ -213,7 +213,7 @@ export interface User {
 ```
 Presentation   ←  (can import) ←  Domain, Application, Infrastructure, Presentation
     ↑
-Infrastructure ←  (can import) ←  Domain, Infrastructure
+Infrastructure ←  (can import) ←  Domain, Application, Infrastructure
     ↑
 Application    ←  (can import) ←  Domain, Application
     ↑
