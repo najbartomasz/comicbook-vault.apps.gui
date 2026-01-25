@@ -12,6 +12,9 @@ export default mergeConfig(vitestConfig, defineConfig({
                 functions: [0, 0],
                 lines: [0, 0]
             }
+        },
+        browser: {
+            headless: !!process.env['CI']
         }
     }
 }));

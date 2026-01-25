@@ -14,6 +14,7 @@ export default mergeConfig(vitestConfig, defineConfig({
             }
         },
         browser: {
+            headless: true,
             screenshotFailures: true
         }
     }
