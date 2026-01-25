@@ -130,8 +130,6 @@ export default {
         'scss/at-if-closing-brace-newline-after': 'always-last-in-chain',
         'scss/at-if-closing-brace-space-after': 'always-intermediate',
         'scss/at-if-no-null': true,
-        'scss/at-import-partial-extension-blacklist': null,
-        'scss/at-import-partial-extension-whitelist': null,
         'scss/at-mixin-argumentless-call-parentheses': 'always',
         'scss/at-mixin-named-arguments': null,
         'scss/at-mixin-parentheses-space-before': 'never',
@@ -149,7 +147,7 @@ export default {
         'scss/dollar-variable-default': null,
         'scss/dollar-variable-empty-line-after': null,
         'scss/dollar-variable-empty-line-before': ['always', {
-            except: ['first-nested', 'after-dollar-variable', 'after-comment'],
+            except: ['first-nested', 'after-dollar-variable', 'after-comment']
         }],
         'scss/dollar-variable-first-in-block': null,
         'scss/dollar-variable-no-missing-interpolation': true,
@@ -157,7 +155,7 @@ export default {
         'scss/dollar-variable-pattern': null,
         'scss/double-slash-comment-empty-line-before': ['always', {
             except: ['first-nested'],
-            ignore: ['between-comments', 'stylelint-commands'],
+            ignore: ['between-comments', 'stylelint-commands']
         }],
         'scss/double-slash-comment-inline': null,
         'scss/double-slash-comment-whitespace-inside': 'always',
@@ -181,7 +179,7 @@ export default {
         'scss/percent-placeholder-pattern': null,
         'scss/selector-nest-combinators': null,
         'scss/selector-no-redundant-nesting-selector': true,
-        'scss/selector-no-union-class-name': true,
-    },
+        'scss/selector-no-union-class-name': true
+    }
 };
 
