@@ -1,4 +1,4 @@
-# ADR-009: Vitest over Jest
+# ADR-010: Vitest over Jest
 
 **Status**: ✅ Accepted
 

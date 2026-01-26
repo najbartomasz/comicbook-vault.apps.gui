@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 680">
   <!-- Definitions for arrow markers -->
   <defs>
     <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -9,11 +9,18 @@
   <!-- Background -->
   <rect width="100%" height="100%" fill="white" />
 
-  <!-- === Row 1 Area === -->
+  <!-- === Row 1: Application Providers === -->
+  <g transform="translate(250, 20)">
+    <rect x="0" y="0" width="300" height="80" rx="5" fill="#f5f5f5" stroke="#9E9E9E" stroke-width="2"/>
+    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">⚪ Application Providers</text>
 
-  <!-- Shell (Centered over Features) -->
-  <!-- Features span x=50 to x=450. Center x=250. Shell width=300. Pos x=100. -->
-  <g transform="translate(100, 20)">
+    <!-- Composition Root Node -->
+    <rect x="50" y="35" width="200" height="35" rx="3" fill="#E0E0E0" stroke="#9E9E9E" stroke-width="1"/>
+    <text x="150" y="58" text-anchor="middle" font-family="Arial" font-size="12">Composition Root (DI)</text>
+  </g>
+
+  <!-- === Row 2: Shell === -->
+  <g transform="translate(250, 130)">
     <rect x="0" y="0" width="300" height="100" rx="5" fill="#e3f2fd" stroke="#03A9F4" stroke-width="2"/>
     <text x="150" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🔵 Shell</text>
 
@@ -28,22 +35,8 @@
     </g>
   </g>
 
-  <!-- Providers (Next to Shell) -->
-  <!-- Shell ends at x=400. Gap 50. Providers start x=450. -->
-  <g transform="translate(450, 30)">
-    <rect x="0" y="0" width="300" height="80" rx="5" fill="#f5f5f5" stroke="#9E9E9E" stroke-width="2"/>
-    <text x="150" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">⚪ Application Providers</text>
-
-    <!-- Composition Root Node -->
-    <rect x="50" y="35" width="200" height="35" rx="3" fill="#E0E0E0" stroke="#9E9E9E" stroke-width="1"/>
-    <text x="150" y="58" text-anchor="middle" font-family="Arial" font-size="12">Composition Root (DI)</text>
-  </g>
-
-
-  <!-- === Row 2: Features & API === -->
-
-  <!-- Features (Vertical Slices) -->
-  <g transform="translate(50, 180)">
+  <!-- === Row 3: Features === -->
+  <g transform="translate(200, 260)">
     <rect x="0" y="0" width="400" height="185" rx="5" fill="#FCE4EC" stroke="#C2185B" stroke-width="2"/>
     <text x="200" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟥 Features (Vertical Slices)</text>
 
@@ -76,79 +69,97 @@
     </g>
   </g>
 
-  <!-- API (Right side of Features, Under Providers) -->
-  <g transform="translate(500, 215)">
-    <rect x="0" y="0" width="250" height="120" rx="5" fill="#f3e5f5" stroke="#9C27B0" stroke-width="2"/>
-    <text x="125" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟣 API</text>
-
-    <rect x="25" y="40" width="200" height="30" rx="3" fill="#ffffff" stroke="#9C27B0" stroke-width="1"/>
-    <text x="125" y="60" text-anchor="middle" font-family="Arial" font-size="12">External API A</text>
-
-    <rect x="25" y="80" width="200" height="30" rx="3" fill="#ffffff" stroke="#9C27B0" stroke-width="1"/>
-    <text x="125" y="100" text-anchor="middle" font-family="Arial" font-size="12">External API B</text>
-  </g>
-
-  <!-- === Row 3: Libs (Dependencied of Features) === -->
-  <g transform="translate(50, 420)">
-    <rect x="0" y="0" width="400" height="160" rx="5" fill="#E0F2F1" stroke="#00897B" stroke-width="2"/>
+  <!-- === Row 4: Libs === -->
+  <g transform="translate(200, 480)">
+    <rect x="0" y="0" width="400" height="180" rx="5" fill="#E0F2F1" stroke="#00897B" stroke-width="2"/>
     <text x="200" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14">🟩 Libs (Horizontal Slices)</text>
 
-    <!-- Context A -->
-    <g transform="translate(20, 40)">
-      <rect x="0" y="0" width="140" height="110" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
-      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Shared Context A</text>
+    <!-- Generic Libs -->
+    <g transform="translate(10, 40)">
+      <rect x="0" y="0" width="120" height="130" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
+      <text x="60" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11">Generic</text>
+      <text x="60" y="32" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">(e.g. UI/Date)</text>
       <!-- Layers -->
-      <rect x="10" y="30" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
-      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
-      <rect x="10" y="55" width="120" height="20" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
-      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Application</text>
-      <rect x="10" y="80" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
-      <text x="70" y="94" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+      <rect x="10" y="45" width="100" height="15" rx="2" fill="#81D4FA" stroke="#03A9F4" stroke-width="1"/>
+      <text x="60" y="56" text-anchor="middle" font-family="Arial" font-size="8">Presentation</text>
+      <rect x="10" y="65" width="100" height="15" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="60" y="76" text-anchor="middle" font-family="Arial" font-size="8">Infrastructure</text>
+      <rect x="10" y="85" width="100" height="15" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="60" y="96" text-anchor="middle" font-family="Arial" font-size="8">Application</text>
+      <rect x="10" y="105" width="100" height="15" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="60" y="116" text-anchor="middle" font-family="Arial" font-size="8">Domain</text>
     </g>
 
-    <!-- Context B -->
-    <g transform="translate(240, 40)">
-      <rect x="0" y="0" width="140" height="85" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
-      <text x="70" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12">Shared Context B</text>
+    <!-- Supporting Libs -->
+    <g transform="translate(140, 40)">
+      <rect x="0" y="0" width="120" height="110" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
+      <text x="60" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11">Supporting</text>
+      <text x="60" y="32" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">(e.g. Config)</text>
       <!-- Layers -->
-      <rect x="10" y="30" width="120" height="20" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
-      <text x="70" y="44" text-anchor="middle" font-family="Arial" font-size="9">Infrastructure</text>
-      <rect x="10" y="55" width="120" height="20" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
-      <text x="70" y="69" text-anchor="middle" font-family="Arial" font-size="9">Domain</text>
+      <rect x="10" y="45" width="100" height="15" rx="2" fill="#B39DDB" stroke="#673AB7" stroke-width="1"/>
+      <text x="60" y="56" text-anchor="middle" font-family="Arial" font-size="8">Infrastructure</text>
+      <rect x="10" y="65" width="100" height="15" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="60" y="76" text-anchor="middle" font-family="Arial" font-size="8">Application</text>
+      <rect x="10" y="85" width="100" height="15" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="60" y="96" text-anchor="middle" font-family="Arial" font-size="8">Domain</text>
+    </g>
+
+    <!-- Core Libs -->
+    <g transform="translate(270, 40)">
+      <rect x="0" y="0" width="120" height="110" rx="3" fill="#f9f9f9" stroke="#00897B" stroke-width="1"/>
+      <text x="60" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11">Core</text>
+      <text x="60" y="32" text-anchor="middle" font-family="Arial" font-size="9" fill="#555">(e.g. Types)</text>
+      <!-- Layers -->
+      <rect x="10" y="65" width="100" height="15" rx="2" fill="#81C784" stroke="#388E3C" stroke-width="1"/>
+      <text x="60" y="76" text-anchor="middle" font-family="Arial" font-size="8">Application</text>
+      <rect x="10" y="85" width="100" height="15" rx="2" fill="#FFCC80" stroke="#FF9800" stroke-width="1"/>
+      <text x="60" y="96" text-anchor="middle" font-family="Arial" font-size="8">Domain</text>
     </g>
   </g>
 
   <!-- === CONNECTIONS === -->
 
-  <!-- Shell -> Features (Presentation Layer uses Feature Pages) -->
-  <!-- Shell center 100+150=250. Features center 50+200=250. -->
-  <line x1="250" y1="120" x2="250" y2="180" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Providers -> Shell (Vertical Down) -->
+  <!-- Providers Bottom center (400, 100). Shell Top center (400, 130). -->
+  <line x1="400" y1="100" x2="400" y2="130" stroke="#666" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
 
-  <!-- Features -> API (Lateral Dependency) -->
-  <!-- Features Right 450. API Left 500. -->
-  <line x1="450" y1="275" x2="500" y2="275" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Shell -> Features (Vertical Down) -->
+  <!-- Shell Bottom center (400, 230). Features Top center (400, 260). -->
+  <line x1="400" y1="230" x2="400" y2="260" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
 
-  <!-- Features -> Libs (Downward Dependency) -->
-  <!-- Features center 250. Libs center 250. -->
-  <line x1="250" y1="365" x2="250" y2="420" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- Features -> Libs (Vertical Down) -->
+  <!-- Features Bottom center (400, 445). Libs Top center (400, 480). -->
+  <line x1="400" y1="445" x2="400" y2="480" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
 
   <!-- Feature B (Left) -> Feature A (Right) -->
-  <!-- Feature B is at x=240 inside Features group. Feature A is at x=20. -->
-  <!-- Abs Coords: B-Left 50+240=290. A-Right 50+20+140=210. -->
-  <!-- Feature B App layer y=55-75 (center 65). Feature A Infra layer y=55-75 (center 65). -->
-  <line x1="290" y1="285" x2="210" y2="285" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
-
-  <!-- Context A -> Context B (Updated to Match Features: B -> A direction) -->
-  <!-- Abs Coords: B-Left 290. A-Right 210. -->
-  <line x1="290" y1="500" x2="210" y2="500" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
-
-  <!-- Providers -> Shell -->
-  <!-- Providers Left 450. Shell Right 400. Y approx 190. -->
-  <line x1="450" y1="70" x2="400" y2="70" stroke="#666" stroke-width="1" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
-
-  <!-- Providers -> API -->
-  <!-- Providers Bottom y=150+80=230. Center x=450+150=600. -->
-  <!-- API Top y=335. Center x=500+125=625. -->
-  <line x1="600" y1="110" x2="625" y2="215" stroke="#666" stroke-width="1" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+  <!-- Feature B (Left=440, Right=580). Feature A (Left=220, Right=360). -->
+  <!-- Internal coords: A at x=20, B at x=240. Group at x=200. -->
+  <!-- Target X range: 240+200=440 (Start of B). 160+200=360 (End of A). -->
+  <!-- Arrow center logic: B-Left 490 (240+50+200). A-Right 410 (160+50+200=410). Wait. -->
+  <!-- Use internal coords: x1=290 (Inside B). x2=210 (Inside/Gap). -->
+  <!-- Group translation 200. -->
+  <!-- Abs x1 = 290+200 = 490. Abs x2 = 210+200 = 410. -->
+  <!-- These are absolute? No, inside 'Features' group, line is not drawn, it's drawn at root. -->
+  <!-- The line declarations in "CONNECTIONS" are root-level. -->
+  <!-- The group "Features" is at trans(200, 260). -->
+  <!-- Relative coords inside group: B is at 240. A is at 20. -->
+  <!-- Arrow source: B (Left side or center). B starts 240. Width 140. Center 310. -->
+  <!-- Arrow destination: A (Right side). A starts 20. Width 140. Ends 160. -->
+  <!-- Let's connect B-Left (240) to A-Right (160). -->
+  <!-- Abs Source X: 200(Group) + 240(B Start) = 440. -->
+  <!-- Abs Dest X: 200(Group) + 160(A End) = 360. -->
+  <!-- Let's give slight padding. x1=440, x2=360. -->
+  <!-- Y level: Group Y=260. Internal Y for layers approx 100. -->
+  <!-- Feature B app layer (y=55 in group => abs y=315). Feature A app layer (y=80?). -->
+  <!-- Let's keep the previous valid relative logic, adjusted for new group pos. -->
+  <!-- Previous: x1=615, y1=285 (Group 375+240=615). Y=180+105=285. -->
+  <!-- New Group X=200, Y=260. -->
+  <!-- New x1 = 200 + 240 = 440. (This is the left edge of B). Correct. -->
+  <!-- New x2 = 200 + 160 = 360. (Right edge of A). Correct. -->
+  <!-- Y coods. App layer center is roughly y=65 inside group? -->
+  <!-- A: Infra=55, App=80. B: Infra=30, App=55. -->
+  <!-- Let's aim at y=65 relative (between them?). -->
+  <!-- Abs Y = 260 + 65 = 325. -->
+  <line x1="440" y1="325" x2="360" y2="325" stroke="#333" stroke-width="1" marker-end="url(#arrowhead)"/>
 
 </svg>

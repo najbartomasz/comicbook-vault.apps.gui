@@ -1,4 +1,4 @@
-# ADR-016: Internationalization (i18n) Approach
+# ADR-020: Internationalization (i18n) Approach
 
 **Status**: 🔄 Proposed
 

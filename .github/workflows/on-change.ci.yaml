@@ -246,7 +246,7 @@ jobs:
 
             - name: Check Architecture Documentation Is Up-to-Date
               run: |
-                  if ! git diff --exit-code docs/ARCHITECTURE.md; then
+                  if ! git diff -I'^\*Last generated:' --exit-code docs/ARCHITECTURE.md; then
                     echo "::error title=Outdated Architecture Docs::Architecture metrics are out of date! Run 'npm run docs:metrics' and commit the changes."
                     exit 1
                   fi

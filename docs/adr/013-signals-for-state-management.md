@@ -1,4 +1,4 @@
-# ADR-012: Signals for State Management
+# ADR-013: Signals for State Management
 
 **Status**: ✅ Accepted
 

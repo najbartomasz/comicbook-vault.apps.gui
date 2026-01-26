@@ -1,4 +1,4 @@
-# ADR-015: Authentication/Authorization Strategy
+# ADR-019: Authentication/Authorization Strategy
 
 **Status**: 🔄 Proposed
 

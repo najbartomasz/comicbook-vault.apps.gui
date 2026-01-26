@@ -1,4 +1,4 @@
-# ADR-008: Strict TypeScript Configuration
+# ADR-009: Strict TypeScript Configuration
 
 **Status**: ✅ Accepted
 

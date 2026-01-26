@@ -1,4 +1,4 @@
-# ADR-014: Native Fetch API for HTTP Client
+# ADR-015: Native Fetch API for HTTP Client
 
 **Status**: ✅ Accepted
 

@@ -1,4 +1,4 @@
-# ADR-011: Standalone Components
+# ADR-012: Standalone Components
 
 **Status**: ✅ Accepted
 

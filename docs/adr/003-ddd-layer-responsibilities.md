@@ -18,21 +18,30 @@ The `lib/` directory was organized by technical layers (`core/`, `infrastructure
 Organize `lib/` using feature-first (bounded context) structure with explicit DDD layers within each feature. Define clear responsibilities for each layer: Presentation, Infrastructure, Application, and Domain.
 
 **Feature-First Structure**:
+
+Note: `lib/` is organized into `core/`, `generic/`, and `supporting/` categories as per [ADR-007](./007-libs-organization.md).
+
 ```
 lib/
-├── date-time/              # Bounded context: Date-time operations
-│   ├── presentation/       # Optional: Feature-specific UI
-│   ├── infrastructure/
-│   └── domain/
+├── generic/                # Generic subdomains (reusable across any app)
+│   ├── date-time/          # Bounded context: Date-time operations
+│   │   ├── presentation/   # Optional: Feature-specific UI
+│   │   ├── infrastructure/
+│   │   └── domain/
+│   │
+│   └── performance/        # Bounded context: Performance monitoring
+│       ├── infrastructure/
+│       └── domain/
 │
-├── performance/            # Bounded context: Performance monitoring
-│   ├── infrastructure/
-│   └── domain/
+├── supporting/             # Supporting subdomains (app-specific)
+│   └── file-storage/       # Bounded context: File handling
+│       ├── infrastructure/
+│       ├── application/
+│       └── domain/
 │
-└── file-storage/           # Bounded context: File handling
-    ├── infrastructure/
-    ├── application/
-    └── domain/
+└── core/                   # Shared kernel (shared business logic)
+    └── common-types/
+        └── domain/
 
 app-providers/              # Application-level DI configuration (root level)
 ├── app-config/
@@ -222,25 +231,25 @@ Domain         ←  (can import) ←  Domain only
 
 **Barrel Files Strategy**:
 
-❌ **No top-level barrel file** (`lib/file-storage/index.ts`):
+❌ **No top-level barrel file** (`lib/supporting/file-storage/index.ts`):
 ```typescript
-// ❌ lib/file-storage/index.ts
+// ❌ lib/supporting/file-storage/index.ts
 export * from './domain';
 export * from './infrastructure'; // Breaks layer boundaries!
 // Now anyone can import infrastructure directly
 ```
 
-✅ **Layer-specific barrel files** (`lib/file-storage/domain/index.ts`, `lib/file-storage/infrastructure/index.ts`):
+✅ **Layer-specific barrel files** (`lib/supporting/file-storage/domain/index.ts`, `lib/supporting/file-storage/infrastructure/index.ts`):
 ```typescript
-// ✅ lib/file-storage/domain/index.ts
+// ✅ lib/supporting/file-storage/domain/index.ts
 export * from './storage.interface';
 
-// ✅ lib/file-storage/infrastructure/index.ts
+// ✅ lib/supporting/file-storage/infrastructure/index.ts
 export * from './browser-storage.adapter';
 
 // Usage - clear layer boundaries:
-import { StoragePort } from '@lib/file-storage/domain';
-import { BrowserStorageAdapter } from '@lib/file-storage/infrastructure';
+import { StoragePort } from '@lib/supporting/file-storage/domain';
+import { BrowserStorageAdapter } from '@lib/supporting/file-storage/infrastructure';
 ```
 
 This allows ESLint to enforce that only appropriate layers can import from infrastructure.

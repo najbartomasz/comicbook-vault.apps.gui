@@ -1,4 +1,4 @@
-# ADR-013: Error Handling Patterns
+# ADR-017: Error Handling Patterns
 
 **Status**: 🔄 Proposed
 

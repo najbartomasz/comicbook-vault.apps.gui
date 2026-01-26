@@ -1,4 +1,4 @@
-# ADR-010: Playwright for E2E Testing
+# ADR-011: Playwright for E2E Testing
 
 **Status**: ✅ Accepted
 

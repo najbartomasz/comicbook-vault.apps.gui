@@ -1,4 +1,4 @@
-# ADR-011: State Management Strategy for Complex Features
+# ADR-016: State Management Strategy for Complex Features
 
 **Status**: 🔄 Proposed
 
