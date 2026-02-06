@@ -95,6 +95,44 @@ const generateMetrics = () => {
 
 const getCircularDepsStatus = (count) => (count === 0 ? '✅' : '❌');
 
+const parseExistingMetrics = (content) => {
+    if (!content) {
+        return null;
+    }
+    const extractIds = (regex) => (content.match(regex) || []).slice(1);
+    const [totalFiles] = extractIds(/- \*\*Total TypeScript Files\*\*: (\d+)/);
+    const [productionFiles] = extractIds(/- \*\*Production Files\*\*: (\d+)/);
+    const [testFiles] = extractIds(/- \*\*Test Files\*\*: (\d+)/);
+    const [fwCount, fwPercent] = extractIds(/- \*\*Framework-Agnostic Files\*\*: (\d+) \((\d+)%\)/);
+    const [ngCount, ngPercent] = extractIds(/- \*\*Angular-Specific Files\*\*: (\d+) \((\d+)%\)/);
+    const [circularDeps] = extractIds(/- \*\*Circular Dependencies\*\*: (\d+)/);
+    if (!totalFiles || !productionFiles || !testFiles || !fwCount || !ngCount || !circularDeps) {
+        return null;
+    }
+    return {
+        totalFiles: Number(totalFiles),
+        productionFiles: Number(productionFiles),
+        testFiles: Number(testFiles),
+        frameworkAgnostic: { count: Number(fwCount), percentage: fwPercent },
+        angularSpecific: { count: Number(ngCount), percentage: ngPercent },
+        circularDependencies: Number(circularDeps)
+    };
+};
+
+const areMetricsIdentical = (newMetrics, existingMetrics) => {
+    if (!existingMetrics) {
+        return false;
+    }
+    return newMetrics.totalFiles === existingMetrics.totalFiles &&
+        newMetrics.productionFiles === existingMetrics.productionFiles &&
+        newMetrics.testFiles === existingMetrics.testFiles &&
+        newMetrics.frameworkAgnostic.count === existingMetrics.frameworkAgnostic.count &&
+        newMetrics.frameworkAgnostic.percentage === existingMetrics.frameworkAgnostic.percentage &&
+        newMetrics.angularSpecific.count === existingMetrics.angularSpecific.count &&
+        newMetrics.angularSpecific.percentage === existingMetrics.angularSpecific.percentage &&
+        newMetrics.circularDependencies === existingMetrics.circularDependencies;
+};
+
 const formatMetricsMarkdown = (metrics) => `## Project Statistics
 
 - **Total TypeScript Files**: ${metrics.totalFiles}
@@ -152,6 +190,11 @@ const updateBadges = (content, metrics) => {
 
 const updateArchitectureDoc = (metrics) => {
     const content = readFileSync(ARCH_DOC_PATH, 'utf8');
+    const existingMetrics = parseExistingMetrics(content);
+    if (areMetricsIdentical(metrics, existingMetrics)) {
+        console.log('✅ Metrics verify: No changes in statistics detected. Skipping update.');
+        return;
+    }
     const metricsMarkdown = formatMetricsMarkdown(metrics);
     let updatedContent = buildUpdatedContent(content, metricsMarkdown);
     updatedContent = updateBadges(updatedContent, metrics);

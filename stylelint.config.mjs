@@ -26,7 +26,7 @@ export default {
         'no-duplicate-selectors': true,
         'no-empty-source': true,
         'no-invalid-double-slash-comments': true,
-        'no-invalid-position-at-import-rule': true,
+        'no-invalid-position-at-import-rule': null,
         'no-irregular-whitespace': true,
         'property-no-unknown': true,
         'selector-anb-no-unmatchable': true,

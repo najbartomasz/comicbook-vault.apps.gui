@@ -5,6 +5,12 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+// Self-hosted fonts to avoid external dependencies (SonarQube Security Hotspot)
+@import '@fontsource/roboto/300.css';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import 'material-icons/iconfont/material-icons.css';
+
 *,
 *::before,
 *::after {
