@@ -39,7 +39,6 @@ export const sonarjsRules = {
     'sonarjs/chai-determinate-assertion': 'error',
     'sonarjs/class-name': 'error',
     'sonarjs/class-prototype': 'error',
-    'sonarjs/code-eval': 'error',
     'sonarjs/cognitive-complexity': [
         'error',
         15
@@ -75,10 +74,6 @@ export const sonarjsRules = {
     'sonarjs/empty-string-repetition': 'error',
     'sonarjs/encryption': 'error',
     'sonarjs/encryption-secure-mode': 'error',
-    'sonarjs/enforce-trailing-comma': [
-        'error',
-        'never'
-    ],
     'sonarjs/existing-groups': 'error',
     'sonarjs/expression-complexity': 'error',
     'sonarjs/file-header': 'off',
@@ -265,7 +260,6 @@ export const sonarjsRules = {
     'sonarjs/stateful-regex': 'error',
     'sonarjs/strict-transport-security': 'error',
     'sonarjs/strings-comparison': 'error',
-    'sonarjs/super-invocation': 'error',
     'sonarjs/table-header': 'error',
     'sonarjs/table-header-reference': 'error',
     'sonarjs/test-check-exception': 'error',
